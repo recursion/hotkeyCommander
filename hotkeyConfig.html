@@ -4,9 +4,29 @@
   <meta charset="UTF-8">
   <title>Hotkey Config</title>
   <link rel="import" id="hotkeyConfigTemplate" href="hotkeyConfigTemplate.html">
+  <link rel="stylesheet" href="hotkey.css">
 </head>
 <body>
   <div id="hotkeys"></div>
   <script src="hotkeyConfig.js"></script>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function(evt) {
+      hotkeyCommander.init();
+
+      // object or array?
+      // currently expects something iterable
+      // an array of objects may be best
+      var hotkeys = {
+        Buy: 's',
+        Sell: 'l'
+      };
+
+      var targetEl = document.getElementById('hotkeys');
+      hotkeyCommander.loadKeys(hotkeys, targetEl);
+
+    });
+
+  </script>
 </body>
 </html>
