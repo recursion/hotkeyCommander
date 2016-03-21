@@ -17,14 +17,48 @@
       // object or array?
       // currently expects something iterable
       // an array of objects may be best
-      var hotkeys = {
-        Buy: 's',
-        Sell: 'l'
+
+      var hotkeysMap = {
+        CANCEL_ALL: {
+          name: 'CANCEL_ALL',
+          keyCode: 89,
+          ctrlKey: false,
+          shiftKey: false,
+          altKey: false
+        },
+        CANCEL_LAST: {
+          name: 'CANCEL_LAST',
+          keyCode: 84,
+          ctrlKey: false,
+          shiftKey: false,
+          altKey: false
+        },
+        CANCEL_BIDS: {
+          name: 'CANCEL_BIDS',
+          keyCode: 82,
+          ctrlKey: false,
+          shiftKey: false,
+          altKey: false
+        },
+        CANCEL_OFFERS: {
+          name: 'CANCEL_OFFERS',
+          keyCode: 85,
+          ctrlKey: false,
+          shiftKey: false,
+          altKey: false
+        },
       };
 
-      var targetEl = document.getElementById('hotkeys');
-      hotkeyCommander.loadKeys(hotkeys, targetEl);
+      var hotkeysDictionary = hotkeyCommander.buildKeyMap(hotkeysMap);
 
+      console.log(hotkeysDictionary);
+      var targetEl = document.getElementById('hotkeys');
+      hotkeyCommander.loadKeys(hotkeysDictionary, targetEl);
+
+      window.addEventListener('keydown', function(evt){
+        console.log(evt);
+        console.log(hotkeys[evt.keyCode]);
+      });
     });
 
   </script>
