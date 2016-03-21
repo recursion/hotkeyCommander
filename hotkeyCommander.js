@@ -12,7 +12,7 @@ var hotkeyCommander = (function() {
 
   // load template
   function init() {
-    var templates = document.getElementById('hotkeyConfigTemplate').import;
+    var templates = document.getElementById('hotkeyTemplate').import;
     template = templates.getElementById('hotkey-setting');
   }
 

@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Hotkey Config</title>
-  <link rel="import" id="hotkeyConfigTemplate" href="hotkeyConfigTemplate.html">
+  <link rel="import" id="hotkeyTemplate" href="hotkeyTemplate.html">
   <link rel="stylesheet" href="hotkey.css">
 </head>
 <body>
   <div id="hotkeys"></div>
   <script src="hotkeyCommander.js"></script>
+  <script src="hotkeys.js"></script>
   <script>
 
     document.addEventListener('DOMContentLoaded', function(evt) {
@@ -18,38 +19,8 @@
       // currently expects something iterable
       // an array of objects may be best
 
-      var hotkeysMap = {
-        CANCEL_ALL: {
-          name: 'CANCEL_ALL',
-          keyCode: 89,
-          ctrlKey: false,
-          shiftKey: false,
-          altKey: false
-        },
-        CANCEL_LAST: {
-          name: 'CANCEL_LAST',
-          keyCode: 84,
-          ctrlKey: false,
-          shiftKey: false,
-          altKey: false
-        },
-        CANCEL_BIDS: {
-          name: 'CANCEL_BIDS',
-          keyCode: 82,
-          ctrlKey: false,
-          shiftKey: false,
-          altKey: false
-        },
-        CANCEL_OFFERS: {
-          name: 'CANCEL_OFFERS',
-          keyCode: 85,
-          ctrlKey: false,
-          shiftKey: false,
-          altKey: false
-        },
-      };
 
-      var hotkeysDictionary = hotkeyCommander.buildKeyMap(hotkeysMap);
+      var hotkeysDictionary = hotkeyCommander.buildKeyMap(HKC_hotkeysMap);
 
       console.log(hotkeysDictionary);
       var targetEl = document.getElementById('hotkeys');
