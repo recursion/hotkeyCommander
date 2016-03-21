@@ -1,11 +1,13 @@
 # Hotkey Commander
-> A drop in javascript module for managing hotkeys.
-> This module uses the HTML import spec for templating, and so is only available to browsers which support html import.
+> A drop in javascript module for configuring hotkeys.
+> This module uses the HTML import spec for templating, which is currently (and sadly) only  supported by chrome. Polyfills or other template options may be added later. 
+
 ### Usage
+- Setup initial hotkeys in the hotkeys.js file.
 - Include the hotkeyCommander.js script in your main html file. 
 - Run the modules init function.
 - Pass an object of hotkeys (using hotkeyCommanders object model) and the element to attach config to, to loadKeys.
-- Start the engine!
+
 ```html
   <div id="hotkeys"></div>
   ....
