@@ -1,6 +1,11 @@
 # Hotkey Commander
 > A drop in javascript module for configuring hotkeys.
-> This module uses the HTML import spec for templating, which is currently (and sadly) only  supported by chrome. Polyfills or other template options may be added later. 
+> This module uses the HTML import spec for templating, which is currently (and sadly) only  supported by chrome. Polyfills or other template options may be added later. This project is still in development and not yet in a usable state.
+
+#### TODO
+- Protect against existing hotkeys.
+- Load hotkeys to and from local storage.
+- Catch/use alt keys (shift/ctrl/alt)
 
 ### Usage
 - Setup initial hotkeys map in the hotkeys.js file.
