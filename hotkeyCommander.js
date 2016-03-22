@@ -10,10 +10,14 @@ var hotkeyCommander = (function() {
 
   return public_api;
 
+  var keymap = {};
+
   // load template
-  function init() {
+  function init(hotkeys, el) {
     var templates = document.getElementById('hotkeyTemplate').import;
     template = templates.getElementById('hotkey-setting');
+    var keymap = buildKeyMap(hotkeys);
+    loadKeys(keymap, el);
   }
 
   function loadKeys(hotkeys, el) {
@@ -25,7 +29,7 @@ var hotkeyCommander = (function() {
 
       clone.querySelector('.settingButton')
         .addEventListener("click", function(evt) {
-          console.log(this);
+          console.log('Attempting to change key: ', i);
         });
 
       clone.querySelector('.functionLabel').innerText = stripUnderscores(hotkeys[i]);

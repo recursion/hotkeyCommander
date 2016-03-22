@@ -13,18 +13,8 @@
   <script>
 
     document.addEventListener('DOMContentLoaded', function(evt) {
-      hotkeyCommander.init();
-
-      // object or array?
-      // currently expects something iterable
-      // an array of objects may be best
-
-
-      var hotkeysDictionary = hotkeyCommander.buildKeyMap(HKC_hotkeysMap);
-
-      console.log(hotkeysDictionary);
       var targetEl = document.getElementById('hotkeys');
-      hotkeyCommander.loadKeys(hotkeysDictionary, targetEl);
+      hotkeyCommander.init(HKC_hotkeysMap, targetEl);
 
       window.addEventListener('keydown', function(evt){
         console.log(evt);
