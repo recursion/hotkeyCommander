@@ -6,6 +6,8 @@
 - Protect against existing hotkeys.
 - Load hotkeys to and from local storage.
 - Catch/use alt keys (shift/ctrl/alt)
+- Assume that the set/record keystrokes could happen in a different window than the one we are actually firing keys from. This ultimately means there will need to be functions for setting up two different listeners. One for record/set keystrokes and one for actually firing them off.
+- Add categories (so that keys can be sorted by category)
 
 ### Usage
 - Setup initial hotkeys map in the hotkeys.js file.
