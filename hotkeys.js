@@ -13,28 +13,24 @@ var HKC_hotkeysMap = (function(){
 
     return {
       CANCEL_ALL: {
-        name: 'CANCEL_ALL',
         keyCode: 89,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       CANCEL_LAST: {
-        name: 'CANCEL_LAST',
         keyCode: 84,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       CANCEL_BIDS: {
-        name: 'CANCEL_BIDS',
         keyCode: 82,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       CANCEL_OFFERS: {
-        name: 'CANCEL_OFFERS',
         keyCode: 85,
         ctrlKey: false,
         shiftKey: false,

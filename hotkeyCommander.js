@@ -52,7 +52,7 @@ var hotkeyCommander = (function() {
 
         });
 
-      clone.querySelector('.functionLabel').innerText = stripUnderscores(hotkeys[i]);
+      clone.querySelector('.functionLabel').innerText = stripUnderscores(hotkeys[i].name);
       clone.querySelector('.settingLabel').innerText = String.fromCharCode(i);
       el.appendChild(clone);
     }
@@ -145,14 +145,13 @@ var hotkeyCommander = (function() {
     return null
   }
 
-  function stripUnderscores(hotkeyObject){
-    var name = hotkeyObject.name.replace('_', ' ');
-    return name;
+  function stripUnderscores(string){
+    return string.replace('_', ' ');
   }
 
   // turn a snake case string into a camelCase string
   function snakeCaseToCamelCase(string) {
-    string = string.replace('_', ' ');
+    string = stripUnderscores(string);
     string = string.split(' ');
     var result = string.map(function(word, index){
       // uppercase the first character of each word
