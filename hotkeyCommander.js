@@ -35,7 +35,7 @@ var hotkeyCommander = (function() {
   function loadKeys(hotkeys, el) {
     // load hotkeys into the template
     // and write it to the page.
-    for (var i in hotkeys) {
+    for (let i in hotkeys) {
       var clone = document.importNode(template.content, true);
       console.log(i, ' ',  hotkeys[i]);
 
@@ -47,7 +47,6 @@ var hotkeyCommander = (function() {
             console.log('Attempting to change key: ', i);
             console.log(keymap[i]);
             recording = i;
-            // popup a modal that lets the user know whats up
           }
 
         });
