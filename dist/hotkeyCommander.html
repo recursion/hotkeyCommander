@@ -9,13 +9,10 @@
 <body>
   <div id="hotkeys"></div>
   <script src="hotkeyCommander.js"></script>
-  <script src="hotkeys.js"></script>
   <script>
 
     document.addEventListener('DOMContentLoaded', function(evt) {
-      var targetEl = document.getElementById('hotkeys');
-      hotkeyCommander.init(HKC_hotkeysMap, targetEl);
-
+      hotkeyCommander.init(document.getElementById('hotkeys'));
     });
 
   </script>

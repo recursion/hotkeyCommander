@@ -56,73 +56,262 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var config = __webpack_require__(1);
-	var engine = __webpack_require__(2);
+	var configurator = __webpack_require__(1);
+	var engine = __webpack_require__(6);
 
-	var template = void 0;
+	var engineSet = false;
+	var configuratorSet = false;
 
-	// the original keys (before mapping);
-	var keyDictionary = {};
+	// two ways to start the module:
+	//   1) call init with the proper parameters (this assumes 1 context)
+	//   2) initialized engine and configurator seperately
 
-	// an object with keycodes for keys
-	// this is what the hotkey engine will call when keys are pressed
-	var keymap = {};
+	// if only 1 element is passed in,
+	// we can assume that its ok to
+	// do everything in one context?
+	exports.init = function (configContainerEl, configListener, engineListener) {
+	  configurator.init(configContainerEl, configListener || window);
+	  engine.init(engineListener || window);
+	};
+
+	exports.setEngine = function (listenerEl) {
+	  engine.init(listenerEl);
+	  engineSet = true;
+	};
+
+	exports.setConfigurator = function (containerEl, listenerEl) {
+	  configurator.init(containerEl, listenerEl);
+	  configuratorSet = true;
+	};
+
+	exports.start = function () {
+	  if (!engineSet || !configuratorSet) {
+	    console.error('Must set engine and configurator with proper containers and listeners');
+	  } else {
+	    // do the damn thing
+	  }
+	};
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// this module:
+	// renders hotkey configuration
+	// handles recording new hotkeys
+
+	var utils = __webpack_require__(2);
+	var Store = __webpack_require__(3);
+
 	var recording = false;
-	var rootElement = void 0;
+	var containerElement = null;
 
-	// This is the object that will be exported
-	var public_api = {
+	// the name of the style used
+	// to indicate when an item is being recorded
+	var recordingStyle = 'recording';
+
+	// public api
+	module.exports = {
 	  init: init
 	};
 
-	// load template
-	function init(hotkeys, el) {
-	  var templates = document.getElementById('hotkeyTemplate').import;
-	  template = templates.getElementById('hotkey-setting');
+	// load configuration templates
+	// takes an element to load the template to
+	function init(containerEl, listenerEl) {
+	  if (!utils.validateEl(containerEl)) {
+	    console.error('Configurators first argument must be a valid DOM element');
+	    throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element');
+	  }
+	  if (!utils.validateEl(listenerEl)) {
+	    console.error('Configurators second argument must be a valid DOM element or the window object');
+	    throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element or the window object.');
+	  }
 
-	  // store the original hotkeys
-	  // TODO: move these into local storage after initial load
-	  keyDictionary = hotkeys;
-	  rootElement = el;
+	  containerElement = containerEl;
 
-	  reload(keyDictionary, rootElement);
+	  utils.addListener(listenerEl || window, 'keydown', onKeydown);
 
-	  window.addEventListener('keydown', onkeydown);
+	  render(Store.getKeymap(), containerEl);
 	}
 
-	function loadKeys(hotkeys, el) {
+	// render the hotkeys to their dom element
+	// clears the element first if clearElement is true
+	function render(hotkeys, el) {
+	  var clearElement = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+	  var templates = document.getElementById('hotkeyTemplate').import;
+	  var template = templates.getElementById('hotkey-setting');
+
+	  if (clearElement) {
+	    containerElement.innerHTML = '';
+	  }
+
+	  // load hotkeys into the template
+	  // and write it to the page.
+
 	  var _loop = function _loop(i) {
 	    var clone = document.importNode(template.content, true);
-	    console.log(i, ' ', hotkeys[i]);
 
-	    clone.querySelector('.settingButton').addEventListener("click", function (evt) {
+	    clone.querySelector('.settingButton').addEventListener('click', function (evt) {
 	      if (!recording) {
 	        // add highlighting to bg for this element
-	        this.parentElement.style.background = 'red';
-	        console.log('Attempting to change key: ', i);
-	        console.log(keymap[i]);
+	        this.parentElement.className += ' ' + recordingStyle;
+
+	        // set recording to the key we are recording
 	        recording = i;
 	      }
 	    });
 
-	    clone.querySelector('.functionLabel').innerText = stripUnderscores(hotkeys[i].name);
+	    clone.querySelector('.functionLabel').innerText = utils.stripUnderscores(hotkeys[i].name);
 	    clone.querySelector('.settingLabel').innerText = String.fromCharCode(i);
 	    el.appendChild(clone);
 	  };
 
-	  // load hotkeys into the template
-	  // and write it to the page.
 	  for (var i in hotkeys) {
 	    _loop(i);
 	  }
 	}
 
-	// takes in an object of mapped hotkeys
-	// and builds an object with keyCode keys
+	function onKeydown(evt) {
+	  // already recording - this is the new key
+	  if (recording) {
+	    // TODO: validate that the key is not already in use.
+
+	    Store.set(recording, evt.keyCode);
+	    render(Store.getKeymap(), containerElement, true);
+
+	    // remove bg highlighting
+	    var keys = document.getElementsByClassName('hotkeyConfig');
+	    for (var key in keys) {
+	      if (keys.hasOwnProperty(key)) {
+	        var targetEl = keys[key];
+	        removeStyle(targetEl, recordingStyle);
+	      }
+	    }
+	    recording = false;
+	  }
+	}
+
+	function removeStyle(el, style) {
+	  var styleList = el.className.split(' ');
+	  console.log(styleList);
+	  var targetIndex = styleList.indexOf(style);
+	  if (targetIndex !== -1) {
+	    // remove the target style
+	    styleList = styleList.splice(targetIndex, 1);
+	    return styleList;
+	  }
+	}
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	// Common modules
+
+	var utils = exports;
+
+	utils.addListener = function (listenerEl, listenerType, cb) {
+	  listenerEl = listenerEl || window;
+	  listenerEl.addEventListener(listenerType, cb);
+	};
+
+	utils.stripUnderscores = function (string) {
+	  if (!string || typeof string !== 'string') {
+	    console.error('stripUnderscores requires a string');
+	    debugger;
+	    return '';
+	  }
+	  return string.replace('_', ' ');
+	};
+
+	// turn a snake case string into a camelCase string
+	utils.snakeCaseToCamelCase = function (string) {
+	  string = stripUnderscores(string);
+	  string = string.split(' ');
+	  var result = string.map(function (word, index) {
+	    // uppercase the first character of each word
+	    // except the first word
+	    if (index !== 0) {
+	      return word[0].toUpperCase() + word.slice(1).toLowerCase();
+	    } else {
+	      return word.toLowerCase();
+	    }
+	  });
+	  return result.join('');
+	};
+
+	// validate that a object is an Element or Window
+	utils.validateEl = function (el) {
+	  if (!el instanceof Window || !el instanceof Element) {
+	    return false;
+	  } else {
+	    return true;
+	  }
+	};
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var defaultHotkeys = __webpack_require__(4);
+
+	var keyDictionary = loadHotkeys();
+	var keymap = generateKeymap(keyDictionary);
+
+	var hotkeyStore = module.exports = {};
+
+	hotkeyStore.getKeymap = function () {
+	  return keymap;
+	};
+
+	hotkeyStore.getAll = function () {
+	  return keyDictionary;
+	};
+
+	hotkeyStore.findKeyByKeycode = findKeyByKeycode;
+
+	hotkeyStore.set = function (key, value) {
+	  // validations?
+	  // TODO: find out if another key is using this code
+	  var dictKey = findKeyByKeycode(key);
+	  if (!dictKey) {
+	    console.error('Could not find keycode with key: ', key);
+	  } else {
+	    keyDictionary[dictKey].keyCode = value;
+
+	    // anytime we change the dictionary we
+	    // want to generate a new keymap
+	    keymap = generateKeymap(keyDictionary);
+	  }
+	};
+
+	/**
+	 * searches through the keyDictionary and
+	 * attempts to find the keycode in the keydictionary
+	 * @returns Key:String or null
+	*/
+	function findKeyByKeycode(keycode) {
+	  for (var key in keyDictionary) {
+	    if (+keyDictionary[key].keyCode === +keycode) {
+	      return key;
+	    }
+	  }
+	  return null;
+	}
+
+	// generate an object with keyCode keys
 	// so that the hotkeys can be accessed by their keycode
 	// instead of by their name
-	// this is what would be used by the hotkey engine
-	function buildKeyMap(hotkeys) {
+	// this should fire anytime the hotkey storage dictionary changes
+	function generateKeymap(keyDictionary) {
+	  var hotkeys = keyDictionary;
 	  var result = {};
 
 	  for (var hotkey in hotkeys) {
@@ -140,106 +329,120 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return result;
 	}
 
-	// rebuild the keymap
-	// render the hotkeys element
-	function reload(hotkeys, el) {
-	  keymap = buildKeyMap(hotkeys);
-
-	  el.innerHTML = '';
-	  //load the hotkeys into the DOM
-	  loadKeys(keymap, el);
+	// TODO:
+	// load an existing dictionary of hotkeys
+	// otherwise load defaults
+	function loadHotkeys() {
+	  return defaultHotkeys;
 	}
 
-	function onkeydown(evt) {
-	  // already recording - this is the new key
-	  if (recording) {
-	    console.log('You are trying to change ', recording, ' to : ', evt.keyCode);
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
 
-	    //TODO: validate that the key is not already in use.
+	"use strict";
 
-	    var keyToSet = findKeyByCode(recording);
-	    // set the key in the hotkey dictionary
-	    if (keyToSet) {
-	      keyToSet.keyCode = evt.keyCode;
-	      reload(keyDictionary, rootElement);
-	    } else {
-	      console.error('Could not find key: ', recording);
-	      console.log('Proper keys are: ', keymap);
-	    }
+	// Define hotkeys here
+	/*  ALL hotkeys must follow this pattern
+	 *
+	 *  HOTKEY_NAME: {
+	 *     name: 'HOTKEY_NAME',
+	 *     keyCode: 89,
+	 *     ctrlKey: false,
+	 *     shiftKey: false,
+	 *     altKey: false
+	 *  }
+	*/
 
-	    // remove bg highlighting
-	    var keys = document.getElementsByClassName('hotkeyConfig');
-	    for (var key in keys) {
-	      if (keys.hasOwnProperty(key)) {
-	        keys[key].style.background = '';
-	      }
-	    }
-	    recording = false;
+	module.exports = {
+	  CANCEL_ALL: {
+	    keyCode: 89,
+	    ctrlKey: false,
+	    shiftKey: false,
+	    altKey: false
+	  },
+	  CANCEL_LAST: {
+	    keyCode: 84,
+	    ctrlKey: false,
+	    shiftKey: false,
+	    altKey: false
+	  },
+	  CANCEL_BIDS: {
+	    keyCode: 82,
+	    ctrlKey: false,
+	    shiftKey: false,
+	    altKey: false
+	  },
+	  CANCEL_OFFERS: {
+	    keyCode: 85,
+	    ctrlKey: false,
+	    shiftKey: false,
+	    altKey: false
+	  }
+	};
+
+/***/ },
+/* 5 */,
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	/** Hotkey Engine Module
+	 *
+	 * This module exports an engine for responding to keystrokes
+	 * Provide the element to listen on
+	 */
+
+	var utils = __webpack_require__(2);
+	var Store = __webpack_require__(3);
+
+	var listenerEl = void 0;
+
+	// public api
+	module.exports = {
+	  init: init,
+	  start: start,
+	  set: set
+	};
+
+	// if no listener element is provided
+	// then use the window object
+	// if no keydownHandler is provided, user our own
+	// keydownhandler can be a function that handles and event...
+	function init(listenerEl, keydownHandler) {
+	  set(listenerEl);
+	  start(keydownHandler || onKeydown);
+	}
+
+	function start(keydownHandler) {
+	  if (!listenerEl) {
+	    var msg = 'Must have a listener set!';
+	    console.error(msg);
+	    throw new Error(msg);
+	  }
+	  utils.addListener(listenerEl, 'keydown', keydownHandler || onKeydown);
+	}
+
+	function set(el) {
+	  if (!utils.validateEl(el)) {
+	    console.error('Must be initialized with the window or a DOM element');
+	    throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element');
 	  } else {
-	    if (keymap[evt.keyCode]) {
-	      console.log('Keymap exists');
-	      console.log(keymap[evt.keyCode]);
-	    } else {
+	    listenerEl = el;
+	  }
+	}
+
+	// this is where the magic happens
+	function onKeydown(evt) {
+	  var keymap = Store.getKeymap();
+	  if (keymap[evt.keyCode]) {
+	    console.log(keymap[evt.keyCode]);
+	    // call the function related to this object here
+	  } else {
 	      console.log('No key mapped to ', evt.keyCode);
 	    }
-	  }
 	}
-
-	//       HELPERS
-
-	/**
-	 * searches through the keyDictionary and
-	 * attempts to find the key containing
-	 * the passed in keycode
-	 * @returns {Key Object} or null
-	*/
-	function findKeyByCode(keycode) {
-	  for (var key in keyDictionary) {
-	    console.log(key, ' ', keyDictionary[key]);
-	    if (+keyDictionary[key].keyCode === +keycode) {
-	      return keyDictionary[key];
-	    }
-	  }
-	  return null;
-	}
-
-	function stripUnderscores(string) {
-	  return string.replace('_', ' ');
-	}
-
-	// turn a snake case string into a camelCase string
-	function snakeCaseToCamelCase(string) {
-	  string = stripUnderscores(string);
-	  string = string.split(' ');
-	  var result = string.map(function (word, index) {
-	    // uppercase the first character of each word
-	    // except the first word
-	    if (index !== 0) {
-	      return word[0].toUpperCase() + word.slice(1).toLowerCase();
-	    } else {
-	      return word.toLowerCase();
-	    }
-	  });
-	  return result.join('');
-	}
-
-	module.exports = public_api;
-
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = {};
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = {};
 
 /***/ }
 /******/ ])

@@ -16,20 +16,12 @@ exports.init = (configContainerEl, configListener, engineListener) => {
   engine.init(engineListener || window)
 }
 
-exports.setEngine = (listenerEl) => {
+exports.startEngine = (listenerEl) => {
   engine.init(listenerEl)
   engineSet = true
 }
 
-exports.setConfigurator = (containerEl, listenerEl) => {
+exports.startConfigurator = (containerEl, listenerEl) => {
   configurator.init(containerEl, listenerEl)
   configuratorSet = true
-}
-
-exports.start = () => {
-  if (!engineSet || !configuratorSet) {
-    console.error('Must set engine and configurator with proper containers and listeners')
-  } else {
-    // do the damn thing
-  }
 }
