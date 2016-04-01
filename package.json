@@ -2,7 +2,7 @@
   "name": "hotkey-commander",
   "version": "0.0.6",
   "description": "A module that provides common functionality for setting and using hotkeys.",
-  "main": "index.js",
+  "main": "dist/hotkeyCommander.js",
   "dependencies": {
   },
   "devDependencies": {
