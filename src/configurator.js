@@ -7,9 +7,12 @@ const Store = require('./store')
 let recording = false
 let containerElement = null
 
-// the name of the style used
-// to indicate when an item is being recorded
+// css selectors used for populating templates
+// and applying/removing styles
 const recordingStyle = 'recording'
+const setButtonSelector = '.set-key-button'
+const labelSelector = '.hotkey-config.key-setting'
+const functionLabelSelector = '.hotkey-config.key-function'
 
 // public api
 module.exports = {
@@ -50,19 +53,25 @@ function render (hotkeys, el, clearElement = false) {
   for (let i in hotkeys) {
     const clone = document.importNode(template.content, true)
 
-    clone.querySelector('.settingButton')
+    clone.querySelector(setButtonSelector)
       .addEventListener('click', function (evt) {
         if (!recording) {
           // add highlighting to bg for this element
-          this.parentElement.className += ' ' + recordingStyle
+          var target = this.parentElement.children
+          for (let i = 0; i < target.length; i++) {
+            const child = target[i]
+            if (child.className.indexOf('key-setting') !== -1) {
+              child.className += ' ' + recordingStyle
+            }
+          }
 
           // set recording to the key we are recording
           recording = i
         }
       })
 
-    clone.querySelector('.functionLabel').innerText = utils.stripUnderscores(hotkeys[i].name)
-    clone.querySelector('.settingLabel').innerText = String.fromCharCode(i)
+    clone.querySelector(functionLabelSelector).innerText = utils.stripUnderscores(hotkeys[i].name)
+    clone.querySelector(labelSelector).innerText = String.fromCharCode(i)
     el.appendChild(clone)
   }
 }
