@@ -35,22 +35,53 @@ function init (containerEl, listenerEl) {
 
   utils.addListener(listenerEl || window, 'keydown', onKeydown)
 
-  render(Store.getKeymap(), containerEl)
+  render(Store.getDictionary(), containerEl)
+}
+
+function getTemplate () {
+  const templates = document.getElementById('hotkeyTemplate').import
+  const template = templates.getElementById('hotkey-setting')
+  return template
+}
+
+function render (dictionary, targetEl, clear = false) {
+  const template = getTemplate()
+
+  // TODO: not alter this outside variable?
+  if (clear) {
+    containerElement.innerHTML = ''
+  }
+
+  for (let key in dictionary) {
+    const clone = document.importNode(template.content, true)
+
+    // remove innards of template
+    clone.querySelector('.hotkey-config-block').innerHTML = `
+      <h1 class="hotkey-config-category">
+        ${formatCategory(key)}
+      </h1>
+    `
+    targetEl.appendChild(clone)
+
+    // render the value property as keys
+    renderKeys(dictionary[key], targetEl)
+  }
+}
+
+function formatCategory (cat) {
+  cat = cat.replace('CATEGORY_', '')
+  cat = utils.stripUnderscores(cat)
+  return cat
 }
 
 // render the hotkeys to their dom element
 // clears the element first if clearElement is true
-function render (hotkeys, el, clearElement = false) {
-  const templates = document.getElementById('hotkeyTemplate').import
-  const template = templates.getElementById('hotkey-setting')
-
-  if (clearElement) {
-    containerElement.innerHTML = ''
-  }
+function renderKeys (hotkeys, el) {
+  const template = getTemplate()
 
   // load hotkeys into the template
   // and write it to the page.
-  for (let i in hotkeys) {
+  for (let key in hotkeys) {
     const clone = document.importNode(template.content, true)
 
     clone.querySelector(setButtonSelector)
@@ -66,12 +97,12 @@ function render (hotkeys, el, clearElement = false) {
           }
 
           // set recording to the key we are recording
-          recording = i
+          recording = key
         }
       })
 
-    clone.querySelector(functionLabelSelector).innerText = utils.stripUnderscores(hotkeys[i].name)
-    clone.querySelector(labelSelector).innerText = String.fromCharCode(i)
+    clone.querySelector(functionLabelSelector).innerText = utils.stripUnderscores(key)
+    clone.querySelector(labelSelector).innerText = String.fromCharCode(hotkeys[key].keyCode)
     el.appendChild(clone)
   }
 }
@@ -82,17 +113,20 @@ function onKeydown (evt) {
     // TODO: validate that the key is not already in use.
 
     Store.set(recording, evt.keyCode)
-    render(Store.getKeymap(), containerElement, true)
-
-    // remove bg highlighting
-    const keys = document.getElementsByClassName('hotkeyConfig')
-    for (const key in keys) {
-      if (keys.hasOwnProperty(key)) {
-        const targetEl = keys[key]
-        removeStyle(targetEl, recordingStyle)
-      }
-    }
+    render(Store.getDictionary(), containerElement, true)
+    renderDoneRecording()
     recording = false
+  }
+}
+
+function renderDoneRecording () {
+  // remove bg highlighting
+  const keys = document.getElementsByClassName('hotkeyConfig')
+  for (const key in keys) {
+    if (keys.hasOwnProperty(key)) {
+      const targetEl = keys[key]
+      removeStyle(targetEl, recordingStyle)
+    }
   }
 }
 

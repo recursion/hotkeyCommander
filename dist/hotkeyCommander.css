@@ -40,3 +40,13 @@
   color: red;
   box-shadow: -1px -1px 2px black;
 }
+
+.hotkey-config-category {
+  margin: 0 auto;
+  text-align: center;
+  background-color: darkgrey;
+  font-weight: bold;
+  font-size: 1.5em;
+  color: white;
+  letter-spacing: 10px;
+}

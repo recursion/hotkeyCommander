@@ -7,13 +7,11 @@
 const utils = require('./utils')
 const Store = require('./store')
 
-let listenerEl
+let listenerElement
 
 // public api
 module.exports = {
-  init: init,
-  start: start,
-  set: set
+  init
 }
 
 // if no listener element is provided
@@ -21,26 +19,22 @@ module.exports = {
 // if no keydownHandler is provided, user our own
 // keydownhandler can be a function that handles and event...
 function init (listenerEl, keydownHandler) {
-  set(listenerEl)
+  if (!utils.validateEl(listenerEl)) {
+    throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
+  } else {
+    listenerElement = listenerEl
+  }
   start(keydownHandler || onKeydown)
 }
 
+// requires that a listener element has been set
 function start (keydownHandler) {
-  if (!listenerEl) {
-    const msg = 'Must have a listener set!'
+  if (!listenerElement) {
+    const msg = 'Must have a listener setListenerElement!'
     console.error(msg)
     throw new Error(msg)
   }
-  utils.addListener(listenerEl, 'keydown', keydownHandler || onKeydown)
-}
-
-function set (el) {
-  if (!utils.validateEl(el)) {
-    console.error('Must be initialized with the window or a DOM element')
-    throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
-  } else {
-    listenerEl = el
-  }
+  utils.addListener(listenerElement, 'keydown', keydownHandler || onKeydown)
 }
 
 // this is where the magic happens

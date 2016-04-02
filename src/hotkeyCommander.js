@@ -6,9 +6,9 @@ const engine = require('./engine')
 //   2) initialized engine and configurator seperately
 
 module.exports = {
-  init: init,
-  startEngine: startEngine,
-  startConfigurator: startConfigurator
+  init,
+  startEngine,
+  startConfigurator
 }
 
 // if only 1 element is passed in,
