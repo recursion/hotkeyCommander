@@ -1,8 +1,11 @@
 const defaultHotkeys = require('./defaultHotkeys')
 
+// module level  variables
+// this is where we keeps the important stuff in memory...
 const keyDictionary = loadHotkeys()
 let keymap = generateKeymap(keyDictionary)
 
+// export the hotkeyStore object
 const hotkeyStore = module.exports = {}
 
 hotkeyStore.getKeymap = () => {
