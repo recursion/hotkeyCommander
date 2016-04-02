@@ -23,11 +23,9 @@ module.exports = {
 // takes an element to load the template to
 function init (containerEl, listenerEl) {
   if (!utils.validateEl(containerEl)) {
-    console.error('Configurators first argument must be a valid DOM element')
     throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element')
   }
   if (!utils.validateEl(listenerEl)) {
-    console.error('Configurators second argument must be a valid DOM element or the window object')
     throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element or the window object.')
   }
 
@@ -102,7 +100,8 @@ function renderKeys (hotkeys, el) {
       })
 
     clone.querySelector(functionLabelSelector).innerText = utils.stripUnderscores(key)
-    clone.querySelector(labelSelector).innerText = String.fromCharCode(hotkeys[key].keyCode)
+    const keyNameString = String.fromCharCode(hotkeys[key].keyCode)
+    clone.querySelector(labelSelector).innerText = keyNameString
     el.appendChild(clone)
   }
 }
@@ -111,7 +110,6 @@ function onKeydown (evt) {
   // already recording - this is the new key
   if (recording) {
     // TODO: validate that the key is not already in use.
-
     Store.set(recording, evt.keyCode)
     render(Store.getDictionary(), containerElement, true)
     renderDoneRecording()
@@ -132,7 +130,6 @@ function renderDoneRecording () {
 
 function removeStyle (el, style) {
   let styleList = el.className.split(' ')
-  console.log(styleList)
   let targetIndex = styleList.indexOf(style)
   if (targetIndex !== -1) {
     // remove the target style

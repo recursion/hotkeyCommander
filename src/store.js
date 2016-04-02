@@ -2,58 +2,41 @@ const defaultHotkeys = require('./defaultHotkeys')
 
 const REGEX_CATEGORY = /^CATEGORY_.+/gi
 
-// module level  variables
-// this is where we keeps the important stuff in memory...
-const hotkeyDictionary = loadHotkeys()
-let keymap = generateNewKeymap(hotkeyDictionary)
+/** ********************************
+ *   module level variables
+ */
 
-// export the hotkeyStore object
-const hotkeyStore = module.exports = {
+// store our hotkey dictionary with categories
+// using hotkey names as keys
+const hotkeyDictionary = loadHotkeys()
+
+// this is a map of the hotkeys
+// with no categories and
+// using the keycodes as keys
+let keymap = generateNewKeymap(hotkeyDictionary)
+/* **************************/
+
+// export the hotkey Store object
+module.exports = {
   findNameByKeyCode,
+  getKeymap,
+  getDictionary,
+  set,
   isCategory
 }
 
-hotkeyStore.getKeymap = () => {
+function copy (obj) {
+  const copy = {}
+  Object.assign({}, obj)
+  return copy
+}
+
+function getKeymap () {
   return keymap
 }
 
-hotkeyStore.getDictionary = () => {
+function getDictionary () {
   return hotkeyDictionary
-}
-
-/*
-  calls back with key, value
-  for each item on the dictionary
-  while skipping over categories entirely
-  usage:
-  onEachKey(hotkeyDictionary, (key, value) => {
-    console.log('key: ', key)
-    console.log('value: ', value)
-  })
-*/
-function onEachKey (dictionary, work) {
-  const categories = dictionary
-  // iterate through a list of categories
-  for (let category in categories) {
-    // iterate through an object of hotkey objects
-    const hotkeys = categories[category]
-    for (let hotkey in hotkeys) {
-      work(hotkey, hotkeys[hotkey])
-    }
-  }
-}
-
-hotkeyStore.set = (key, value) => {
-  const dict = hotkeyDictionary
-  onEachKey(dict, (k, v) => {
-    if (k === key) {
-      // set the keycode
-      v.keyCode = value
-    }
-  })
-  // anytime we change the dictionary we
-  // want to generate a new keymap
-  generateNewKeymap(dict)
 }
 
 /**
@@ -65,7 +48,7 @@ hotkeyStore.set = (key, value) => {
 function findNameByKeyCode (keycode) {
   const dict = hotkeyDictionary
   let result = null
-  onEachKey(dict, (key, value) => {
+  forEachHotkey(dict, (key, value) => {
     if (dict[key].keyCode === keycode) {
       result = key
     }
@@ -73,18 +56,59 @@ function findNameByKeyCode (keycode) {
   return result
 }
 
+function set (key, value) {
+  forEachHotkey((k, v) => {
+    if (k === key) {
+      // set the keycode
+      v.keyCode = value
+    }
+  })
+  // anytime we change the dictionary we
+  // want to generate a new keymap
+  generateNewKeymap()
+}
+
+function isCategory (key) {
+  // regex describing a category key
+  // anything that begins with CATEGORY_
+  // will be treated as a category type
+  const reggie = REGEX_CATEGORY
+  return reggie.test(key)
+}
+
+/*
+  calls back with key, value
+  for each item on the dictionary
+  while skipping over categories entirely
+  usage:
+  forEachHotkey(hotkeyDictionary, (key, value) => {
+    console.log('key: ', key)
+    console.log('value: ', value)
+  })
+*/
+function forEachHotkey (work) {
+  const categories = hotkeyDictionary
+  // iterate through a list of categories
+  for (let category in categories) {
+    // iterate through an object of hotkey objects
+    const hotkeys = categories[category]
+    for (let hotkey in hotkeys) {
+      work(hotkey, hotkeys[hotkey])
+    }
+  }
+}
+
 // generate an object with keyCode keys
 // so that the hotkeys can be accessed by their keycode
 // instead of by their name
 // this should fire anytime the hotkey storage dictionary changes
 // generate keymap must now strip out categories
-function generateNewKeymap (keyDictionary) {
-  const hotkeys = keyDictionary
+function generateNewKeymap () {
   const result = {}
 
   // create a hotkey object
   // and add it to our result object
-  onEachKey(hotkeys, (key, value) => {
+  forEachHotkey((key, value) => {
     result[value.keyCode] = {
       name: key,
       ctrlKey: value.ctrlKey,
@@ -96,14 +120,6 @@ function generateNewKeymap (keyDictionary) {
   // and return it
   keymap = result
   return keymap
-}
-
-function isCategory (key, dictionary) {
-  // regex describing a category key
-  // anything that begins with CATEGORY_
-  // will be treated as a category type
-  const reggie = REGEX_CATEGORY
-  return reggie.test(key)
 }
 
 // TODO:

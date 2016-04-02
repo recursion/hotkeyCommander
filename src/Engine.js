@@ -40,13 +40,16 @@ function start (keydownHandler) {
 // this is where the magic happens
 function onKeydown (evt) {
   const keymap = Store.getKeymap()
-  console.log(keymap)
+
+  const keyCode = evt.keyCode
+  const tgt = String.fromCharCode(keyCode)
+  console.log(keyCode, tgt)
+
   if (keymap[evt.keyCode]) {
-    console.log(keymap[evt.keyCode])
+    // console.log(String.fromCharCode(evt.keyCode), evt, evt.keyCode, keymap[evt.keyCode])
     // call the function related to this object here
   } else {
-    console.log('NOT MAPPED')
-    console.log(evt.keyCode)
+    console.log('Not mapped: ', evt, evt.keyCode)
   }
 }
 
