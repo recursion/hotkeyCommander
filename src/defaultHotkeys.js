@@ -1,17 +1,21 @@
-// Define hotkeys here
-/*  ALL hotkeys must follow this pattern
+/**
+ *  ALL Categories MUST be prefixed with CATEGORY_
+ *  ALL hotkeys must follow this pattern
+ *  Use ASCII keyCodes
+ *  (they will be consume during the keypress event)
  *
- *  CATEGORY_CATEGORY_NAME: {
+ * {
+ *  CATEGORY_THE_CATEGORY_NAME: {
  *    HOTKEY_NAME: {
- *       name: 'HOTKEY_NAME',
  *       keyCode: 89,
  *       ctrlKey: false,
  *       shiftKey: false,
  *       altKey: false
- *    },
- *    .......
- *  }
+ *    }.......
+ *  }.......
+ * }
 */
+// Define hotkeys here
 module.exports = {
   CATEGORY_CANCEL_KEYS: {
     CANCEL_ALL: {

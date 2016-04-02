@@ -6,10 +6,39 @@ const REGEX_CATEGORY = /^CATEGORY_.+/gi
  *   module level variables
  */
 
+/**       HOTKEY DICTIONARY
+ *
+ * {
+ *  CATEGORY_THE_CATEGORY_NAME: {
+ *    HOTKEY_NAME: {
+ *       keyCode: 89,
+ *       ctrlKey: false,
+ *       shiftKey: false,
+ *       altKey: false
+ *    },
+ *    .......
+ *  },
+ *  .......
+ * }
+ *
+ */
 // store our hotkey dictionary with categories
 // using hotkey names as keys
 const hotkeyDictionary = loadHotkeys()
 
+/**       HOTKEY MAP
+ *
+ * {
+*    HOTKEY_KEYCODE: {
+*       name: 'HOTKEY_NAME',
+*       keyCode: 89,
+*       ctrlKey: false,
+*       shiftKey: false,
+*       altKey: false
+*    },
+*    .......
+* }
+*/
 // this is a map of the hotkeys
 // with no categories and
 // using the keycodes as keys
@@ -23,12 +52,6 @@ module.exports = {
   getDictionary,
   set,
   isCategory
-}
-
-function copy (obj) {
-  const copy = {}
-  Object.assign({}, obj)
-  return copy
 }
 
 function getKeymap () {
