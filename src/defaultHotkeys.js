@@ -15,25 +15,25 @@
 module.exports = {
   CATEGORY_CANCEL_KEYS: {
     CANCEL_ALL: {
-      keyCode: 89,
+      keyCode: 121,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     CANCEL_LAST: {
-      keyCode: 84,
+      keyCode: 116,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     CANCEL_BIDS: {
-      keyCode: 82,
+      keyCode: 114,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     CANCEL_OFFERS: {
-      keyCode: 85,
+      keyCode: 117,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
@@ -41,25 +41,25 @@ module.exports = {
   },
   CATEGORY_TOGGLE_KEYS: {
     TOGGLE_LOTSIZE_UP: {
-      keyCode: 220,
+      keyCode: 92,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     TOGGLE_LOTSIZE_DOWN: {
-      keyCode: 222,
+      keyCode: 39,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     TOGGLE_OFFSET_UP: {
-      keyCode: 189,
+      keyCode: 45,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     TOGGLE_OFFSET_DOWN: {
-      keyCode: 187,
+      keyCode: 61,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
@@ -67,37 +67,37 @@ module.exports = {
   },
   CATEGORY_BUY_ORDERS: {
     BID_BETTER: {
-      keyCode: 70,
+      keyCode: 102,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     BID_WITH_BEST_BID: {
-      keyCode: 68,
+      keyCode: 100,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     BID_BELOW_BEST: {
-      keyCode: 83,
+      keyCode: 115,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     BID_DOUBLE_BELOW_BEST: {
-      keyCode: 65,
+      keyCode: 97,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     HIT_THE_OFFER: {
-      keyCode: 71,
+      keyCode: 103,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     MARKET_BUY: {
-      keyCode: 444,
+      keyCode: 309,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
@@ -105,31 +105,31 @@ module.exports = {
   },
   CATEGORY_SELL_ORDERS: {
     OFFER_BETTER: {
-      keyCode: 74,
+      keyCode: 106,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     OFFER_WITH_BEST_ASK: {
-      keyCode: 75,
+      keyCode: 107,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     OFFER_ABOVE_BEST: {
-      keyCode: 76,
+      keyCode: 108,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     OFFER_DOUBLE_ABOVE_BEST: {
-      keyCode: 186,
+      keyCode: 59,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
     },
     HIT_THE_BID: {
-      keyCode: 72,
+      keyCode: 555,
       ctrlKey: false,
       shiftKey: false,
       altKey: false

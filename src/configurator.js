@@ -31,7 +31,7 @@ function init (containerEl, listenerEl) {
 
   containerElement = containerEl
 
-  utils.addListener(listenerEl || window, 'keydown', onKeydown)
+  utils.addListener(listenerEl || window, 'keypress', onKeyPress)
 
   render(Store.getDictionary(), containerEl)
 }
@@ -106,7 +106,7 @@ function renderKeys (hotkeys, el) {
   }
 }
 
-function onKeydown (evt) {
+function onKeyPress (evt) {
   // already recording - this is the new key
   if (recording) {
     // TODO: validate that the key is not already in use.

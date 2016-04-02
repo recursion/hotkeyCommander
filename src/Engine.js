@@ -24,7 +24,7 @@ function init (listenerEl, keydownHandler) {
   } else {
     listenerElement = listenerEl
   }
-  start(keydownHandler || onKeydown)
+  start(keydownHandler || onKeyPress)
 }
 
 // requires that a listener element has been set
@@ -34,11 +34,11 @@ function start (keydownHandler) {
     console.error(msg)
     throw new Error(msg)
   }
-  utils.addListener(listenerElement, 'keydown', keydownHandler || onKeydown)
+  utils.addListener(listenerElement, 'keypress', keydownHandler || onKeyPress)
 }
 
 // this is where the magic happens
-function onKeydown (evt) {
+function onKeyPress (evt) {
   const keymap = Store.getKeymap()
 
   const keyCode = evt.keyCode
