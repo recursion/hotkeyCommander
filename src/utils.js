@@ -12,7 +12,7 @@ utils.stripUnderscores = (string) => {
     console.error('stripUnderscores requires a string')
     return ''
   }
-  return string.replace('_', ' ')
+  return string.replace(/_/g, ' ')
 }
 
 // turn a snake case string into a camelCase string
