@@ -5,7 +5,7 @@ const REGEX_CATEGORY = /^CATEGORY_.+/gi
 // module level  variables
 // this is where we keeps the important stuff in memory...
 const hotkeyDictionary = loadHotkeys()
-let keymap = generateKeymap(hotkeyDictionary)
+let keymap = generateNewKeymap(hotkeyDictionary)
 
 // export the hotkeyStore object
 const hotkeyStore = module.exports = {
@@ -21,21 +21,39 @@ hotkeyStore.getDictionary = () => {
   return hotkeyDictionary
 }
 
-hotkeyStore.set = (key, value) => {
-  const categories = hotkeyDictionary
+/*
+  calls back with key, value
+  for each item on the dictionary
+  while skipping over categories entirely
+  usage:
+  onEachKey(hotkeyDictionary, (key, value) => {
+    console.log('key: ', key)
+    console.log('value: ', value)
+  })
+*/
+function onEachKey (dictionary, work) {
+  const categories = dictionary
   // iterate through a list of categories
   for (let category in categories) {
     // iterate through an object of hotkey objects
     const hotkeys = categories[category]
     for (let hotkey in hotkeys) {
-      if (hotkey === key) {
-        hotkeys[hotkey].keyCode = value
-      }
+      work(hotkey, hotkeys[hotkey])
     }
   }
+}
+
+hotkeyStore.set = (key, value) => {
+  const dict = hotkeyDictionary
+  onEachKey(dict, (k, v) => {
+    if (k === key) {
+      // set the keycode
+      v.keyCode = value
+    }
+  })
   // anytime we change the dictionary we
   // want to generate a new keymap
-  keymap = generateKeymap(hotkeyDictionary)
+  generateNewKeymap(dict)
 }
 
 /**
@@ -45,13 +63,14 @@ hotkeyStore.set = (key, value) => {
  * @returns Key:String or null
 */
 function findNameByKeyCode (keycode) {
-  const hotkeys = removeCategoriesFromDictionary(hotkeyDictionary)
-  for (let key in hotkeys) {
-    if (hotkeys[key].keyCode === keycode) {
-      return key
+  const dict = hotkeyDictionary
+  let result = null
+  onEachKey(dict, (key, value) => {
+    if (dict[key].keyCode === keycode) {
+      result = key
     }
-  }
-  return null
+  })
+  return result
 }
 
 // generate an object with keyCode keys
@@ -59,42 +78,24 @@ function findNameByKeyCode (keycode) {
 // instead of by their name
 // this should fire anytime the hotkey storage dictionary changes
 // generate keymap must now strip out categories
-function generateKeymap (keyDictionary) {
-  keyDictionary = removeCategoriesFromDictionary(keyDictionary)
+function generateNewKeymap (keyDictionary) {
   const hotkeys = keyDictionary
   const result = {}
 
-  for (const hotkey in hotkeys) {
-    if (hotkeys.hasOwnProperty(hotkey)) {
-      // build new hotkey dictionary here
-      const thisKey = hotkeys[hotkey]
-      result[thisKey.keyCode] = {
-        name: hotkey,
-        ctrlKey: hotkeys[hotkey].ctrlKey,
-        altKey: hotkeys[hotkey].altKey,
-        shiftKey: hotkeys[hotkey].shiftKey
-      }
+  // create a hotkey object
+  // and add it to our result object
+  onEachKey(hotkeys, (key, value) => {
+    result[value.keyCode] = {
+      name: key,
+      ctrlKey: value.ctrlKey,
+      altKey: value.altKey,
+      shiftKey: value.shiftKey
     }
-  }
-  return result
-}
-
-// return a dictionary of only hotkeys (for building keymaps)
-// (returns a version of the hotkey dictionary with the categories stripped out)
-function removeCategoriesFromDictionary (hotkeysDictionary) {
-  const result = {}
-
-  for (const hotkey in hotkeysDictionary) {
-    if (hotkeysDictionary.hasOwnProperty(hotkey)) {
-      if (isCategory(hotkey, hotkeysDictionary)) {
-        // TODO: verify that this key doesnt exist yet..
-
-        // add this categorys hotkeys to our result object
-        Object.assign(result, hotkeysDictionary[hotkey])
-      }
-    }
-  }
-  return result
+  })
+  // set keymap to our result
+  // and return it
+  keymap = result
+  return keymap
 }
 
 function isCategory (key, dictionary) {
@@ -109,5 +110,6 @@ function isCategory (key, dictionary) {
 // load an existing dictionary of hotkeys
 // otherwise load defaults
 function loadHotkeys () {
+  console.log('Loading: ', defaultHotkeys)
   return defaultHotkeys
 }

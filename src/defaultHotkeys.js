@@ -90,6 +90,12 @@ module.exports = {
       shiftKey: false,
       altKey: false
     },
+    HIT_THE_OFFER: {
+      keyCode: 71,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false
+    },
     MARKET_BUY: {
       keyCode: 444,
       ctrlKey: false,
@@ -124,12 +130,6 @@ module.exports = {
     },
     HIT_THE_BID: {
       keyCode: 72,
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: false
-    },
-    HIT_THE_OFFER: {
-      keyCode: 71,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
