@@ -149,6 +149,5 @@ function generateNewKeymap () {
 // load an existing dictionary of hotkeys
 // otherwise load defaults
 function loadHotkeys () {
-  console.log('Loading: ', defaultHotkeys)
   return defaultHotkeys
 }
