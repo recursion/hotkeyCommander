@@ -40,7 +40,9 @@ function start (keydownHandler) {
 // this is where the magic happens
 function onKeyPress (evt) {
   const keymap = Store.getKeymap()
-  if (keymap[evt.keyCode]) {
+  const keycode = evt.keyCode
+  const target = keymap[keycode]
+  if (target) {
     // console.log(String.fromCharCode(evt.keyCode), evt, evt.keyCode, keymap[evt.keyCode])
     // call the function related to this object here
   } else {

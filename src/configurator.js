@@ -65,6 +65,8 @@ function render (dictionary, targetEl, clear = false) {
   }
 }
 
+// removes CATEGORY_ from the beginning of a string
+// replaces underscores with spaces
 function formatCategory (cat) {
   cat = cat.replace('CATEGORY_', '')
   cat = utils.stripUnderscores(cat)
@@ -76,9 +78,14 @@ function formatCategory (cat) {
 // and add the second string to element.className
 function swapStyles (element, removeClassName, addClassName) {
   // remove the idle state
-  const removeClassIndex = element.className.indexOf(removeClassName)
   const classNames = element.className.split(' ')
+  const removeClassIndex = classNames.indexOf(removeClassName)
   classNames.splice(removeClassIndex, 1)
+
+  // turn the array back into a string
+  element.className = classNames.join(' ')
+
+  // add the new classname to it
   element.className += ' ' + addClassName
 }
 
@@ -86,7 +93,6 @@ function swapStyles (element, removeClassName, addClassName) {
 // clears the element first if clearElement is true
 function renderKeys (hotkeys, el) {
   const template = getTemplate()
-  const hotkeyLabelButton = 'key-label'
 
   // load hotkeys into the template
   // and write it to the page.
@@ -97,17 +103,13 @@ function renderKeys (hotkeys, el) {
       .addEventListener('click', function (evt) {
         if (!recording) {
           // add highlighting to bg for this element
-          var target = this.parentElement.children
-          for (let i = 0; i < target.length; i++) {
-            const child = target[i]
-            // find out if this child has the target class
-            if (child.className.indexOf(hotkeyLabelButton) !== -1) {
-              swapStyles(child, 'recorder-idle', 'recorder-active')
-            }
-          }
-
+          swapStyles(this, 'recorder-idle', 'recorder-active')
           // set recording to the key we are recording
           recording = key
+        } else {
+          // we are already recording.. so stop
+          swapStyles(this, 'recorder-active', 'recorder-idle')
+          recording = false
         }
       })
 
