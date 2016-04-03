@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
   context: __dirname,
-  entry: './src/hotkeyCommander.js',
+  entry: './src',
   output: {
     library: 'hotkeyCommander',
     libraryTarget: 'umd',

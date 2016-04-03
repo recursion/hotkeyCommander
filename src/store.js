@@ -1,7 +1,4 @@
 const defaultHotkeys = require('../hotkey.defaults')
-
-const REGEX_CATEGORY = /^CATEGORY_.+/gi
-
 /** ********************************
  *   module level variables
  */
@@ -111,7 +108,7 @@ function isCategory (key) {
   // regex describing a category key
   // anything that begins with CATEGORY_
   // will be treated as a category type
-  const reggie = REGEX_CATEGORY
+  const reggie = /^CATEGORY_.+/gi
   return reggie.test(key)
 }
 
