@@ -1,8 +1,12 @@
+* {
+  margin: 0 auto;
+}
 .hotkey-container-block {
   max-width: 600px;
   border: 1px solid black;
   display: block;
   padding: 0;
+  color: white;
 }
 
 .hotkey-block {
@@ -12,6 +16,7 @@
 }
 
 .key-description {
+  color: black;
   width: 58%;
   text-align: right;
 }
@@ -19,7 +24,7 @@
   width: 40%;
 }
 .recorder-idle {
-  background-color: tan;
+  background-color: grey;
 }
 .recorder-active{
   background-color: red;
@@ -28,15 +33,17 @@
 .key-label:hover {
   font-weight: bold;
   border: 1px solid black;
-  color: white;
 }
 
+.hotkey-container-block > h1 {
+  margin: 0;
+}
 .hotkey-config-category {
   text-align: center;
-  background-color: darkgrey;
+  background-color: grey;
+  border: 3px solid black;
   font-weight: bold;
   font-size: 1.5em;
-  color: white;
   letter-spacing: 10px;
 }
 
