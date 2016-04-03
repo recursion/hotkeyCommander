@@ -6,6 +6,12 @@ const REGEX_CATEGORY = /^CATEGORY_.+/gi
  *   module level variables
  */
 
+const recording = {
+  key: null,
+  target: null,
+  active: false
+}
+
 /**       HOTKEY DICTIONARY
  *
  * {
@@ -49,13 +55,23 @@ let keymap = generateNewKeymap(hotkeyDictionary)
 module.exports = {
   findNameByKeyCode,
   getKeymap,
+  getKeys,
   getDictionary,
   set,
-  isCategory
+  isCategory,
+  recording
 }
 
 function getKeymap () {
   return keymap
+}
+
+function getKeys () {
+  const result = {}
+  forEachHotkey((key, value) => {
+    result[key] = value
+  })
+  return result
 }
 
 function getDictionary () {
