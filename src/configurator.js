@@ -9,10 +9,9 @@ let containerElement = null
 
 // css selectors used for populating templates
 // and applying/removing styles
-const recordingStyle = 'recording'
-const setButtonSelector = '.set-key-button'
-const labelSelector = '.hotkey-config.key-setting'
-const functionLabelSelector = '.hotkey-config.key-function'
+const configBlockSelector = '.hotkey-container-block'
+const keyLabelSelector = '.hotkey-block.key-label'
+const functionLabelSelector = '.hotkey-block.key-description'
 
 // public api
 module.exports = {
@@ -38,7 +37,7 @@ function init (containerEl, listenerEl) {
 
 function getTemplate () {
   const templates = document.getElementById('hotkeyTemplate').import
-  const template = templates.getElementById('hotkey-setting')
+  const template = templates.getElementById('hotkey-config-template')
   return template
 }
 
@@ -54,7 +53,7 @@ function render (dictionary, targetEl, clear = false) {
     const clone = document.importNode(template.content, true)
 
     // remove innards of template
-    clone.querySelector('.hotkey-config-block').innerHTML = `
+    clone.querySelector(configBlockSelector).innerHTML = `
       <h1 class="hotkey-config-category">
         ${formatCategory(key)}
       </h1>
@@ -72,25 +71,38 @@ function formatCategory (cat) {
   return cat
 }
 
+// takes an element, and two string
+// it will remove the first string from element.className
+// and add the second string to element.className
+function swapStyles (element, removeClassName, addClassName) {
+  // remove the idle state
+  const removeClassIndex = element.className.indexOf(removeClassName)
+  const classNames = element.className.split(' ')
+  classNames.splice(removeClassIndex, 1)
+  element.className += ' ' + addClassName
+}
+
 // render the hotkeys to their dom element
 // clears the element first if clearElement is true
 function renderKeys (hotkeys, el) {
   const template = getTemplate()
+  const hotkeyLabelButton = 'key-label'
 
   // load hotkeys into the template
   // and write it to the page.
   for (let key in hotkeys) {
     const clone = document.importNode(template.content, true)
 
-    clone.querySelector(setButtonSelector)
+    clone.querySelector(keyLabelSelector)
       .addEventListener('click', function (evt) {
         if (!recording) {
           // add highlighting to bg for this element
           var target = this.parentElement.children
           for (let i = 0; i < target.length; i++) {
             const child = target[i]
-            if (child.className.indexOf('key-setting') !== -1) {
-              child.className += ' ' + recordingStyle
+            // find out if this child has the target class
+            if (child.className.indexOf(hotkeyLabelButton) !== -1) {
+              swapStyles(child, 'recorder-idle', 'recorder-active')
             }
           }
 
@@ -101,7 +113,7 @@ function renderKeys (hotkeys, el) {
 
     clone.querySelector(functionLabelSelector).innerText = utils.stripUnderscores(key)
     const keyNameString = String.fromCharCode(hotkeys[key].keyCode)
-    clone.querySelector(labelSelector).innerText = keyNameString
+    clone.querySelector(keyLabelSelector).innerText = keyNameString
     el.appendChild(clone)
   }
 }
@@ -123,17 +135,7 @@ function renderDoneRecording () {
   for (const key in keys) {
     if (keys.hasOwnProperty(key)) {
       const targetEl = keys[key]
-      removeStyle(targetEl, recordingStyle)
+      swapStyles(targetEl, 'recorder-active', 'recorder-idle')
     }
-  }
-}
-
-function removeStyle (el, style) {
-  let styleList = el.className.split(' ')
-  let targetIndex = styleList.indexOf(style)
-  if (targetIndex !== -1) {
-    // remove the target style
-    styleList = styleList.splice(targetIndex, 1)
-    return styleList
   }
 }
