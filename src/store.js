@@ -1,4 +1,4 @@
-const defaultHotkeys = require('./defaultHotkeys')
+const defaultHotkeys = require('../hotkey.defaults')
 
 const REGEX_CATEGORY = /^CATEGORY_.+/gi
 

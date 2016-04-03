@@ -27,14 +27,10 @@ function init (containerEl, listenerEl) {
 
 function onKeyPress (evt) {
   // already recording - this is the new key
-  if (Store.recording) {
-    const targetKey = Store.getKeys()[Store.recording.key]
-
+  if (Store.recording.active) {
     // TODO: validate that the key is not already in use.
 
     Store.set(Store.recording.key, evt.keyCode)
-    deactivateRecordingState(Store.recording.target, targetKey)
-
-    Store.recording.active = false
+    deactivateRecordingState(Store.recording.target, Store.recording.key)
   }
 }

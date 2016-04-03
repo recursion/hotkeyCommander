@@ -1,6 +1,5 @@
 const utils = require('./utils')
 const store = require('./store')
-let containerElement = null
 
 // css selectors used for populating templates
 // and applying/removing styles
@@ -14,21 +13,30 @@ module.exports = {
 }
 
 /** ***********************************************
-             RENDER METHODS
+             RECORDING STATE MANAGEMENT
 /** ***********************************************/
-
-// this is really the only piece of data that gets updated
-function renderButtonText (el, hotkeyObject) {
-  el.innerText = String.fromCharCode(hotkeyObject.keyCode)
+function deactivateRecordingState (el, key) {
+  store.recording.active = false
+  swapStyles(el, 'recorder-active', 'recorder-idle')
+  render(el, key)
 }
 
-function mount (dictionary, targetEl, clear = false) {
-  const template = getTemplate()
+function activateRecordingState (el, key) {
+  store.recording.active = true
+  store.recording.key = key
+  store.recording.target = el
+  swapStyles(el, 'recorder-idle', 'recorder-active')
+}
 
-  // TODO: not alter this outside variable?
-  if (clear) {
-    containerElement.innerHTML = ''
-  }
+/** ***********************************************
+                   MOUNT
+    Takes in a dictionary of hotkeys/categories and an element
+    and mounts the dictionary up into a
+    hotkey template inside of the passed in element
+/** ***********************************************/
+function mount (dictionary, targetEl) {
+  const templates = document.getElementById('hotkeyTemplate').import
+  const template = templates.getElementById('hotkey-config-template')
 
   for (let key in dictionary) {
     const clone = document.importNode(template.content, true)
@@ -41,46 +49,38 @@ function mount (dictionary, targetEl, clear = false) {
     `
     targetEl.appendChild(clone)
 
-    // render the value property as keys
-    renderKeys(dictionary[key], targetEl)
+    // load hotkeys into the template
+    // and render it
+    for (let hotkey in dictionary[key]) {
+      const clone = document.importNode(template.content, true)
+      const target = clone.querySelector(keyLabelSelector)
+
+      target.addEventListener('click', function (evt) {
+        if (store.recording.active) {
+          deactivateRecordingState(target, hotkey)
+        } else {
+          activateRecordingState(target, hotkey)
+        }
+      })
+      render(target, hotkey)
+      clone.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(hotkey)
+      targetEl.appendChild(clone)
+    }
   }
 }
-
-// render the hotkeys to their dom element
-// clears the element first if clearElement is true
-function renderKeys (hotkeys, el) {
-  const template = getTemplate()
-
-  // load hotkeys into the template
-  // and write it to the page.
-  for (let key in hotkeys) {
-    const clone = document.importNode(template.content, true)
-    renderKeyBlock(clone, key, hotkeys[key])
-    el.appendChild(clone)
-  }
-}
-
-function renderKeyBlock (el, key, hotkeyObject) {
-  buildButton(el, key, hotkeyObject)
-  el.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(key)
-}
-
-function buildButton (el, key, hotkeyObject) {
-  const target = el.querySelector(keyLabelSelector)
-
-  target.addEventListener('click', function (evt) {
-    (store.recording.active) ? deactivateRecordingState(this) : activateRecordingState(this, key)
-  })
-  renderButtonText(target, hotkeyObject)
+/** ***********************************************
+                 RENDER
+    Handles the rendering of the only elements that ever get updated
+    - those that display a key character
+      that a hotkey is using.
+/** ***********************************************/
+// this is really the only piece of data that gets updated
+function render (el, key) {
+  const hotkey = store.getKeys()[key]
+  el.innerText = String.fromCharCode(hotkey.keyCode)
 }
 
 // Render helpers
-
-function getTemplate () {
-  const templates = document.getElementById('hotkeyTemplate').import
-  const template = templates.getElementById('hotkey-config-template')
-  return template
-}
 // removes CATEGORY_ from the beginning of a string
 // replaces underscores with spaces
 function formatCategory (cat) {
@@ -88,19 +88,7 @@ function formatCategory (cat) {
   cat = utils.stripUnderscores(cat)
   return cat
 }
-function deactivateRecordingState (el, key) {
-  store.recording.active = false
-  // re-render just the element displaying this piece of data
-  renderButtonText(el, key)
-  swapStyles(el, 'recorder-active', 'recorder-idle')
-}
-function activateRecordingState (el, key) {
-  // the key we are recording
-  // and the target element
-  store.recording.key = key
-  store.recording.target = el
-  swapStyles(el, 'recorder-idle', 'recorder-active')
-}
+
 // takes an element, and two string
 // it will remove the first string from element.className
 // and add the second string to element.className
