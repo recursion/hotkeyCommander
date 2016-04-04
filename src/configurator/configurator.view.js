@@ -8,9 +8,12 @@ const keyCodes = require('../keycodeMap')
 
 //                CSS SELECTORS
 
-const configBlockSelector = '.hotkey-container-block'
-const keyLabelSelector = '.hotkey-block.key-label'
-const descriptionLabelSelector = '.hotkey-block.key-description'
+const configBlockSelector = '.hotkey-config'
+const setKeyBtnSelector = '.config-label.key-recorder-btn'
+const descriptionLabelSelector = '.config-label.key-description'
+const categorySelector = 'config-category'
+const idleStateSelector = 'key-recorder-btn--idle'
+const activeStateSelector = 'key-recorder-btn--active'
 
 module.exports = (Store) => {
   // set a listener for stop events generated outside of the view
@@ -42,13 +45,13 @@ module.exports = (Store) => {
   }
 
   function emitStartRecording (el, key) {
-    swapStyles(el, 'recorder-idle', 'recorder-active')
+    swapStyles(el, idleStateSelector, activeStateSelector)
     Store.emit('recording-start', createEvent(el, key))
   }
 
   function onStopHandler (event) {
     const {element, key} = event
-    swapStyles(element, 'recorder-active', 'recorder-idle')
+    swapStyles(element, activeStateSelector, idleStateSelector)
     render(element, key.keyCode)
   }
 
@@ -67,7 +70,7 @@ module.exports = (Store) => {
 
       // remove innards of template
       categoryDiv.querySelector(configBlockSelector).innerHTML = `
-        <h5 class="hotkey-config-category">
+        <h5 class=${categorySelector}>
           ${utils.stripUnderscores(category.name)}
         </h5>
       `
@@ -77,7 +80,7 @@ module.exports = (Store) => {
       // and render it
       category.keys.forEach((hotkey) => {
         const hotkeyConfigElement = document.importNode(template.content, true)
-        const button = hotkeyConfigElement.querySelector(keyLabelSelector)
+        const button = hotkeyConfigElement.querySelector(setKeyBtnSelector)
 
         // hotkey set button click handler
         button.addEventListener('click', function (evt) {

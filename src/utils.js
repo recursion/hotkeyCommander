@@ -41,23 +41,40 @@ utils.validateEl = (el) => {
   }
 }
 
-utils.createAlertPopup = (options) => {
-  const alertParent = document.body
-  const alertPopupStyleName = 'key-overwrite-alert'
-  // create a div
-  const alertDiv = document.createElement('div')
+function createDiv () {
+  return document.createElement('div')
+}
 
-  // assign the div a pre-agreed style
-  alertDiv.className = alertPopupStyleName
+// options should at least
+// have a fadeOutTime and a message
+utils.createAlertPopup = (options) => {
+  // selectors
+  const alertPopupStyleName = 'panel alert'
+  const alertWarningStyle = 'alert--warning'
+  const panelStyleName = 'panel milky'
+  const alertMessageStyle = 'alert-message'
+
+  // create our elements
+  const parent = document.body
+  const panel = createDiv()
+  const alertDiv = createDiv()
+  const alertMsg = createDiv()
+
+  // set styles
+  panel.className = panelStyleName
+  alertDiv.className = `${alertPopupStyleName} ${alertWarningStyle}`
+  alertMsg.className = alertMessageStyle
 
   // insert data into the div
-  alertDiv.innerHTML = options.message
+  alertMsg.innerHTML = options.message
 
-  // mount the div on the alert parent element
-  alertParent.appendChild(alertDiv)
+  // mount the elements
+  parent.appendChild(panel)
+  panel.appendChild(alertDiv)
+  alertDiv.appendChild(alertMsg)
 
-  // call a function that begins a fadeout process
-  utils.doWorkAfter(utils.removeElFromDom, alertDiv, options.fadeoutTime)
+  // remove the element after a set time
+  utils.doWorkAfter(utils.removeElFromDom, panel, options.fadeoutTime)
 }
 
 // takes a callback, a target item, and a time
