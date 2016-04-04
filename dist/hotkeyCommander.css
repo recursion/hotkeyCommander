@@ -21,32 +21,30 @@
   font-size: .6em;
   text-align: right;
 }
-.key-label {
-  width: 40%;
-}
 .recorder-idle {
   background-color: grey;
 }
 .recorder-active{
-  background-color: red;
+  background-color: #ff1111;
 }
-h5 {
+.key-label {
+  width: 40%;
+  box-shadow: -1px -1px 1px white, 1px 1px 1px black;
+  text-shadow: -1px -1px 1px black, 1px 1px 1px white;
 }
 .key-label:hover {
   font-weight: bold;
-  border: 1px solid black;
+  box-shadow: -1px -1px 1px black, 1px 1px 1px white;
 }
 
-.hotkey-container-block > h1 {
-  margin: 0;
-}
 .hotkey-config-category {
   text-align: center;
   background-color: black;
-  color: white;
+  color: #ddd;
   font-weight: bold;
-  border-bottom: 2px dotted grey;
   letter-spacing: 10px;
+  box-shadow: -1px -1px 1px white, 1px 1px 1px black;
+  text-shadow: -1px -1px 1px black, 1px 1px 1px white;
 }
 
 .right {
@@ -57,11 +55,12 @@ h5 {
 .key-overwrite-alert {
   display: block;
   position: absolute;
+  width: 90%;
   top: 0px;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
 
   margin: 0 auto;
-  padding: 1em;
 
   background-color: orange;
   color: black;
