@@ -5,6 +5,7 @@
  * and handles the logic of recording new key strokes
  */
 const utils = require('../utils')
+const keyCodes = require('../keycodeMap')
 const activeKeys = []
 
 // public api
@@ -48,7 +49,7 @@ module.exports = (Store) => {
 
   // key down handler
   function onKeyDown (evt) {
-    // console.log(`${evt.keyCode} ${String.fromCharCode(evt.keyCode)}, ${keyCodes[evt.keyCode]}`)
+    console.log(`${evt.keyCode} ${String.fromCharCode(evt.keyCode)}, ${keyCodes[evt.keyCode]}`)
 
     // we only do things here if key recording has been activated
     const recordingState = Store.recording

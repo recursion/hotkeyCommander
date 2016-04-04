@@ -2,7 +2,9 @@
 
 # Hotkey Commander
 
-> A javascript module that makes it easy to configure and consume keypress events. Aka: hotkeys.
+> A 'drop in' javascript module for super-easy, user-level hotkey configuration and event consumption.
+
+Your users will be able to easily configure their hotkey preferences, while still invoking your pre-defined event handlers for the needed functions. You simply pass the module an object with your event handler functions that share a simple naming convention with your hotkey definitions, along with the elements you want to listen on, and display and display the config panel to, and hotkeyCommander does the rest. When a user changes his hotkey settings, the new hotkey is immediately active.
 
 1. Create your custom hotkeys via a simple js object / key value pair template
 2. Create a hotkeyCommander instance.
@@ -10,18 +12,17 @@
 4. Give hotkeyCommander the element you want the configuration template rendered to.
 5. Give hotkeyCommander the element you want the hotkey engine to listen on.
 6. Give hotkeyCommander the element you want the config
-This module uses the HTML import spec for templating, which is currently (and sadly) only  supported by chrome. Polyfills or other template options may be added later. This project is still in development and not yet in a usable state.
+
+This module currently uses the HTML import spec for templating, which is (sadly) only supported by chrome. It will be converted to a more universal templating solution shortly, and then probably something like a react specific component.
 
 #### TODO
-- Protect against overwriting existing hotkeys.
-  - Just do a swap? or outright reject?
 
 - Load hotkeys to and from local storage.
-
 - Catch/use alt keys (shift/ctrl/alt)
-
+- Convert to a more universal templating solution.
+- Convert to a redux store
+- ~~Protect against overwriting existing hotkeys.~~
 - ~~Add categories (so that keys can be sorted by category)~~
-
 - ~~Assume that the set/record keystrokes could happen in a different window than the one we are actually firing keys from. This ultimately means there will need to be functions for setting up two different listeners. One for record/set keystrokes and one for actually firing them off.~~
 
 ### Usage
@@ -43,8 +44,9 @@ This module uses the HTML import spec for templating, which is currently (and sa
   <script src="dist/hotkeyCommander.js"></script>
 
   <script>
+    var hotkeys = require('./myHotkeyDefaults')
     var targetEl = document.getElementById('hotkeys');
-    hotkeyCommander.init(targetEl);
+    hotkeyCommander.init(targetEl, {hotkeys: hotkeys});
   </script>
 ```
 
@@ -52,15 +54,18 @@ This module uses the HTML import spec for templating, which is currently (and sa
 > The config portion will run in the plugin context
 > while the  hotkey engine will run in the extensions target window
 > instructions coming
-> but it will look like this
+> but it will look something like this
 ```
-// in the context where you will be running
+// in the context/file where you will be running
 // the configuration module
+const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-hotkeyCommander.startConfigurator(targetElement, listenerElement)
+hotkeyCommander.startConfigurator(targetElement, listenerElement, {hotkeys})
+
 // then in the context where you want the keykeys to be responded to:
+const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-hotkeyCommander.startEngine(listenerElement, responderObject)
+hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
 ```
 
 #### Development
@@ -69,50 +74,54 @@ hotkeyCommander.startEngine(listenerElement, responderObject)
 > Ill shove it here for the time being.
 
 ##### Data Structures
-
        HOTKEY OBJECT
-
 This is the data structure representing a hotkey
-The name should describe
-
-CAPITAL_NAME_WITH_UNDERSCORES: {
+```
+{
+  name: CAPITAL_NAME_WITH_UNDERSCORES,
   keyCode: ASCII_KEYCODE,
   altKey: BOOL,
   ctrlKey: BOOL,
   shiftKey: BOOL
 }
-
+```
      HOTKEY DICTIONARY
-
 a data structure that takes the shape
 of an object with keys that are category
 names and values that are objects of
 hotkey objects
-
+```
 {
-  CATEGORY_THE_CATEGORY_NAME: {
-    HOTKEY_NAME: {
-       keyCode: 89,
-       ctrlKey: false,
-       shiftKey: false,
-       altKey: false
-    },.......
-  },.....
+  name: CATEGORY_THE_CATEGORY_NAME,
+  keys: [
+    {
+      name: CAPITAL_NAME_WITH_UNDERSCORES,
+      keyCode: ASCII_KEYCODE,
+      altKey: BOOL,
+      ctrlKey: BOOL,
+      shiftKey: BOOL
+    }
+  ]
 }
-
+```
      HOTKEY MAP
-
 Dictionary of hotkeys referenced by keyCode instead of by name
 This is always updated to reflect the state of the hotkey dictionary
-
+```
 {
-HOTKEY_KEYCODE: {
-   name: 'HOTKEY_NAME',
-   ctrlKey: false,
-   shiftKey: false,
-   altKey: false
-},
-.......
+  HOTKEY_KEYCODE: {
+     name: 'HOTKEY_NAME',
+     ctrlKey: false,
+     shiftKey: false,
+     altKey: false
+  },
+  HOTKEY2_KEYCODE: {
+     name: 'HOTKEY2_NAME',
+     ctrlKey: false,
+     shiftKey: false,
+     altKey: false
+  },.......
 }
+```
 
 
