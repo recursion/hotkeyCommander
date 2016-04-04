@@ -1,4 +1,9 @@
-const utils = require('./utils')
+/**
+ * Configurator.view.js
+ * this module is responsible for creating/mounting
+ * and rendering the hotkey configuration view
+ */
+const utils = require('../utils')
 
 // css selectors used for populating templates
 // and applying/removing styles
@@ -7,29 +12,35 @@ const keyLabelSelector = '.hotkey-block.key-label'
 const descriptionLabelSelector = '.hotkey-block.key-description'
 
 module.exports = (Store) => {
-  Store.on('recording-stopped', stop)
+  // set a listener for stop events generated outside of the view
+  Store.on('recording-stopped', onStopHandler)
 
+  // public api
   return {
     mount
   }
 
+  // event handler / emitter functions
+
   function createEvent (el, key) {
-    return {hotkey: key, element: el}
+    return {keyName: key, element: el}
   }
 
-  function emitStop (el, key) {
+  function emitStopRecording (el, key) {
     Store.emit('recording-stop', createEvent(el, key))
+    onStopHandler(createEvent(el, key))
   }
 
-  function emitStart (el, key) {
+  function emitStartRecording (el, key) {
     swapStyles(el, 'recorder-idle', 'recorder-active')
     Store.emit('recording-start', createEvent(el, key))
   }
 
-  function stop (event) {
-    const {element, hotkey} = event
+  function onStopHandler (event) {
+    const {element, keyName} = event
+    const keyObject = Store.getKeys()[keyName]
     swapStyles(element, 'recorder-active', 'recorder-idle')
-    render(element, hotkey)
+    render(element, keyObject.keyCode)
   }
 
   /** ***********************************************
@@ -38,38 +49,46 @@ module.exports = (Store) => {
       and mounts the dictionary up into a
       hotkey template inside of the passed in element
   /** ***********************************************/
-  function mount (dictionary, targetEl) {
+  function mount (hotkeysObject, containerEl) {
     const templates = document.getElementById('hotkeyTemplate').import
     const template = templates.getElementById('hotkey-config-template')
 
-    for (let key in dictionary) {
-      const clone = document.importNode(template.content, true)
+    for (let category in hotkeysObject) {
+      const categoryDiv = document.importNode(template.content, true)
+      const hotkeys = hotkeysObject[category]
 
       // remove innards of template
-      clone.querySelector(configBlockSelector).innerHTML = `
+      categoryDiv.querySelector(configBlockSelector).innerHTML = `
         <h1 class="hotkey-config-category">
-          ${formatCategory(key)}
+          ${formatCategory(category)}
         </h1>
       `
-      targetEl.appendChild(clone)
+      containerEl.appendChild(categoryDiv)
 
       // load hotkeys into the template
       // and render it
-      const category = dictionary[key]
-      for (let hotkey in category) {
-        const clone = document.importNode(template.content, true)
-        const target = clone.querySelector(keyLabelSelector)
+      for (let hotkey in hotkeys) {
+        const hotkeyConfigElement = document.importNode(template.content, true)
+        const button = hotkeyConfigElement.querySelector(keyLabelSelector)
+        const targetKey = hotkeys[hotkey]
 
-        target.addEventListener('click', function (evt) {
+        // hotkey set button click handler
+        button.addEventListener('click', function (evt) {
+          // if we are recording a key
           if (Store.recording.active) {
-            emitStop(target, category[hotkey])
+            // if this element is for the hotkey we are currently recording
+            if (Store.recording.element === this) {
+              // stop recording
+              emitStopRecording(button, hotkey)
+            }
           } else {
-            emitStart(target, category[hotkey])
+            // start recording!
+            emitStartRecording(button, hotkey)
           }
         })
-        render(target, dictionary[key][hotkey])
-        clone.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(hotkey)
-        targetEl.appendChild(clone)
+        render(button, targetKey.keyCode)
+        hotkeyConfigElement.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(hotkey)
+        containerEl.appendChild(hotkeyConfigElement)
       }
     }
   }
@@ -80,8 +99,8 @@ module.exports = (Store) => {
         that a hotkey is using.
   /** ***********************************************/
   // this is really the only piece of data that gets updated
-  function render (el, hotkey) {
-    el.innerText = String.fromCharCode(hotkey.keyCode)
+  function render (el, keyCode) {
+    el.innerText = String.fromCharCode(keyCode)
   }
 
   // Render helpers

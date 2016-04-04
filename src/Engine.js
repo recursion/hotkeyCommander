@@ -14,17 +14,13 @@ module.exports = (Store) => {
     init
   }
 
-  // if no listener element is provided
-  // then use the window object
-  // if no keydownHandler is provided, user our own
-  // keydownhandler can be a function that handles and event...
-  function init (listenerEl, keydownHandler) {
+  function init (listenerEl) {
     if (!utils.validateEl(listenerEl)) {
       throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
     } else {
       listenerElement = listenerEl
     }
-    start(keydownHandler || onKeyPress)
+    start(onKeyPress)
   }
 
   // requires that a listener element has been set
@@ -34,7 +30,7 @@ module.exports = (Store) => {
       console.error(msg)
       throw new Error(msg)
     }
-    utils.addListener(listenerElement, 'keypress', keydownHandler || onKeyPress)
+    utils.addListener(listenerElement, 'keypress', keydownHandler)
   }
 
   // Handle key press events

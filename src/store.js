@@ -13,7 +13,7 @@ module.exports = () => {
 
   // track recording state
   const recordingState = {
-    key: null,
+    keyName: null,
     element: null,
     active: false
   }
@@ -39,8 +39,8 @@ module.exports = () => {
   return Store
 
   function onSetKey (event) {
-    const {hotkey, newKeyCode} = event
-    set(hotkey, newKeyCode)
+    const {keyName, newKeyCode} = event
+    set(keyName, newKeyCode)
     stopRecording(event)
   }
 
@@ -50,9 +50,9 @@ module.exports = () => {
   }
 
   function onStartRecording (event) {
-    const {hotkey, element} = event
+    const {keyName, element} = event
     recordingState.active = true
-    recordingState.key = hotkey
+    recordingState.keyName = keyName
     recordingState.element = element
   }
 
@@ -129,6 +129,8 @@ module.exports = () => {
   }
 
   function set (key, value) {
+    console.log(key)
+    key = getKeys()[key]
     key.keyCode = value
     // anytime we change the dictionary we
     // want to generate a new keymap

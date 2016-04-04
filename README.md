@@ -1,7 +1,16 @@
 [![Stories in Ready](https://badge.waffle.io/recursion/hotkeyCommander.png?label=ready&title=Ready)](https://waffle.io/recursion/hotkeyCommander)
+
 # Hotkey Commander
-> A drop in javascript module for configuring hotkeys.
-> This module uses the HTML import spec for templating, which is currently (and sadly) only  supported by chrome. Polyfills or other template options may be added later. This project is still in development and not yet in a usable state.
+
+> A javascript module that makes it easy to configure and consume keypress events. Aka: hotkeys.
+
+1. Create your custom hotkeys via a simple js object / key value pair template
+2. Create a hotkeyCommander instance.
+3. Give the default hotkey object to hotkey commander.
+4. Give hotkeyCommander the element you want the configuration template rendered to.
+5. Give hotkeyCommander the element you want the hotkey engine to listen on.
+6. Give hotkeyCommander the element you want the config
+This module uses the HTML import spec for templating, which is currently (and sadly) only  supported by chrome. Polyfills or other template options may be added later. This project is still in development and not yet in a usable state.
 
 #### TODO
 - Protect against overwriting existing hotkeys.

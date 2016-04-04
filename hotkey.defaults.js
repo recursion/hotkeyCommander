@@ -133,7 +133,7 @@ module.exports = {
       altKey: false
     },
     HIT_THE_BID: {
-      keyCode: 555,
+      keyCode: 104,
       ctrlKey: false,
       shiftKey: false,
       altKey: false
