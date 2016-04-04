@@ -1,5 +1,6 @@
-const configurator = require('./configurator')
-const engine = require('./engine')
+const store = require('./store')()
+const configurator = require('./configurator')(store)
+const engine = require('./engine')(store)
 
 // two ways to start the module:
 //   1) call init with the proper parameters (this assumes 1 context)

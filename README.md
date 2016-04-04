@@ -53,3 +53,56 @@ const hotkeyCommander = require('hotkeyCommander')
 hotkeyCommander.startEngine(listenerElement, responderObject)
 ```
 
+#### Development
+> The following data doesnt really belong here,
+> but in leiu of replicating it throughout the project
+> Ill shove it here for the time being.
+
+##### Data Structures
+
+       HOTKEY OBJECT
+
+This is the data structure representing a hotkey
+The name should describe
+
+CAPITAL_NAME_WITH_UNDERSCORES: {
+  keyCode: ASCII_KEYCODE,
+  altKey: BOOL,
+  ctrlKey: BOOL,
+  shiftKey: BOOL
+}
+
+     HOTKEY DICTIONARY
+
+a data structure that takes the shape
+of an object with keys that are category
+names and values that are objects of
+hotkey objects
+
+{
+  CATEGORY_THE_CATEGORY_NAME: {
+    HOTKEY_NAME: {
+       keyCode: 89,
+       ctrlKey: false,
+       shiftKey: false,
+       altKey: false
+    },.......
+  },.....
+}
+
+     HOTKEY MAP
+
+Dictionary of hotkeys referenced by keyCode instead of by name
+This is always updated to reflect the state of the hotkey dictionary
+
+{
+HOTKEY_KEYCODE: {
+   name: 'HOTKEY_NAME',
+   ctrlKey: false,
+   shiftKey: false,
+   altKey: false
+},
+.......
+}
+
+
