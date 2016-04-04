@@ -15,6 +15,7 @@ const descriptionLabelSelector = '.hotkey-block.key-description'
 module.exports = (Store) => {
   // set a listener for stop events generated outside of the view
   Store.on('recording-stopped', onStopHandler)
+  Store.on('key-overwrite-alert', keyOverWriteAlert)
 
   // public api
   return {
@@ -22,6 +23,14 @@ module.exports = (Store) => {
   }
 
   // event handler / emitter functions
+
+  function keyOverWriteAlert () {
+    // pop up an alert box of some kind
+    utils.createAlertPopup({
+      message: 'KEY ALREADY IN USE',
+      fadeoutTime: 2000
+    })
+  }
 
   function createEvent (el, key) {
     return {key: key, element: el}
@@ -58,9 +67,9 @@ module.exports = (Store) => {
 
       // remove innards of template
       categoryDiv.querySelector(configBlockSelector).innerHTML = `
-        <h1 class="hotkey-config-category">
-          ${formatCategory(category.name)}
-        </h1>
+        <h5 class="hotkey-config-category">
+          ${utils.stripUnderscores(category.name)}
+        </h5>
       `
       containerEl.appendChild(categoryDiv)
 
@@ -99,15 +108,6 @@ module.exports = (Store) => {
   // this is really the only piece of data that gets updated
   function render (el, code) {
     el.innerText = keyCodes[code]
-  }
-
-  // Render helpers
-  // removes CATEGORY_ from the beginning of a string
-  // replaces underscores with spaces
-  function formatCategory (cat) {
-    cat = cat.replace('CATEGORY_', '')
-    cat = utils.stripUnderscores(cat)
-    return cat
   }
 
   // takes an element, and two string

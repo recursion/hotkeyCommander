@@ -12,12 +12,13 @@
 .hotkey-block {
   display: inline-block;
   text-align: center;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .key-description {
   color: black;
   width: 58%;
+  font-size: .6em;
   text-align: right;
 }
 .key-label {
@@ -29,7 +30,8 @@
 .recorder-active{
   background-color: red;
 }
-
+h5 {
+}
 .key-label:hover {
   font-weight: bold;
   border: 1px solid black;
@@ -40,14 +42,34 @@
 }
 .hotkey-config-category {
   text-align: center;
-  background-color: grey;
-  border: 3px solid black;
+  background-color: black;
+  color: white;
   font-weight: bold;
-  font-size: 1.5em;
+  border-bottom: 2px dotted grey;
   letter-spacing: 10px;
 }
 
 .right {
   clear: both;
   float: right;
+}
+
+.key-overwrite-alert {
+  display: block;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+
+  margin: 0 auto;
+  padding: 1em;
+
+  background-color: orange;
+  color: black;
+  box-shadow: 5px 5px 5px black;
+  border: 3px dotted black;
+  border-radius: 5px;
+  font-size: 1.4em;
+  font-weight: bold;
+  letter-spacing: .25em;
+  text-align: center;
 }

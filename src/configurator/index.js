@@ -71,7 +71,7 @@ module.exports = (Store) => {
         } else {
           // alert the user
           // cant set key to a code already in use
-          console.log('User - this key is in use by another hotkey - how would you like to proceed?')
+          Store.emit('key-overwrite-alert')
         }
       } else {
         // this key was not set and should be ok to use

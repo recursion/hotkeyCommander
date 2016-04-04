@@ -74,6 +74,7 @@ module.exports = () => {
     return keymap
   }
 
+/* not need?
   function getHotkeysMappedByName () {
     const hotkeys = {}
     forEachHotkey((hotkey) => {
@@ -81,6 +82,16 @@ module.exports = () => {
     })
     return hotkeys
   }
+  function filterEachHotkey (filter) {
+    const result = []
+    forEachHotkey((hotkey) => {
+      if (filter(hotkey)) {
+        result.push(hotkey)
+      }
+    })
+    return result
+  }
+  */
 
   // generate an object with code keys
   // so that the hotkeys can be accessed by their keycode
@@ -107,16 +118,6 @@ module.exports = () => {
         work(hotkey)
       })
     })
-  }
-
-  function filterEachHotkey (filter) {
-    const result = []
-    forEachHotkey((hotkey) => {
-      if (filter(hotkey)) {
-        result.push(hotkey)
-      }
-    })
-    return result
   }
 
   // TODO:

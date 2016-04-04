@@ -40,3 +40,35 @@ utils.validateEl = (el) => {
     return true
   }
 }
+
+utils.createAlertPopup = (options) => {
+  const alertParent = document.body
+  const alertPopupStyleName = 'key-overwrite-alert'
+  // create a div
+  const alertDiv = document.createElement('div')
+
+  // assign the div a pre-agreed style
+  alertDiv.className = alertPopupStyleName
+
+  // insert data into the div
+  alertDiv.innerHTML = options.message
+
+  // mount the div on the alert parent element
+  alertParent.appendChild(alertDiv)
+
+  // call a function that begins a fadeout process
+  utils.doWorkAfter(utils.removeElFromDom, alertDiv, options.fadeoutTime)
+}
+
+// takes a callback, a target item, and a time
+// after time - calls the callback with target
+utils.doWorkAfter = (work, target, time) => {
+  setTimeout(() => {
+    work(target)
+  }, time)
+}
+
+// removes an element from the dom
+utils.removeElFromDom = (el) => {
+  el.parentNode.removeChild(el)
+}
