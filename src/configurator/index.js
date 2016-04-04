@@ -5,12 +5,12 @@
  * and handles the logic of recording new key strokes
  */
 const utils = require('../utils')
-const keyCodes = require('../keyCodes')
 const activeKeys = []
 
 // public api
 module.exports = (Store) => {
   const {mount} = require('./configurator.view')(Store)
+  const hotkeys = Store.getHotkeys()
 
   return {
     init: init
@@ -26,7 +26,7 @@ module.exports = (Store) => {
     utils.addListener(listenerElement, 'keydown', onKeyDown)
     utils.addListener(listenerElement, 'keyup', onKeyUp)
 
-    mount(Store.getDictionary(), configRenderElement)
+    mount(hotkeys, configRenderElement)
   }
 
   // emit an event when a user is trying to set a key

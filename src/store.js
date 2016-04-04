@@ -4,12 +4,12 @@ const Store = new EM2()
 module.exports = () => {
   // store our hotkey dictionary with categories
   // using hotkey names as keys
-  const hotkeyDictionary = loadHotkeys()
+  const hotkeyList = loadHotkeys()
 
   // this is a map of the hotkeys
   // with no categories and
   // using the keycodes as keys
-  let keymap = generateNewKeymap(hotkeyDictionary)
+  let keymap = generateNewKeymap()
 
   // track recording state
   const recordingState = {
@@ -21,12 +21,8 @@ module.exports = () => {
   const public_api = {
     on: Store.on,
     emit: Store.emit,
-    findNameByKeyCode,
+    getHotkeys,
     getKeymap,
-    getKeys,
-    getDictionary,
-    set,
-    isCategory,
     recording: recordingState
   }
 
@@ -35,6 +31,9 @@ module.exports = () => {
   Store.on('recording-start', onStartRecording)
   Store.on('recording-set-key', onSetKey)
 
+  // Extend event emitter
+  // with our own public methods
+  // and export it
   Object.assign(Store, public_api)
   return Store
 
@@ -60,35 +59,27 @@ module.exports = () => {
     key.keyCode = value
     // anytime we change the dictionary we
     // want to generate a new keymap
-    generateNewKeymap()
+    keymap = generateNewKeymap()
   }
   /* *****************************
    *  data accessor methods
    * ****************************/
 
-  // returns a dictionary of hotkey objects
-  // using codes as keys
+  // return the hotkeys list in its natural form
+  function getHotkeys () {
+    return hotkeyList
+  }
+
   function getKeymap () {
     return keymap
   }
 
-  // returns a dictionary of the hotkeys
-  // using their names as keys
-  function getKeys () {
-    const result = {}
-    forEachHotkey((key, value) => {
-      result[key] = value
+  function getHotkeysMappedByName () {
+    const hotkeys = {}
+    forEachHotkey((hotkey) => {
+      hotkeys[hotkey.name] = hotkey
     })
-    return result
-  }
-
-  // returns the entire dictionary of hotkeys
-  // which is ultimately a dictionary of categories
-  // where the keys are the category names
-  // and the value are an object of hotkey objects
-  // using their names as keys
-  function getDictionary () {
-    return hotkeyDictionary
+    return hotkeys
   }
 
   // generate an object with code keys
@@ -101,67 +92,31 @@ module.exports = () => {
 
     // create a hotkey object
     // and add it to our result object
-    forEachHotkey((key, value) => {
-      result[value.keyCode] = {
-        name: key,
-        ctrlKey: value.ctrlKey,
-        altKey: value.altKey,
-        shiftKey: value.shiftKey
-      }
+    forEachHotkey((key) => {
+      result[key.keyCode] = key
     })
     // set keymap to our result
     // and return it
-    keymap = result
-    return keymap
-  }
-  /* *****************************
-   *  helpers
-   * ****************************/
-  /**
-   * searches through the keyDictionary and
-   * attempts to find the keycode in the keydictionary
-   * @param {Number} - a keycode
-   * @returns Key:String or null
-  */
-  function findNameByKeyCode (keycode) {
-    const dict = hotkeyDictionary
-    let result = null
-    forEachHotkey(dict, (key, value) => {
-      if (dict[key].code === keycode) {
-        result = key
-      }
-    })
     return result
   }
 
-  function isCategory (key) {
-    // regex describing a category key
-    // anything that begins with CATEGORY_
-    // will be treated as a category type
-    const reggie = /^CATEGORY_.+/gi
-    return reggie.test(key)
+  // call back with each hotkey object
+  function forEachHotkey (work) {
+    hotkeyList.forEach((category) => {
+      category.keys.forEach((hotkey) => {
+        work(hotkey)
+      })
+    })
   }
 
-  /*
-    calls back with key, value
-    for each item on the dictionary
-    while skipping over categories entirely
-    usage:
-    forEachHotkey(hotkeyDictionary, (key, value) => {
-      console.log('key: ', key)
-      console.log('value: ', value)
-    })
-  */
-  function forEachHotkey (work) {
-    const categories = hotkeyDictionary
-    // iterate through a list of categories
-    for (let category in categories) {
-      // iterate through an object of hotkey objects
-      const hotkeys = categories[category]
-      for (let hotkey in hotkeys) {
-        work(hotkey, hotkeys[hotkey])
+  function filterEachHotkey (filter) {
+    const result = []
+    forEachHotkey((hotkey) => {
+      if (filter(hotkey)) {
+        result.push(hotkey)
       }
-    }
+    })
+    return result
   }
 
   // TODO:

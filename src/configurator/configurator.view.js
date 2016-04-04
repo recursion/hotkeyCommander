@@ -4,13 +4,13 @@
  * and rendering the hotkey configuration view
  */
 const utils = require('../utils')
+const keyCodes = require('../keycodeMap')
 
-// css selectors used for populating templates
-// and applying/removing styles
+//                CSS SELECTORS
+
 const configBlockSelector = '.hotkey-container-block'
 const keyLabelSelector = '.hotkey-block.key-label'
 const descriptionLabelSelector = '.hotkey-block.key-description'
-const keyCodes = require('../keyCodes')
 
 module.exports = (Store) => {
   // set a listener for stop events generated outside of the view
@@ -49,28 +49,26 @@ module.exports = (Store) => {
       and mounts the dictionary up into a
       hotkey template inside of the passed in element
   /** ***********************************************/
-  function mount (hotkeysObject, containerEl) {
+  function mount (hotkeys, containerEl) {
     const templates = document.getElementById('hotkeyTemplate').import
     const template = templates.getElementById('hotkey-config-template')
 
-    for (let category in hotkeysObject) {
+    hotkeys.forEach((category) => {
       const categoryDiv = document.importNode(template.content, true)
-      const hotkeys = hotkeysObject[category]
 
       // remove innards of template
       categoryDiv.querySelector(configBlockSelector).innerHTML = `
         <h1 class="hotkey-config-category">
-          ${formatCategory(category)}
+          ${formatCategory(category.name)}
         </h1>
       `
       containerEl.appendChild(categoryDiv)
 
       // load hotkeys into the template
       // and render it
-      for (let hotkey in hotkeys) {
+      category.keys.forEach((hotkey) => {
         const hotkeyConfigElement = document.importNode(template.content, true)
         const button = hotkeyConfigElement.querySelector(keyLabelSelector)
-        const targetKey = hotkeys[hotkey]
 
         // hotkey set button click handler
         button.addEventListener('click', function (evt) {
@@ -79,18 +77,18 @@ module.exports = (Store) => {
             // if this element is for the hotkey we are currently recording
             if (Store.recording.element === this) {
               // stop recording
-              emitStopRecording(button, targetKey)
+              emitStopRecording(button, hotkey)
             }
           } else {
             // start recording!
-            emitStartRecording(button, targetKey)
+            emitStartRecording(button, hotkey)
           }
         })
-        render(button, targetKey.keyCode)
-        hotkeyConfigElement.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(hotkey)
+        render(button, hotkey.keyCode)
+        hotkeyConfigElement.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(hotkey.name)
         containerEl.appendChild(hotkeyConfigElement)
-      }
-    }
+      })
+    })
   }
   /** ***********************************************
                    RENDER
