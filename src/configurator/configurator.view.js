@@ -10,6 +10,7 @@ const utils = require('../utils')
 const configBlockSelector = '.hotkey-container-block'
 const keyLabelSelector = '.hotkey-block.key-label'
 const descriptionLabelSelector = '.hotkey-block.key-description'
+const keyCodes = require('../keyCodes')
 
 module.exports = (Store) => {
   // set a listener for stop events generated outside of the view
@@ -23,7 +24,7 @@ module.exports = (Store) => {
   // event handler / emitter functions
 
   function createEvent (el, key) {
-    return {keyName: key, element: el}
+    return {key: key, element: el}
   }
 
   function emitStopRecording (el, key) {
@@ -37,10 +38,9 @@ module.exports = (Store) => {
   }
 
   function onStopHandler (event) {
-    const {element, keyName} = event
-    const keyObject = Store.getKeys()[keyName]
+    const {element, key} = event
     swapStyles(element, 'recorder-active', 'recorder-idle')
-    render(element, keyObject.keyCode)
+    render(element, key.keyCode)
   }
 
   /** ***********************************************
@@ -79,11 +79,11 @@ module.exports = (Store) => {
             // if this element is for the hotkey we are currently recording
             if (Store.recording.element === this) {
               // stop recording
-              emitStopRecording(button, hotkey)
+              emitStopRecording(button, targetKey)
             }
           } else {
             // start recording!
-            emitStartRecording(button, hotkey)
+            emitStartRecording(button, targetKey)
           }
         })
         render(button, targetKey.keyCode)
@@ -99,8 +99,8 @@ module.exports = (Store) => {
         that a hotkey is using.
   /** ***********************************************/
   // this is really the only piece of data that gets updated
-  function render (el, keyCode) {
-    el.innerText = String.fromCharCode(keyCode)
+  function render (el, code) {
+    el.innerText = keyCodes[code]
   }
 
   // Render helpers

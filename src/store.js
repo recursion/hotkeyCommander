@@ -13,7 +13,7 @@ module.exports = () => {
 
   // track recording state
   const recordingState = {
-    keyName: null,
+    keyCode: null,
     element: null,
     active: false
   }
@@ -39,8 +39,8 @@ module.exports = () => {
   return Store
 
   function onSetKey (event) {
-    const {keyName, newKeyCode} = event
-    set(keyName, newKeyCode)
+    const {key, newKeyCode} = event
+    set(key, newKeyCode)
     stopRecording(event)
   }
 
@@ -50,18 +50,24 @@ module.exports = () => {
   }
 
   function onStartRecording (event) {
-    const {keyName, element} = event
+    const {key, element} = event
     recordingState.active = true
-    recordingState.keyName = keyName
+    recordingState.key = key
     recordingState.element = element
   }
 
+  function set (key, value) {
+    key.keyCode = value
+    // anytime we change the dictionary we
+    // want to generate a new keymap
+    generateNewKeymap()
+  }
   /* *****************************
    *  data accessor methods
    * ****************************/
 
   // returns a dictionary of hotkey objects
-  // using keyCodes as keys
+  // using codes as keys
   function getKeymap () {
     return keymap
   }
@@ -85,7 +91,7 @@ module.exports = () => {
     return hotkeyDictionary
   }
 
-  // generate an object with keyCode keys
+  // generate an object with code keys
   // so that the hotkeys can be accessed by their keycode
   // instead of by their name
   // this should fire anytime the hotkey storage dictionary changes
@@ -121,20 +127,11 @@ module.exports = () => {
     const dict = hotkeyDictionary
     let result = null
     forEachHotkey(dict, (key, value) => {
-      if (dict[key].keyCode === keycode) {
+      if (dict[key].code === keycode) {
         result = key
       }
     })
     return result
-  }
-
-  function set (key, value) {
-    console.log(key)
-    key = getKeys()[key]
-    key.keyCode = value
-    // anytime we change the dictionary we
-    // want to generate a new keymap
-    generateNewKeymap()
   }
 
   function isCategory (key) {

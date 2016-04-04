@@ -5,6 +5,8 @@
  * and handles the logic of recording new key strokes
  */
 const utils = require('../utils')
+const keyCodes = require('../keyCodes')
+const activeKeys = []
 
 // public api
 module.exports = (Store) => {
@@ -21,34 +23,51 @@ module.exports = (Store) => {
       throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element')
     }
 
-    utils.addListener(listenerElement, 'keypress', onKeyPress)
+    utils.addListener(listenerElement, 'keydown', onKeyDown)
+    utils.addListener(listenerElement, 'keyup', onKeyUp)
 
     mount(Store.getDictionary(), configRenderElement)
   }
 
   // emit an event when a user is trying to set a key
   function emitSetKey (keyToSet, newKeyCode, targetEl) {
-    const event = {element: targetEl, keyName: keyToSet, newKeyCode}
+    const event = {element: targetEl, key: keyToSet, newKeyCode}
     Store.emit('recording-set-key', event)
   }
 
-  // key press handler
-  function onKeyPress (evt) {
+  // key up handler
+  function onKeyUp (evt) {
     const recordingState = Store.recording
-    // we only do things here if key recording has been activated
     if (recordingState.active) {
-      const keyCode = evt.keyCode
-      const targetKeyName = recordingState.keyName
+      const code = evt.keyCode
+
+      // turn this key off
+      activeKeys[code] = false
+    }
+  }
+
+  // key down handler
+  function onKeyDown (evt) {
+    // console.log(`${evt.keyCode} ${String.fromCharCode(evt.keyCode)}, ${keyCodes[evt.keyCode]}`)
+
+    // we only do things here if key recording has been activated
+    const recordingState = Store.recording
+    if (recordingState.active) {
+      const code = evt.keyCode
       const targetEl = recordingState.element
+      const targetKey = recordingState.key
+
+      // turn this key on
+      activeKeys[code] = true
 
       // look for a key already using the desired keycode
-      const keyAlreadyUsed = Store.getKeymap()[keyCode]
+      const keyAlreadyUsed = Store.getKeymap()[code]
 
       if (keyAlreadyUsed) {
         // since a key is already in use
-        if (targetKeyName === keyAlreadyUsed.name) {
+        if (targetKey.name === keyAlreadyUsed.name) {
           // key already mapped to this keycode - no change
-          emitSetKey(targetKeyName, keyCode, targetEl)
+          emitSetKey(targetKey, code, targetEl)
         } else {
           // alert the user
           // cant set key to a code already in use
@@ -56,7 +75,7 @@ module.exports = (Store) => {
         }
       } else {
         // this key was not set and should be ok to use
-        emitSetKey(targetKeyName, keyCode, targetEl)
+        emitSetKey(targetKey, code, targetEl)
       }
     }
   }
