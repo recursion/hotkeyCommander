@@ -2,30 +2,33 @@
 
 # Hotkey Commander
 
-> A 'drop in' module that provides keyboard event handling, and allows your users to easily view and set their preferred hotkeys.
+> A 'drop in' module that provides keyboard event handling and allows your users to easily view, and set their preferred hotkeys.
 
-- **Convenient**
-    - This package attempts to be a boilerplate for handling keyboard events, and hotkey configuration by:
-        - Listening to, and responding to keyboard events with **your** event handlers
-        - Allows users to easily view, and change **their** hotkey preferences.
+This module is essentially a boilerplate for handling keyboard events and user hotkey configuration. It maps **your** eventhandlers to user defined keyboard events. User can easily view, and change **their** hotkey preferences.
+
+HotkeyCommander allows you, the developer, to quit worrying about user hotkey configuration and keyboard event capture and response.
+
 - **Easy to use:**
-    - As a developer, you simply:
-        - expose an object with your event handlers
+    - **Usage** _more detail further down in the readme_
+        - create a hotkeyCommander commands object - a simple js object with properly named eventhandlers on it.
         - define a list of hotkey definitions
         - create an instance of hotkeyCommander
         - pass the eventHandler object and the hotkey definitions to your instance of hotkeyCommander.
-    - Your users can easily configure their hotkey preferences, and hotkey commander instantly starts responding to their new keypress's.
+    - **Users easily configure their preferences**, and hotkey commander instantly starts responding to their changes.
 - **Powerful**
-    - Can run from multiple contexts: Engineered from the start to work in a 'multi-context' chrome extension situation, where hotkey configuration runs in a completely seperate browser context than the hotkey event consumption engine - _hotkeyCommander will of course work just as easily in a single browser context._
-    - Responds to key combinations like Ctrl+Shift+k
-    - Display the configuration pane with hotkeyCommanders built in rendering engine, or pass the job off to react, or your view rendering framework/library of choice.
+    - **Responds to key combinations:** Ctrl+Shift+k, Alt+Ctrl+u - etc
+    - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension situation: where hotkey configuration runs in a completely seperate browser context than the the keyboard events are being consumed in - _hotkeyCommander will work just as easily in a single browser context._
+    - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine, or pass the job off to react, or your view rendering framework/library of choice.
+- **Modern**
+    - Builtin es2015 support via babel and webpack.
+    - Style conventions enforced by ['standard'](http://standardjs.com/index.html).
+    - Package management via npm.
 
-
-> This module is still under development: It is not feature complete, and is not ready for production use. et. It is coming along quite rapidly however, and should be seeing a 1.0 release before summer arrives.
+> This module is still under development: While it is not feature complete or ready for production use, it is rather usable. It is coming along quite rapidly and should be seeing a 1.0 release before summer 2016 arrives.
 
 ###### Contributing
 - Pull requests are welcomed.
-- Project uses [standard](http://standardjs.com/index.html) for all styling requirements. No fuss. No muss.
+- Project uses [standard](http://standardjs.com/index.html) linting for all styling requirements. No fuss. No muss.
 - Please use git issues from communications/feature requests/bug reports. Or jump on the [waffle](https://waffle.io/recursion/hotkeyCommander) to see our issues the way we do.
 
 # Usage
