@@ -20,29 +20,47 @@ module.exports = (Store) => {
     } else {
       listenerElement = listenerEl
     }
-    start(onKeyPress)
+    start(listenerEl)
   }
 
-  // requires that a listener element has been set
-  function start (keydownHandler) {
+  // requires a listener element
+  function start (listenerElement) {
     if (!listenerElement) {
-      const msg = 'Must have a listener setListenerElement!'
+      const msg = 'The keyboard event engine requires an element to listen for keyboard events on. This can be window, or some other valid HTML element.'
       console.error(msg)
       throw new Error(msg)
     }
-    utils.addListener(listenerElement, 'keypress', keydownHandler)
+    utils.addListener(listenerElement, 'keydown', onKeyPress)
   }
 
   // Handle key press events
   function onKeyPress (evt) {
     const keymap = Store.getKeymap()
-    const keycode = evt.keyCode
-    const target = keymap[keycode]
+    const lookup = utils.hashKeyboardEvent(evt)
+    const target = keymap[lookup]
     if (target) {
-      // console.log(String.fromCharCode(evt.keyCode), evt, evt.keyCode, keymap[evt.keyCode])
+      // the user has entered the correct key combination
+      // for this hotkey
       // call the function related to this object here
+      // convert target name to camelcase string
+      // call commanderObject[targetNameAsCamelCaseString]()
+      console.log('You activated an in use hotkey!')
     } else {
       // console.log('Not mapped: ', evt, evt.keyCode)
     }
+  }
+
+  // make sure this keyboard event matches the keyObjects mapped requirements
+  function metaKeysMatchKeyPress (keyObject, keyboardEvent) {
+    if (keyObject.altKey !== keyboardEvent.altKey) {
+      return false
+    }
+    if (keyObject.shiftKey !== keyboardEvent.shiftKey) {
+      return false
+    }
+    if (keyObject.ctrlKey !== keyboardEvent.ctrlKey) {
+      return false
+    }
+    return true
   }
 }

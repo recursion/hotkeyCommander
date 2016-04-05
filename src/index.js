@@ -15,9 +15,9 @@ module.exports = {
 // if only 1 element is passed in,
 // we can assume that its ok to
 // do everything in one context?
-function init (targetEl = window) {
-  configurator.init(targetEl)
-  engine.init(targetEl)
+function init (configRootElement = window, engineListener = window) {
+  configurator.init(configRootElement)
+  engine.init(engineListener)
 }
 
 function startEngine (listenerEl) {

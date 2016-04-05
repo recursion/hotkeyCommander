@@ -1,4 +1,5 @@
 const defaultHotkeys = require('../hotkey.defaults')
+const utils = require('./utils')
 const EM2 = require('eventemitter2')
 const Store = new EM2()
 module.exports = () => {
@@ -109,7 +110,8 @@ module.exports = () => {
     // create a hotkey object
     // and add it to our result object
     forEachHotkey((key) => {
-      result[key.keyCode] = key
+      let hashedName = utils.hashKeyboardEvent(key)
+      result[hashedName] = key
     })
     // set keymap to our result
     // and return it

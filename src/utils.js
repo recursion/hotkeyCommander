@@ -1,18 +1,39 @@
-// Common modules
-
+// Common functions
 const utils = exports
+const keyCodes = require('./keycodeMap')
 
+// adds cb as the event handler for listenerType  events on listenerEl (or window)
 utils.addListener = (listenerEl, listenerType, cb) => {
   listenerEl = listenerEl || window
   listenerEl.addEventListener(listenerType, cb)
 }
 
+// replaces all underscores with whitespace
 utils.stripUnderscores = (string) => {
   if (!string || typeof string !== 'string') {
     console.error('stripUnderscores requires a string')
     return ''
   }
   return string.replace(/_/g, ' ')
+}
+
+// takes a keyboard event
+// returns a hashed string representing
+// the key combination used
+utils.hashKeyboardEvent = (keyboardEvent) => {
+  // take a key object and create a nice printable string.
+  let keyDisplayString = ''
+  if (keyboardEvent.ctrlKey) {
+    keyDisplayString += 'Ctrl+'
+  }
+  if (keyboardEvent.altKey) {
+    keyDisplayString += 'Alt+'
+  }
+  if (keyboardEvent.shiftKey) {
+    keyDisplayString += 'Shift+'
+  }
+  keyDisplayString += keyCodes[keyboardEvent.keyCode]
+  return keyDisplayString
 }
 
 // turn a snake case string into a camelCase string

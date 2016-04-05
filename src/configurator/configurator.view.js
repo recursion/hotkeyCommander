@@ -110,25 +110,7 @@ module.exports = (Store) => {
   /** ***********************************************/
   // this is really the only piece of data that gets updated
   function render (el, key) {
-    el.innerText = formatKey(key)
-  }
-
-  // take a key object and create a nice printable string.
-  function formatKey (key) {
-    let keyDisplayString = ''
-    console.log(key)
-    if (key.ctrlKey) {
-      keyDisplayString += 'Ctrl+'
-    }
-    if (key.altKey) {
-      keyDisplayString += 'Alt+'
-    }
-    if (key.shiftKey) {
-      keyDisplayString += 'Shift+'
-    }
-    keyDisplayString += keyCodes[key.keyCode]
-    console.log(keyDisplayString)
-    return keyDisplayString
+    el.innerText = utils.hashKeyboardEvent(key)
   }
 
   // takes an element, and two string

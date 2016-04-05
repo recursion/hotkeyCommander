@@ -1,4 +1,4 @@
-const keyCodes = require('../keycodeMap')
+const utils = require('../utils')
 
 // an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
 // these can only be used to modify other keys - not as standalone hotkeys
@@ -25,6 +25,7 @@ module.exports = (Store) => {
   // this is a generic keyboard event handler
   // and could be used equally for up/down or press events
   function onKeyboardEvent (keyboardEvent) {
+    /*
     console.log(`
      keycode: ${keyboardEvent.keyCode}
      char: ${String.fromCharCode(keyboardEvent.keyCode)}
@@ -33,6 +34,7 @@ module.exports = (Store) => {
      shift: ${keyboardEvent.shiftKey}
      alt: ${keyboardEvent.altKey}
     `)
+    */
 
     // we only do things here if key recording has been activated
     const recordingState = Store.recording
@@ -42,7 +44,7 @@ module.exports = (Store) => {
       const targetKey = recordingState.key
 
       // look for a key already using the desired keycode
-      const keyAlreadyUsed = Store.getKeymap()[code]
+      const keyAlreadyUsed = Store.getKeymap()[utils.hashKeyboardEvent(keyboardEvent)]
 
       // dont respond to direct meta key presses
       if (metaKeyCodes.indexOf(code) !== -1) {
