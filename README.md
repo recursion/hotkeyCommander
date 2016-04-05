@@ -99,9 +99,12 @@ Creating hotkey definitions is a mostly simple concept. Ultimately its an array 
 ###### Naming Conventions:
 > Your eventhandler's method names, and your hotkey definitions must use the same name __except__:
 
-  - __hotkey definitions__ use all caps and underscores
-      - ex: `YOUR_HOTKEY_DESCRIPTION`
-  - __eventhandler method names__ use traditional camel case
+  - **hotkey definitions:**
+      - use all caps and underscores
+      - ex: `OPEN_FILE_MENU`
+
+  - **eventhandler method names:**
+      - use traditional camel case
       - ex `yourHotkeyDescription`
 
 ###### HOTKEY OBJECT
