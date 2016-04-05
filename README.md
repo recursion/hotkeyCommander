@@ -2,16 +2,26 @@
 
 # Hotkey Commander
 
-> A 'drop in' javascript module for consuming keyboard events with super-easy, user-level configuration.
+> A 'drop in' module that provides keyboard event handling, and allows your users to easily view and set their preferred hotkeys.
 
+- **Convenient**
+    - This package attempts to be a boilerplate for handling keyboard events, and hotkey configuration by:
+        - Listening to, and responding to keyboard events with **your** event handlers
+        - Allows users to easily view, and change **their** hotkey preferences.
 - **Easy to use:**
-    - As a developer, you simply define an object with your event handlers, and a list of hotkey definitions, and pass them to your instance of hotkeyCommander. The module handles everything else from there.
-    - Your users can easily configure their hotkey preferences, and your application will instantly respond to their new preferences.
-    - Display the configuration pane with hotkeyCommanders built in rendering engine, ~~or pass the job off to react, or your view rendering framework/library of choice.~~ *coming soon*
+    - As a developer, you simply:
+        - expose an object with your event handlers
+        - define a list of hotkey definitions
+        - create an instance of hotkeyCommander
+        - pass the eventHandler object and the hotkey definitions to your instance of hotkeyCommander.
+    - Your users can easily configure their hotkey preferences, and hotkey commander instantly starts responding to their new keypress's.
+- **Powerful**
+    - Can run from multiple contexts: Engineered from the start to work in a 'multi-context' chrome extension situation, where hotkey configuration runs in a completely seperate browser context than the hotkey event consumption engine - _hotkeyCommander will of course work just as easily in a single browser context._
+    - Responds to key combinations like Ctrl+Shift+k
+    - Display the configuration pane with hotkeyCommanders built in rendering engine, or pass the job off to react, or your view rendering framework/library of choice.
 
-- **Can run from multiple contexts:** Engineered from the start to work in a 'multi-context' chrome extension situation, where hotkey configuration runs in a completely seperate browser context than the hotkey event consumption engine - _hotkeyCommander will of course work just as easily in a single browser context._
 
-> This module is still under development, and not ready for production use. It is coming along rapidly however.
+> This module is still under development: It is not feature complete, and is not ready for production use. et. It is coming along quite rapidly however, and should be seeing a 1.0 release before summer arrives.
 
 ###### Contributing
 - Pull requests are welcomed.
