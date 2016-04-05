@@ -2,23 +2,44 @@
 
 # Hotkey Commander
 
-> A 'drop in' javascript module for key event consumption and super-easy, user-level configuration.
+> A 'drop in' javascript module for consuming keyboard events with super-easy, user-level configuration.
 
-Your users will be able to easily configure, and instantly use, *their* hotkey preferences, while still invoking *your* pre-defined event handlers.
+- **Easy to use:**
+    - As a developer, you simply define an object with your event handlers, and a list of hotkey definitions, and pass them to your instance of hotkeyCommander. The module handles everything else from there.
+    - Your users can easily configure their hotkey preferences, and your application will instantly respond to their new preferences.
+    - Display the configuration pane with hotkeyCommanders built in rendering engine, ~~or pass the job off to react, or your view rendering framework/library of choice.~~ *coming soon*
 
-1. Create your list of custom hotkey definitions.
-2. Add hotkeyCommander to your project. `npm install --save hotkey-commander`
-3. Create an instance of hotkeyCommander (with require, or by including the script in your html).
+- **Can run from multiple contexts:** Engineered from the start to work in a 'multi-context' chrome extension situation, where hotkey configuration runs in a completely seperate browser context than the hotkey event consumption engine - _hotkeyCommander will of course work just as easily in a single browser context._
+
+> This module is still under development, and not ready for production use. It is coming along rapidly however.
+
+###### Contributing
+- Pull requests are welcomed.
+- Project uses [standard](http://standardjs.com/index.html) for all styling requirements. No fuss. No muss.
+- Please use git issues from communications/feature requests/bug reports. Or jump on the [waffle](https://waffle.io/recursion/hotkeyCommander) to see our issues the way we do.
+
+# Usage
+
+#### Overview
+
+1. Create your list of custom hotkey definitions. *see below for details*
+2. Add hotkeyCommander to your project.
+    - ~~`npm install --save hotkey-commander`~~  *-not yet implemented*
+    - or
+    - clone the repo and build hotkeyCommander.js
+        1. git clone ........
+        1. run `npm run build` or `webpack` from the cloned repo to build
+        2. copy dist/hotkeyCommander.js to your project as needed
+3. Create an instance of hotkeyCommander
+    - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
+    - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
 3. Pass hotkeyCommander:
     1. A hotkey definition list
     2. An object with *your* eventhandler methods, which follows the hotkeyCommander hotkey naming pattern
     3. the HTML Elements to:
         - render configuration on
         - consume user key events from
-
-# Usage
-
-#### Load as a script from html, or load as a node module.
+#### Load as a script from html or as a node module.
 
 ##### As browser script
 > - `npm run build` to get the bundle file to the project dist directory
@@ -38,14 +59,13 @@ Your users will be able to easily configure, and instantly use, *their* hotkey p
   </script>
 ```
 
-##### As a node module or multi-context google chrome extension
+##### As a node module
 > The config portion will run in the plugin context
 > while the  hotkey engine will run in the extensions target window.
 > Better instructions coming, but to give you an idea, it will look something like this:
-```
 
-// in the context/file where you will be running
-// the configuration module
+```js
+// in the context/file where you will be providing user configuration
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
 hotkeyCommander.startConfigurator(targetElement, listenerElement, {hotkeys})
@@ -55,18 +75,26 @@ const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
 hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
 ```
-
----
+----
 
 ### Creating hotkey definitions:
 
-> Creating hotkey definitions is a mostly simple concept. Ultimately its an array
-> of objects which describe hotkeys, grouped by category. Let me lay out the pieces here:
+Creating hotkey definitions is a mostly simple concept. Ultimately its an array of objects which describe hotkeys, grouped by category. Its important to note that there are some important naming conventions that must be followed here in order for hotkeyCommander to work. Let me lay out the pieces here:
 
 ---
+
+###### Naming Conventions:
+> Your eventhandler's method names, and your hotkey definitions must use the same name __except__:
+
+  - __hotkey definitions__ use all caps and underscores
+      - ex: `YOUR_HOTKEY_DESCRIPTION`
+  - __eventhandler method names__ use traditional camel case
+      - ex `yourHotkeyDescription`
+
 ###### HOTKEY OBJECT
 > Represents a hotkey
-```
+
+```js
 {
   name: YOUR_EVENTHANDLER_NAME_WITH_ALL_CAPS_AND_UNDERSCORES,
   keyCode: ASCII_KEYCODE,
@@ -77,7 +105,8 @@ hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
 ```
 ###### HOTKEY CATEGORY OBJECT
 > A category of hotkeys
-```
+
+```js
 {
   name: YOUR_CATEGORY_NAME,
   keys: [
@@ -90,7 +119,8 @@ hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
 ```
 ###### HOTKEY LIST
 > An array of hotkey category objects:
-```
+
+```js
 [
   {categoryObject},
   {categoryObject},
@@ -99,8 +129,9 @@ hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
   {categoryObject}
 ]
 ```
-###### FULL EXAMPLE
-```
+###### HOTKEY.DEFAULTS.JS EXAMPLE
+```js
+// hotkey.defaults.js
 [
   {
     name: 'MOVEMENT_KEYS',
@@ -143,24 +174,11 @@ hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
 ]
 ```
 
-###### Naming Conventions:
-
-1. both the hotkey name and the event handler method name MUST use the SAME name
-2. the name must be formatted differently in each location.
-    - _hotkey names use:_
-        - all caps with words seperated by underscore
-        - ex: `YOUR_HOTKEY_DESCRIPTION`
-    - _method names use:_
-        - camel case
-        - ex `yourHotkeyDescription`
-
-This module currently uses the HTML import spec for templating, which is (sadly) only supported by chrome. It will be converted to a more universal templating solution shortly, and then probably something like a react specific component.
-
-
 #### TODO
-- Load hotkeys to and from local storage.
+- Load hotkeys to and from local storage (google.storage.sync for chrome extensions).
 - Catch/use alt keys (shift/ctrl/alt)
 - Convert to a more universal templating solution.
+- Make the module easily usable in other frameworks (react/angular/webcomponents?)
 - Convert to a redux store
 - ~~Protect against overwriting existing hotkeys.~~
 - ~~Add categories (so that keys can be sorted by category)~~
