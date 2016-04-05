@@ -9,10 +9,11 @@ This module is essentially a boilerplate for handling keyboard events and user h
 HotkeyCommander allows you, the developer, to quit worrying about user hotkey configuration and keyboard event capture and response.
 
 - **Easy to use:**
-    - create a hotkeyCommander commands object - a simple js object with properly named eventhandlers on it.
-    - define your hotkey definitions
-    - create an instance of hotkeyCommander
-    - pass the eventHandler object and the hotkey definitions to your instance of hotkeyCommander.
+    1. include the package in your project
+    2. define your hotkey definitions
+    3. create a commands object - a simple js object with properly named eventhandlers on it.
+    4. create an instance of hotkeyCommander
+    5. pass the eventHandler object, the hotkey definitions, and the target elements to your instance of hotkeyCommander.
 - **User configuration built in:** Your app instantly starts responding to user hotkey preference changes.
     - Users easily view and change current settings
 - **Modular construction**
