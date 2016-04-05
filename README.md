@@ -9,16 +9,17 @@ This module is essentially a boilerplate for handling keyboard events and user h
 HotkeyCommander allows you, the developer, to quit worrying about user hotkey configuration and keyboard event capture and response.
 
 - **Easy to use:**
-    - **Usage** _more detail further down in the readme_
-        - create a hotkeyCommander commands object - a simple js object with properly named eventhandlers on it.
-        - define a list of hotkey definitions
-        - create an instance of hotkeyCommander
-        - pass the eventHandler object and the hotkey definitions to your instance of hotkeyCommander.
-    - **Users easily configure their preferences**, and hotkey commander instantly starts responding to their changes.
+    - create a hotkeyCommander commands object - a simple js object with properly named eventhandlers on it.
+    - define your hotkey definitions
+    - create an instance of hotkeyCommander
+    - pass the eventHandler object and the hotkey definitions to your instance of hotkeyCommander.
+- **User configuration built in:** Your app instantly starts responding to user hotkey preference changes.
+    - Users easily view and change current settings
+- **Modular construction**
+    - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine, or pass the job off to react, or your view rendering framework/library of choice.
 - **Powerful**
     - **Responds to key combinations:** Ctrl+Shift+k, Alt+Ctrl+u - etc
     - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension situation: where hotkey configuration runs in a completely seperate browser context than the the keyboard events are being consumed in - _hotkeyCommander will work just as easily in a single browser context._
-    - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine, or pass the job off to react, or your view rendering framework/library of choice.
 - **Modern**
     - Builtin es2015 support via babel and webpack.
     - Style conventions enforced by ['standard'](http://standardjs.com/index.html).
