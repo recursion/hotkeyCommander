@@ -37,10 +37,10 @@ module.exports = () => {
   Object.assign(Store, public_api)
   return Store
 
-  function onSetKey (event) {
-    const {key, newKeyCode} = event
-    set(key, newKeyCode)
-    stopRecording(event)
+  function onSetKey (setKeyEvent) {
+    const {key, keyboardEvent} = setKeyEvent
+    set(key, keyboardEvent)
+    stopRecording(setKeyEvent)
   }
 
   function stopRecording (event) {
@@ -55,8 +55,13 @@ module.exports = () => {
     recordingState.element = element
   }
 
-  function set (key, value) {
-    key.keyCode = value
+  function set (key, event) {
+    const {keyCode, altKey, ctrlKey, shiftKey} = event
+    key.keyCode = keyCode
+    key.altKey = altKey
+    key.shiftKey = shiftKey
+    key.ctrlKey = ctrlKey
+
     // anytime we change the dictionary we
     // want to generate a new keymap
     keymap = generateNewKeymap()

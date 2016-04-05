@@ -52,7 +52,7 @@ module.exports = (Store) => {
   function onStopHandler (event) {
     const {element, key} = event
     swapStyles(element, activeStateSelector, idleStateSelector)
-    render(element, key.keyCode)
+    render(element, key)
   }
 
   /** ***********************************************
@@ -96,7 +96,7 @@ module.exports = (Store) => {
             emitStartRecording(button, hotkey)
           }
         })
-        render(button, hotkey.keyCode)
+        render(button, hotkey)
         hotkeyConfigElement.querySelector(descriptionLabelSelector).innerText = utils.stripUnderscores(hotkey.name)
         containerEl.appendChild(hotkeyConfigElement)
       })
@@ -109,8 +109,26 @@ module.exports = (Store) => {
         that a hotkey is using.
   /** ***********************************************/
   // this is really the only piece of data that gets updated
-  function render (el, code) {
-    el.innerText = keyCodes[code]
+  function render (el, key) {
+    el.innerText = formatKey(key)
+  }
+
+  // take a key object and create a nice printable string.
+  function formatKey (key) {
+    let keyDisplayString = ''
+    console.log(key)
+    if (key.ctrlKey) {
+      keyDisplayString += 'Ctrl+'
+    }
+    if (key.altKey) {
+      keyDisplayString += 'Alt+'
+    }
+    if (key.shiftKey) {
+      keyDisplayString += 'Shift+'
+    }
+    keyDisplayString += keyCodes[key.keyCode]
+    console.log(keyDisplayString)
+    return keyDisplayString
   }
 
   // takes an element, and two string

@@ -1,5 +1,8 @@
 const keyCodes = require('../keycodeMap')
-const activeKeys = []
+
+// an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
+// these can only be used to modify other keys - not as standalone hotkeys
+const metaKeyCodes = [17, 16, 18, 91]
 
 module.exports = (Store) => {
   return {
@@ -8,49 +11,58 @@ module.exports = (Store) => {
 
     },
     onKeyup: (evt) => {
-      const recordingState = Store.recording
-      if (recordingState.active) {
-        const code = evt.keyCode
 
-        // turn this key off
-        activeKeys[code] = false
-      }
     },
-    onKeydown: (evt) => {
-      console.log(`${evt.keyCode} ${String.fromCharCode(evt.keyCode)}, ${keyCodes[evt.keyCode]}`)
-      // we only do things here if key recording has been activated
-      const recordingState = Store.recording
-      if (recordingState.active) {
-        const code = evt.keyCode
-        const targetEl = recordingState.element
-        const targetKey = recordingState.key
+    onKeydown: onKeyboardEvent
+  }
 
-        // turn this key on
-        activeKeys[code] = true
+  // emit an event when a user is trying to set a key
+  function emitSetKey (keyToSet, keyboardEvent, targetEl) {
+    const event = {element: targetEl, key: keyToSet, keyboardEvent}
+    Store.emit('recording-set-key', event)
+  }
 
-        // look for a key already using the desired keycode
-        const keyAlreadyUsed = Store.getKeymap()[code]
+  // this is a generic keyboard event handler
+  // and could be used equally for up/down or press events
+  function onKeyboardEvent (keyboardEvent) {
+    console.log(`
+     keycode: ${keyboardEvent.keyCode}
+     char: ${String.fromCharCode(keyboardEvent.keyCode)}
+     key: ${keyCodes[keyboardEvent.keyCode]}
+     ctrl: ${keyboardEvent.ctrlKey}
+     shift: ${keyboardEvent.shiftKey}
+     alt: ${keyboardEvent.altKey}
+    `)
 
-        if (keyAlreadyUsed) {
-          // since a key is already in use
-          if (targetKey.name === keyAlreadyUsed.name) {
-            // key already mapped to this keycode - no change
-            emitSetKey(targetKey, code, targetEl)
-          } else {
-            // alert the user
-            // cant set key to a code already in use
-            Store.emit('key-overwrite-alert')
-          }
+    // we only do things here if key recording has been activated
+    const recordingState = Store.recording
+    if (recordingState.active) {
+      const code = keyboardEvent.keyCode
+      const targetEl = recordingState.element
+      const targetKey = recordingState.key
+
+      // look for a key already using the desired keycode
+      const keyAlreadyUsed = Store.getKeymap()[code]
+
+      // dont respond to direct meta key presses
+      if (metaKeyCodes.indexOf(code) !== -1) {
+        return
+      }
+
+      if (keyAlreadyUsed) {
+        // since a key is already in use
+        if (targetKey.name === keyAlreadyUsed.name) {
+          // key already mapped to this keycode - no change
+          emitSetKey(targetKey, keyboardEvent, targetEl)
         } else {
-          // this key was not set and should be ok to use
-          emitSetKey(targetKey, code, targetEl)
+          // alert the user
+          // cant set key to a code already in use
+          Store.emit('key-overwrite-alert')
         }
+      } else {
+        // this key was not set and should be ok to use
+        emitSetKey(targetKey, keyboardEvent, targetEl)
       }
     }
-  }
-  // emit an event when a user is trying to set a key
-  function emitSetKey (keyToSet, newKeyCode, targetEl) {
-    const event = {element: targetEl, key: keyToSet, newKeyCode}
-    Store.emit('recording-set-key', event)
   }
 }
