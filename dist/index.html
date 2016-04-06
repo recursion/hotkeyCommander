@@ -12,7 +12,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', function(evt) {
       const commander = hotkeyCommander(document.getElementById('hotkeyCommander'))
-      console.log(commander)
       commander.on('CANCEL_ALL', () => {
         console.log('CANCEL_ALL Event!')
       })
