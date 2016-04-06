@@ -39,13 +39,11 @@ module.exports = (Store) => {
   }
 
   function stopRecording (el, key) {
-    console.log('nope')
     updateState(createEvent(el, key))
     Store.emit(events.stopRecording, createEvent(el, key))
   }
 
   function startRecording (el, key) {
-    console.log('yup', events.startRecording)
     swapStyles(el, idleStateSelector, activeStateSelector)
     Store.emit(events.startRecording, createEvent(el, key))
   }
@@ -54,6 +52,16 @@ module.exports = (Store) => {
     const {element, key} = event
     swapStyles(element, activeStateSelector, idleStateSelector)
     render(element, key)
+  }
+
+  /** ***********************************************
+                   RENDER
+      Handles the rendering of the only elements that ever get updated
+      which is simply the keykey character display/button
+  /** ***********************************************/
+  // this is really the only piece of data that gets updated
+  function render (el, key) {
+    el.innerText = utils.hashKeyboardEvent(key)
   }
 
   /** ***********************************************
@@ -102,16 +110,6 @@ module.exports = (Store) => {
         containerEl.appendChild(hotkeyConfigElement)
       })
     })
-  }
-  /** ***********************************************
-                   RENDER
-      Handles the rendering of the only elements that ever get updated
-      - those that display a key character
-        that a hotkey is using.
-  /** ***********************************************/
-  // this is really the only piece of data that gets updated
-  function render (el, key) {
-    el.innerText = utils.hashKeyboardEvent(key)
   }
 
   // takes an element, and two string

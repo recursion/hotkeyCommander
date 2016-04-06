@@ -1,18 +1,17 @@
-const defaultHotkeys = require('../../hotkey.defaults')
 const utils = require('./utils')
 const events = require('./events')
 
 const EM2 = require('eventemitter2')
 const Store = new EM2()
 
-module.exports = () => {
+module.exports = (defaultHotkeys) => {
   // store our hotkey dictionary with categories
   // using hotkey names as keys
-  const hotkeyList = loadHotkeys()
+  const hotkeyList = defaultHotkeys
 
-  // this is a map of the hotkeys
-  // with no categories and
-  // using the keycodes as keys
+  // They map of the hotkeys
+  // with each hotkey being mapped to a hash
+  // of the combined hotkey characters
   let keymap = generateNewKeymap()
 
   // track recording state
@@ -133,12 +132,5 @@ module.exports = () => {
         work(hotkey)
       })
     })
-  }
-
-  // TODO:
-  // load an existing dictionary of hotkeys
-  // otherwise load defaults
-  function loadHotkeys () {
-    return defaultHotkeys
   }
 }
