@@ -123,8 +123,8 @@ module.exports = [
       },
       {
         name: 'MARKET_BUY',
-        keyCode: 70,
-        ctrlKey: false,
+        keyCode: 71,
+        ctrlKey: true,
         shiftKey: false,
         altKey: false
       }
@@ -135,14 +135,14 @@ module.exports = [
     keys: [
       {
         name: 'OFFER_BETTER',
-        keyCode: 72,
+        keyCode: 74,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
         name: 'OFFER_WITH_BEST_ASK',
-        keyCode: 74,
+        keyCode: 75,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
@@ -171,7 +171,7 @@ module.exports = [
       {
         name: 'MARKET_SELL',
         keyCode: 72,
-        ctrlKey: false,
+        ctrlKey: true,
         shiftKey: false,
         altKey: false
       }

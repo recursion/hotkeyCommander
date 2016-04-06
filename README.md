@@ -54,10 +54,11 @@ A user of your application will be able to easily view and configure hotkeys tha
     - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
     - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
 3. Pass hotkeyCommander:
-    1. An object with *your* eventhandler methods, which follows the hotkeyCommander hotkey naming pattern
+    1. Your hotkey definitions object
     2. the HTML Elements to:
         - render configuration on
         - consume user key events from
+4. Create event handlers on the emitter than hotkeyCommander hands you back.
 
 #### Load as a script from html or as a node module.
 

@@ -1,5 +1,6 @@
 const utils = require('../common/utils')
 const events = require('../common/events')
+const keyCodes = require('../../keycodes.local')
 
 // an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
 // these can only be used to modify other keys - not as standalone hotkeys
