@@ -1,4 +1,5 @@
 const utils = require('../common/utils')
+const events = require('../common/events')
 
 // an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
 // these can only be used to modify other keys - not as standalone hotkeys
@@ -19,7 +20,7 @@ module.exports = (Store) => {
   // emit an event when a user is trying to set a key
   function emitSetKey (keyToSet, keyboardEvent, targetEl) {
     const event = {element: targetEl, key: keyToSet, keyboardEvent}
-    Store.emit('recording-set-key', event)
+    Store.emit(events.setKey, event)
   }
 
   // this is a generic keyboard event handler
@@ -53,18 +54,13 @@ module.exports = (Store) => {
 
       if (keyAlreadyUsed) {
         // since a key is already in use
-        if (targetKey.name === keyAlreadyUsed.name) {
+        if (targetKey.name !== keyAlreadyUsed.name) {
           // key already mapped to this keycode - no change
-          emitSetKey(targetKey, keyboardEvent, targetEl)
-        } else {
-          // alert the user
-          // cant set key to a code already in use
-          Store.emit('key-overwrite-alert')
+          Store.emit(events.alert)
+          return
         }
-      } else {
-        // this key was not set and should be ok to use
-        emitSetKey(targetKey, keyboardEvent, targetEl)
       }
+      emitSetKey(targetKey, keyboardEvent, targetEl)
     }
   }
 }

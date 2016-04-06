@@ -4,9 +4,9 @@
  * and rendering the hotkey configuration view
  */
 const utils = require('../common/utils')
+const events = require('../common/events')
 
 //                CSS SELECTORS
-
 const configBlockSelector = '.hotkey-config'
 const setKeyBtnSelector = '.config-label.key-recorder-btn'
 const descriptionLabelSelector = '.config-label.key-description'
@@ -16,8 +16,8 @@ const activeStateSelector = 'key-recorder-btn--active'
 
 module.exports = (Store) => {
   // set a listener for stop events generated outside of the view
-  Store.on('recording-stopped', onStopHandler)
-  Store.on('key-overwrite-alert', keyOverWriteAlert)
+  Store.on(events.setKey, updateState)
+  Store.on(events.alert, keyOverWriteAlert)
 
   // public api
   return {
@@ -30,7 +30,7 @@ module.exports = (Store) => {
     // pop up an alert box of some kind
     utils.createAlertPopup({
       message: 'KEY ALREADY IN USE',
-      fadeoutTime: 2000
+      fadeoutTime: 1000
     })
   }
 
@@ -38,17 +38,19 @@ module.exports = (Store) => {
     return {key: key, element: el}
   }
 
-  function emitStopRecording (el, key) {
-    Store.emit('recording-stop', createEvent(el, key))
-    onStopHandler(createEvent(el, key))
+  function stopRecording (el, key) {
+    console.log('nope')
+    updateState(createEvent(el, key))
+    Store.emit(events.stopRecording, createEvent(el, key))
   }
 
-  function emitStartRecording (el, key) {
+  function startRecording (el, key) {
+    console.log('yup', events.startRecording)
     swapStyles(el, idleStateSelector, activeStateSelector)
-    Store.emit('recording-start', createEvent(el, key))
+    Store.emit(events.startRecording, createEvent(el, key))
   }
 
-  function onStopHandler (event) {
+  function updateState (event) {
     const {element, key} = event
     swapStyles(element, activeStateSelector, idleStateSelector)
     render(element, key)
@@ -88,11 +90,11 @@ module.exports = (Store) => {
             // if this element is for the hotkey we are currently recording
             if (Store.recording.element === this) {
               // stop recording
-              emitStopRecording(button, hotkey)
+              stopRecording(button, hotkey)
             }
           } else {
             // start recording!
-            emitStartRecording(button, hotkey)
+            startRecording(button, hotkey)
           }
         })
         render(button, hotkey)

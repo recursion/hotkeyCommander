@@ -1,5 +1,7 @@
 const defaultHotkeys = require('../../hotkey.defaults')
 const utils = require('./utils')
+const events = require('./events')
+
 const EM2 = require('eventemitter2')
 const Store = new EM2()
 
@@ -29,9 +31,9 @@ module.exports = () => {
   }
 
   // setup event listeners
-  Store.on('recording-stop', stopRecording)
-  Store.on('recording-start', onStartRecording)
-  Store.on('recording-set-key', onSetKey)
+  Store.on(events.stopRecording, stopRecording)
+  Store.on(events.startRecording, onStartRecording)
+  Store.on(events.setKey, onSetKey)
 
   // Extend event emitter
   // with our own public methods
@@ -46,8 +48,8 @@ module.exports = () => {
   }
 
   function stopRecording (event) {
+    console.log('stop! setting active to false!', event)
     recordingState.active = false
-    Store.emit('recording-stopped', event)
   }
 
   function onStartRecording (event) {
