@@ -14,19 +14,31 @@ const categorySelector = 'config-category'
 const idleStateSelector = 'key-recorder-btn--idle'
 const activeStateSelector = 'key-recorder-btn--active'
 
+function generateTemplate () {
+  return `
+    <template id="hotkey-config-template">
+      <div class="hotkey-config">
+        <div class="config-label key-description"></div>
+        <div class="config-label key-recorder-btn key-recorder-btn--idle right"></div>
+      </div>
+    </template>
+  `
+}
+
 module.exports = (Store) => {
   // set a listener for stop events generated outside of the view
   Store.on(events.setKey, updateState)
-  Store.on(events.alert, keyOverWriteAlert)
+  Store.on(events.alert, alert)
 
   // public api
   return {
     mount
   }
 
-  // event handler / emitter functions
-
-  function keyOverWriteAlert () {
+  /**
+         event handler / emitter functions
+  */
+  function alert () {
     // pop up an alert box of some kind
     utils.createAlertPopup({
       message: 'KEY ALREADY IN USE',
@@ -55,45 +67,17 @@ module.exports = (Store) => {
   }
 
   /** ***********************************************
-                   RENDER
-      Handles the rendering of the only elements that ever get updated
-      which is simply the keykey character display/button
-  /** ***********************************************/
-  // this is really the only piece of data that gets updated
-  function render (el, key) {
-    el.innerText = utils.hashKeyboardEvent(key)
-  }
-
-  function returnTemplate () {
-    return `
-      <template id="hotkey-config-template">
-        <div class="hotkey-config">
-          <div class="config-label key-description"></div>
-          <div class="config-label key-recorder-btn key-recorder-btn--idle right"></div>
-        </div>
-      </template>
-    `
-  }
-  /** ***********************************************
                      MOUNT
       Takes in a dictionary of hotkeys/categories and an element
       and mounts the dictionary up into a
       hotkey template inside of the passed in element
   /** ***********************************************/
   function mount (hotkeys, containerEl) {
-    containerEl.innerHTML = returnTemplate()
+    containerEl.innerHTML = generateTemplate()
     const template = document.getElementById('hotkey-config-template')
 
     hotkeys.forEach((category) => {
-      const categoryDiv = document.importNode(template.content, true)
-
-      // remove innards of template
-      categoryDiv.querySelector(configBlockSelector).innerHTML = `
-        <h5 class=${categorySelector}>
-          ${utils.stripUnderscores(category.name)}
-        </h5>
-      `
-      containerEl.appendChild(categoryDiv)
+      containerEl.appendChild(createCategory(template, category))
 
       // load hotkeys into the template
       // and render it
@@ -122,12 +106,33 @@ module.exports = (Store) => {
     })
   }
 
+  /** ***********************************************
+                   RENDER
+      Handles the rendering of the only elements that ever get updated
+      which is simply the keykey character display/button
+  /** ***********************************************/
+  // this is really the only piece of data that gets updated
+  function render (el, key) {
+    el.innerText = utils.hashKeyboardEvent(key)
+  }
+
+  function createCategory (template, category) {
+    const categoryDiv = document.importNode(template.content, true)
+    // remove innards of template
+    categoryDiv.querySelector(configBlockSelector).innerHTML = `
+      <h5 class=${categorySelector}>
+        ${utils.stripUnderscores(category.name)}
+      </h5>
+    `
+    return categoryDiv
+  }
+
   // takes an element, and two string
   // it will remove the first string from element.className
   // and add the second string to element.className
   function swapStyles (element, removeClassName, addClassName) {
     // remove the idle state
-      const classNames = element.className.split(' ')
+    const classNames = element.className.split(' ')
     const removeClassIndex = classNames.indexOf(removeClassName)
     classNames.splice(removeClassIndex, 1)
 

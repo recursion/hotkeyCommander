@@ -6,31 +6,30 @@
 
 const utils = require('../common/utils')
 
+const EventEmitter2 = require('eventemitter2')
+const emitter = new EventEmitter2()
+
 // public api
 module.exports = (Store) => {
   return {
-    init
+    create
   }
 
-  function init (listenerEl) {
+  // return our event emitter
+  function create (listenerEl) {
     if (!utils.validateEl(listenerEl)) {
       throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
     }
-    start(listenerEl)
-  }
 
-  // requires a listener element
-  function start (listenerElement) {
-    if (!listenerElement) {
-      const msg = 'The keyboard event engine requires an element to listen for keyboard events on. This can be window, or some other valid HTML element.'
-      console.error(msg)
-      throw new Error(msg)
-    }
-    utils.addListener(listenerElement, 'keydown', onKeyPress)
+    utils.addListener(listenerEl, 'keydown', onKeyboardEvent)
+    return emitter
   }
 
   // Handle key press events
-  function onKeyPress (evt) {
+  // right now we are having hte user pass in a 'command object'
+  // another option would be to just have the user pass in an event emitter
+  // that they want to respond to.......
+  function onKeyboardEvent (evt) {
     const keymap = Store.getKeymap()
     const lookup = utils.hashKeyboardEvent(evt)
     const target = keymap[lookup]
@@ -41,10 +40,21 @@ module.exports = (Store) => {
       // convert target name to camelcase string
       // call commanderObject[targetNameAsCamelCaseString]()
       if (!Store.recording.active) {
-        console.log('You activated an in use hotkey!')
+        emitter.emit(target.name)
+        /*
+        // convert keymap name to camelCase
+        const commandName = utils.snakeCaseToCamelCase(target.name)
+
+        // invoke that command on the commander object
+        const command = commanderObject[commandName]
+        if (command) {
+          // what should we pass it here, if anything?
+          // only thing we could really pass is the keyboard event itself..
+          // but we shouldnt need it...
+          command()
+        }
+        */
       }
-    } else {
-      // console.log('Not mapped: ', evt, evt.keyCode)
     }
   }
 }

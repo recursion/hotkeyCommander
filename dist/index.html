@@ -11,7 +11,11 @@
   <script src="hotkeyCommander.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function(evt) {
-      hotkeyCommander.init(document.getElementById('hotkeyCommander'))
+      const commander = hotkeyCommander(document.getElementById('hotkeyCommander'))
+      console.log(commander)
+      commander.on('CANCEL_ALL', () => {
+        console.log('CANCEL_ALL Event!')
+      })
     })
   </script>
 </body>

@@ -7,13 +7,6 @@ let commander
 // two ways to start the module:
 //   1) call init with the proper parameters (this assumes 1 context)
 //   2) initialized engine and configurator seperately
-
-module.exports = {
-  init,
-  startCommander,
-  startConfigurator
-}
-
 /*
 {
   configListener: {HTMLElement},
@@ -26,14 +19,15 @@ module.exports = {
 // if only 1 element is passed in,
 // we can assume that its ok to
 // do everything in one context?
-function init (configRootElement = window, engineListenerEl = window, hotkeyDefinitions, commanderObject = {}) {
+// returns an event emitter than can be used to respond to keyboard events
+module.exports = (configRootElement = window, engineListenerEl = window, hotkeyDefinitions) => {
   // instantiate a store and pass it to our configurator and commander objects
   const store = require('./common/store')(hotkeyDefinitions || defaultHotkeys)
   configurator = require('./configurator')(store)
   commander = require('./commander')(store)
 
-  configurator.init(configRootElement, hotkeyDefinitions, store)
-  commander.init(engineListenerEl, hotkeyDefinitions, commanderObject, store)
+  configurator.init(configRootElement, hotkeyDefinitions)
+  return commander.create(engineListenerEl)
 }
 
 /*
@@ -44,10 +38,10 @@ function init (configRootElement = window, engineListenerEl = window, hotkeyDefi
   store: {StoreObject}
 }
 */
-function startCommander (listenerEl, hotkeys, commander, store) {
-  store = store || require('./common/store')(hotkeys || defaultHotkeys)
+exports.createCommander = (listenerEl, hotkeys = defaultHotkeys, commanderObject) => {
+  const store = require('./common/store')(hotkeys)
   commander = require('./commander')(store)
-  commander.init(listenerEl, hotkeys, commander)
+  return commander.start(listenerEl, commanderObject)
 }
 
 /*
@@ -58,8 +52,8 @@ function startCommander (listenerEl, hotkeys, commander, store) {
   store: {StoreObject}
 }
 */
-function startConfigurator (targetEl, hotkeys, store) {
-  store = store || require('./common/store')(hotkeys || defaultHotkeys)
+exports.startConfigurator = (targetEl, hotkeys = defaultHotkeys) => {
+  const store = require('./common/store')(hotkeys)
   configurator = require('./configurator')(store)
   configurator.init(targetEl)
 }
