@@ -48,8 +48,13 @@ module.exports = () => {
   }
 
   function stopRecording (event) {
-    console.log('stop! setting active to false!', event)
-    recordingState.active = false
+    // lets wait just a second to set this back to false
+    // so the commander engine doesn try to process the
+    // recording keystroke as anything other than recording
+    // (only applies when commander and configurator are listening on same target Element)
+    setTimeout(() => {
+      recordingState.active = false
+    }, 1)
   }
 
   function onStartRecording (event) {

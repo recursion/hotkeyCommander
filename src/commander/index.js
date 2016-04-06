@@ -40,7 +40,9 @@ module.exports = (Store) => {
       // call the function related to this object here
       // convert target name to camelcase string
       // call commanderObject[targetNameAsCamelCaseString]()
-      console.log('You activated an in use hotkey!')
+      if (!Store.recording.active) {
+        console.log('You activated an in use hotkey!')
+      }
     } else {
       // console.log('Not mapped: ', evt, evt.keyCode)
     }
