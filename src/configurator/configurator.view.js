@@ -64,6 +64,16 @@ module.exports = (Store) => {
     el.innerText = utils.hashKeyboardEvent(key)
   }
 
+  function returnTemplate () {
+    return `
+      <template id="hotkey-config-template">
+        <div class="hotkey-config">
+          <div class="config-label key-description"></div>
+          <div class="config-label key-recorder-btn key-recorder-btn--idle right"></div>
+        </div>
+      </template>
+    `
+  }
   /** ***********************************************
                      MOUNT
       Takes in a dictionary of hotkeys/categories and an element
@@ -71,8 +81,8 @@ module.exports = (Store) => {
       hotkey template inside of the passed in element
   /** ***********************************************/
   function mount (hotkeys, containerEl) {
-    const templates = document.getElementById('hotkeyTemplate').import
-    const template = templates.getElementById('hotkey-config-template')
+    containerEl.innerHTML = returnTemplate()
+    const template = document.getElementById('hotkey-config-template')
 
     hotkeys.forEach((category) => {
       const categoryDiv = document.importNode(template.content, true)
@@ -117,7 +127,7 @@ module.exports = (Store) => {
   // and add the second string to element.className
   function swapStyles (element, removeClassName, addClassName) {
     // remove the idle state
-    const classNames = element.className.split(' ')
+      const classNames = element.className.split(' ')
     const removeClassIndex = classNames.indexOf(removeClassName)
     classNames.splice(removeClassIndex, 1)
 

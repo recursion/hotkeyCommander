@@ -201,9 +201,9 @@ Creating hotkey definitions is a mostly simple concept. Ultimately its an array 
 
 #### TODO
 - Load hotkeys to and from local storage (google.storage.sync for chrome extensions).
-- Convert to a more universal templating solution.
 - Make the module easily usable in other frameworks (react/angular/webcomponents?)
 - Convert to a redux store
+- ~~Convert to a more universal templating solution~~
 - ~~Catch/use alt keys (shift/ctrl/alt)~~
 - ~~Protect against overwriting existing hotkeys.~~
 - ~~Add categories (so that keys can be sorted by category)~~
