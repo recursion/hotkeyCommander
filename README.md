@@ -4,11 +4,9 @@
 
 > A 'drop in' module that provides keyboard event handling and allows your users to easily view, and set their preferred hotkeys.
 
-This module is essentially a boilerplate for handling keyboard events and user hotkey configuration. It maps **your** event handlers to user defined keyboard events. User can easily view, and change **their** hotkey preferences.
+HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and hotkeyCommander will hand you back an event emitter that will emit your events, regardless of which hotkeys your user wants to use to invoke those actions.
 
-HotkeyCommander allows you, the developer, to quit worrying about user hotkey configuration and keyboard event capture and response. Simply import the module to your project, instantiate it, and hand it your hotkey definitions and an object with your event handlers: both using the simple, intuitive hotkeyCommander naming convention.
-
-A user of your application will be able to easily view the hotkeys and by simply clicking on the hotkey they want to change - press the  key combination they want to apply to that function, and bam! Your application now responds to thier new hotkey preference, and you are done!
+A user of your application will be able to easily view and configure hotkeys that will remain mapped to your selected events. To record a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
 
 
      Default State      | Hotkey Recording State  |  Key Recorded state
@@ -18,15 +16,15 @@ A user of your application will be able to easily view the hotkeys and by simply
 - **Easy to use:**
     1. include the package in your project
     2. define your hotkey definitions
-    3. create a commands object - a simple js object with properly named eventhandlers on it.
-    4. create an instance of hotkeyCommander
-    5. pass the eventHandler object, the hotkey definitions, and the target elements to your instance of hotkeyCommander.
+    3. create an instance of hotkeyCommander
+    4. pass the hotkey definitions, and the target elements to your instance of hotkeyCommander.
+    5. Assign your event handlers to the event emitter that hotkeyCommander hands you back.
 - **User configuration built in:** Your app instantly starts responding to user hotkey preference changes.
     - Users easily view and change current settings
 - **Modular construction**
-    - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine, or pass the job off to react, or your view rendering framework/library of choice.
+    - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine or use your own.
 - **Powerful**
-    - **Responds to key combinations:** Ctrl+Shift+k, Alt+Ctrl+u - etc
+    - **Responds to multiple key combinations:** Ctrl+Shift+k, Alt+Ctrl+u - etc
     - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension situation: where hotkey configuration runs in a completely seperate browser context than the the keyboard events are being consumed in - _hotkeyCommander will work just as easily in a single browser context._
 - **Modern**
     - Builtin es2015 support via babel and webpack.
@@ -56,11 +54,11 @@ A user of your application will be able to easily view the hotkeys and by simply
     - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
     - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
 3. Pass hotkeyCommander:
-    1. A hotkey definition list
-    2. An object with *your* eventhandler methods, which follows the hotkeyCommander hotkey naming pattern
-    3. the HTML Elements to:
+    1. An object with *your* eventhandler methods, which follows the hotkeyCommander hotkey naming pattern
+    2. the HTML Elements to:
         - render configuration on
         - consume user key events from
+
 #### Load as a script from html or as a node module.
 
 ##### As browser script
@@ -77,7 +75,12 @@ A user of your application will be able to easily view the hotkeys and by simply
   <script>
     var hotkeys = require('./myHotkeyDefaults')
     var targetEl = document.getElementById('hotkeys');
-    hotkeyCommander.init(targetEl, {hotkeys: hotkeys});
+    const commander = hotkeyCommander(targetEl, {hotkeys: hotkeys});
+    // setup your event handlers
+    commander.on('YOUR_EVENT_NAME', () => {
+      // respond to the keypress here
+      console.log('YOUR_EVENT_NAME happened!')
+    })
   </script>
 ```
 
@@ -95,33 +98,26 @@ hotkeyCommander.startConfigurator(targetElement, listenerElement, {hotkeys})
 // then in the context where you want the keykeys to be responded to:
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-hotkeyCommander.startEngine(listenerElement, responderObject, {hotkeys})
+const commander = hotkeyCommander(listenerElement, responderObject, {hotkeys})
+commander.on('YOUR_EVENT', () => {
+  // do stuff
+})
 ```
 ----
 
 ### Creating hotkey definitions:
 
-Creating hotkey definitions is a mostly simple concept. Ultimately its an array of objects which describe hotkeys, grouped by category. Its important to note that there are some important naming conventions that must be followed here in order for hotkeyCommander to work. Let me lay out the pieces here:
+Creating hotkey definitions is a mostly simple concept. Ultimately its an array of objects which describe hotkeys, grouped by category. Whatever name you give the hotkey, is the event that will
+be emitted for that action
 
 ---
-
-###### Naming Conventions:
-> Your eventhandler's method names, and your hotkey definitions must use the same name __except__:
-
-  - **hotkey definitions:**
-      - use all caps and underscores
-      - ex: `OPEN_FILE_MENU`
-
-  - **eventhandler method names:**
-      - use traditional camel case
-      - ex `yourHotkeyDescription`
 
 ###### HOTKEY OBJECT
 > Represents a hotkey
 
 ```js
 {
-  name: YOUR_EVENTHANDLER_NAME_WITH_ALL_CAPS_AND_UNDERSCORES,
+  name: 'YOUR_EVENT',
   keyCode: ASCII_KEYCODE,
   altKey: BOOL,
   ctrlKey: BOOL,

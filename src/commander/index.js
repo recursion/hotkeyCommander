@@ -42,6 +42,7 @@ module.exports = (Store) => {
       if (!Store.recording.active) {
         emitter.emit(target.name)
         /*
+        This is what we were doing before inverting the command object
         // convert keymap name to camelCase
         const commandName = utils.snakeCaseToCamelCase(target.name)
 

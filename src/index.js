@@ -38,10 +38,10 @@ module.exports = (configRootElement = window, engineListenerEl = window, hotkeyD
   store: {StoreObject}
 }
 */
-exports.createCommander = (listenerEl, hotkeys = defaultHotkeys, commanderObject) => {
+exports.createCommander = (listenerEl, hotkeys = defaultHotkeys) => {
   const store = require('./common/store')(hotkeys)
   commander = require('./commander')(store)
-  return commander.start(listenerEl, commanderObject)
+  return commander.start(listenerEl)
 }
 
 /*
