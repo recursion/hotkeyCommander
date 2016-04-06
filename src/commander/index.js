@@ -4,9 +4,7 @@
  * Provide the element to listen on
  */
 
-const utils = require('./utils')
-
-let listenerElement
+const utils = require('../common/utils')
 
 // public api
 module.exports = (Store) => {
@@ -17,8 +15,6 @@ module.exports = (Store) => {
   function init (listenerEl) {
     if (!utils.validateEl(listenerEl)) {
       throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
-    } else {
-      listenerElement = listenerEl
     }
     start(listenerEl)
   }
@@ -48,19 +44,5 @@ module.exports = (Store) => {
     } else {
       // console.log('Not mapped: ', evt, evt.keyCode)
     }
-  }
-
-  // make sure this keyboard event matches the keyObjects mapped requirements
-  function metaKeysMatchKeyPress (keyObject, keyboardEvent) {
-    if (keyObject.altKey !== keyboardEvent.altKey) {
-      return false
-    }
-    if (keyObject.shiftKey !== keyboardEvent.shiftKey) {
-      return false
-    }
-    if (keyObject.ctrlKey !== keyboardEvent.ctrlKey) {
-      return false
-    }
-    return true
   }
 }

@@ -3,8 +3,7 @@
  * this module is responsible for creating/mounting
  * and rendering the hotkey configuration view
  */
-const utils = require('../utils')
-const keyCodes = require('../keycodeMap')
+const utils = require('../common/utils')
 
 //                CSS SELECTORS
 

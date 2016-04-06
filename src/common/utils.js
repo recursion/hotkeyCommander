@@ -1,6 +1,6 @@
 // Common functions
 const utils = exports
-const keyCodes = require('./keycodeMap')
+const keyCodes = require('./keycodes.local')
 
 // adds cb as the event handler for listenerType  events on listenerEl (or window)
 utils.addListener = (listenerEl, listenerType, cb) => {

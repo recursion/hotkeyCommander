@@ -1,7 +1,8 @@
-const defaultHotkeys = require('../hotkey.defaults')
+const defaultHotkeys = require('../../hotkey.defaults')
 const utils = require('./utils')
 const EM2 = require('eventemitter2')
 const Store = new EM2()
+
 module.exports = () => {
   // store our hotkey dictionary with categories
   // using hotkey names as keys

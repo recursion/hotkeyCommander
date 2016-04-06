@@ -1,4 +1,4 @@
-const utils = require('../utils')
+const utils = require('../common/utils')
 
 // an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
 // these can only be used to modify other keys - not as standalone hotkeys

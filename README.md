@@ -4,9 +4,16 @@
 
 > A 'drop in' module that provides keyboard event handling and allows your users to easily view, and set their preferred hotkeys.
 
-This module is essentially a boilerplate for handling keyboard events and user hotkey configuration. It maps **your** eventhandlers to user defined keyboard events. User can easily view, and change **their** hotkey preferences.
+This module is essentially a boilerplate for handling keyboard events and user hotkey configuration. It maps **your** event handlers to user defined keyboard events. User can easily view, and change **their** hotkey preferences.
 
-HotkeyCommander allows you, the developer, to quit worrying about user hotkey configuration and keyboard event capture and response.
+HotkeyCommander allows you, the developer, to quit worrying about user hotkey configuration and keyboard event capture and response. Simply import the module to your project, instantiate it, and hand it your hotkey definitions and an object with your event handlers: both using the simple, intuitive hotkeyCommander naming convention.
+
+A user of your application will be able to easily view the hotkeys and by simply clicking on the hotkey they want to change - press the  key combination they want to apply to that function, and bam! Your application now responds to thier new hotkey preference, and you are done!
+
+
+     Default State      | Hotkey Recording State  |  Key Recorded state
+:----------------------:|:-----------------------:|:-----------------------:
+![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
 
 - **Easy to use:**
     1. include the package in your project
