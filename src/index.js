@@ -46,7 +46,7 @@ module.exports = (configRootElement = window, engineListenerEl = window, hotkeyD
 }
 */
 exports.Commander = (listenerEl, hotkeys = defaultHotkeys) => {
-  const store = require('./common/store')(hotkeys)
+  const store = createStore(configReducer)
   commander = require('./commander')(store)
   return commander(listenerEl)
 }
@@ -60,7 +60,7 @@ exports.Commander = (listenerEl, hotkeys = defaultHotkeys) => {
 }
 */
 exports.Configurator = (targetEl, hotkeys = defaultHotkeys) => {
-  const store = require('./common/store')(hotkeys)
+  const store = createStore(configReducer)
   configurator = require('./configurator')(store)
   configurator.init(targetEl)
 }
