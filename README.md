@@ -43,64 +43,77 @@ Your users will be able to easily view and configure their hotkey preferences. T
 
 #### Overview
 
-1. Create your list of custom hotkey definitions. *see below for details*
-2. Add hotkeyCommander to your project.
+1. Get the package
     - ~~`npm install --save hotkey-commander`~~  *-not yet implemented*
     - or
     - clone the repo and build hotkeyCommander.js
         1. git clone ........
         1. run `npm run build` or `webpack` from the cloned repo to build
         2. copy dist/hotkeyCommander.js to your project as needed
-3. Create an instance of hotkeyCommander
+2. Create your list of custom hotkey definitions. *see below for details*
+3. Include hotkeyCommander in your project somewhere....
     - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
     - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
-3. Pass hotkeyCommander:
+3. Pass hotkeyCommander some arguments:
     1. Your hotkey definitions object
     2. the HTML Elements to:
         - render configuration on
         - consume user key events from
+    3. `const commander = hotkeyCommander(configContainerElement, commanderListenerElement, hotkeyDefinition)`
 4. Create event handlers on the emitter than hotkeyCommander hands you back.
+    - `commander.on('MOVE_FORWARD', onMoveForward)`
 
 #### Load as a script from html or as a node module.
 
 ##### As browser script
 > - `npm run build` to get the bundle file to the project dist directory
-> - move the files in dist to where you want to serve them, or serve from there..
+> - move dist/hotkeyCommander.js to where you serve files from, or serve from dist..
 > - Setup initial hotkeys map in the hotkeys.js file.
 > - Include the hotkeyCommander.js script in your main html file.
 > - Call init on it with the desired container element (this is where you want your config panel to render)
 
 ```html
-  <div id="hotkeys"></div>
+  <div id="hotkeyCommander"></div>
   <script src="dist/hotkeyCommander.js"></script>
 
   <script>
-    var hotkeys = require('./myHotkeyDefaults')
-    var targetEl = document.getElementById('hotkeys');
-    const commander = hotkeyCommander(targetEl, {hotkeys: hotkeys});
+
+    const hotkeys = require('./myHotkeyDefaults')
+    const targetEl = document.getElementById('hotkeyCommander');
+    const commander = hotkeyCommander(targetEl, window, hotkeys);
+
     // setup your event handlers
     commander.on('YOUR_EVENT_NAME', () => {
       // respond to the keypress here
       console.log('YOUR_EVENT_NAME happened!')
     })
+
   </script>
 ```
 
 ##### As a node module
+```js
+const hotkeys = require('./myDefaultHotkeys')
+const hotkeyCommander = require('hotkeyCommander')
+const listenerElement = windo
+hotkeyCommander(targetElement, listenerElement, hotkeys)
+```
+
+##### As a chrome plugin
 > The config portion will run in the plugin context
-> while the  hotkey engine will run in the extensions target window.
+> while the hotkey engine will run in the extensions target window.
 > Better instructions coming, but to give you an idea, it will look something like this:
 
 ```js
 // in the context/file where you will be providing user configuration
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-hotkeyCommander.startConfigurator(targetElement, listenerElement, {hotkeys})
+hotkeyCommander.startConfigurator(targetElement, listenerElement, hotkeys)
 
 // then in the context where you want the keykeys to be responded to:
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-const commander = hotkeyCommander(listenerElement, responderObject, {hotkeys})
+const commander = hotkeyCommander(listenerElement, responderObject, hotkeys)
 commander.on('YOUR_EVENT', () => {
   // do stuff
 })
