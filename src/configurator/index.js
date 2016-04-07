@@ -19,7 +19,7 @@ module.exports = (Store) => {
   // takes an element to load the view into
   // and an element to listen to keystrokes on
   function init (configRenderElement, listenerElement = window) {
-    if (!utils.validateEl(configRenderElement)) {
+    if (!utils.isHTMLElement(configRenderElement) || !utils.isHTMLElement(listenerElement)) {
       throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element')
     }
 

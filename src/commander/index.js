@@ -1,4 +1,4 @@
-/** Hotkey Engine Module
+/** HotkeyCommander Engine Module
  *
  * This module exports an engine for responding to keystrokes
  * Provide the element to listen on
@@ -17,7 +17,7 @@ module.exports = (Store) => {
 
   // return our event emitter
   function create (listenerEl) {
-    if (!utils.validateEl(listenerEl)) {
+    if (!utils.isHTMLElement(listenerEl)) {
       throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
     }
 

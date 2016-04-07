@@ -54,7 +54,7 @@ utils.snakeCaseToCamelCase = (string) => {
 
 /* globals Window Element */
 // validate that a object is an Element or Window
-utils.validateEl = (el) => {
+utils.isHTMLElement = (el) => {
   if (!el instanceof Window || !el instanceof Element) {
     return false
   } else {
