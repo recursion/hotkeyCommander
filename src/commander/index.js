@@ -11,12 +11,10 @@ const emitter = new EventEmitter2()
 
 // public api
 module.exports = (Store) => {
-  return {
-    create
-  }
+  return commander
 
   // return our event emitter
-  function create (listenerEl) {
+  function commander (listenerEl) {
     if (!utils.isHTMLElement(listenerEl)) {
       throw new Error('Invalid initializer for hotkey engine listener. Must be the window object or valid DOM Element')
     }

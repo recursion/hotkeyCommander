@@ -27,7 +27,7 @@ module.exports = (configRootElement = window, engineListenerEl = window, hotkeyD
   commander = require('./commander')(store)
 
   configurator.init(configRootElement, hotkeyDefinitions)
-  return commander.create(engineListenerEl)
+  return commander(engineListenerEl)
 }
 
 /* TODO: When commander and configurator are running in seperate contexts
@@ -43,10 +43,10 @@ module.exports = (configRootElement = window, engineListenerEl = window, hotkeyD
   store: {StoreObject}
 }
 */
-exports.createCommander = (listenerEl, hotkeys = defaultHotkeys) => {
+exports.Commander = (listenerEl, hotkeys = defaultHotkeys) => {
   const store = require('./common/store')(hotkeys)
   commander = require('./commander')(store)
-  return commander.start(listenerEl)
+  return commander(listenerEl)
 }
 
 /*
@@ -57,7 +57,7 @@ exports.createCommander = (listenerEl, hotkeys = defaultHotkeys) => {
   store: {StoreObject}
 }
 */
-exports.startConfigurator = (targetEl, hotkeys = defaultHotkeys) => {
+exports.Configurator = (targetEl, hotkeys = defaultHotkeys) => {
   const store = require('./common/store')(hotkeys)
   configurator = require('./configurator')(store)
   configurator.init(targetEl)

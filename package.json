@@ -4,7 +4,8 @@
   "description": "A module that provides common functionality for setting and using hotkeys.",
   "main": "dist/hotkeyCommander.js",
   "dependencies": {
-    "eventemitter2": "^1.0.0"
+    "eventemitter2": "^1.0.0",
+    "redux": "^3.3.1"
   },
   "devDependencies": {
     "babel": "^6.5.2",
