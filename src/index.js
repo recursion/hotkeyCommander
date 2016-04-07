@@ -30,7 +30,12 @@ module.exports = (configRootElement = window, engineListenerEl = window, hotkeyD
   return commander.create(engineListenerEl)
 }
 
+/* TODO: When commander and configurator are running in seperate contexts
+    we will assume its a chrome plugin, and allow each component to
+    use its own store object, which will in turn be using chrome.storage.sync
+    and its event emitter to transmit changes of the keymap.
 /*
+
 {
   engineListener: {HTMLElement},
   commander: {CommanderObject},

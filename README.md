@@ -2,11 +2,13 @@
 
 # Hotkey Commander
 
-> A 'drop in' module that provides keyboard event handling and allows your users to easily view, and set their preferred hotkeys.
+> HotkeyCommander consumes keyboard events and provides simple user hotkey display/configuration, so you dont have to! Designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
 
 HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and hotkeyCommander will hand you back an event emitter that will emit your events, regardless of which hotkeys your user wants to use to invoke those actions.
 
-A user of your application will be able to easily view and configure hotkeys that will remain mapped to your selected events. To record a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
+Your users will be able to easily view and configure their hotkey preferences. Their new hotkeys remain mapped to your events.
+
+>To record a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
 
 
      Default State      | Hotkey Recording State  |  Key Recorded state
@@ -16,9 +18,8 @@ A user of your application will be able to easily view and configure hotkeys tha
 - **Easy to use:**
     1. include the package in your project
     2. define your hotkey definitions
-    3. create an instance of hotkeyCommander
-    4. pass the hotkey definitions, and the target elements to your instance of hotkeyCommander.
-    5. Assign your event handlers to the event emitter that hotkeyCommander hands you back.
+    3. pass the hotkey definitions, and the target elements to hotkeyCommander.
+    4. Assign your event handlers to the event emitter that hotkeyCommander hands you back.
 - **User configuration built in:** Your app instantly starts responding to user hotkey preference changes.
     - Users easily view and change current settings
 - **Modular construction**
