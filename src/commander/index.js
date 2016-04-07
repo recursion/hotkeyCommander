@@ -28,17 +28,21 @@ module.exports = (Store) => {
   // another option would be to just have the user pass in an event emitter
   // that they want to respond to.......
   function onKeyboardEvent (evt) {
-    const keymap = Store.getKeymap()
+    const state = Store.getState()
+    const keymap = state.keymap
     const lookup = utils.hashKeyboardEvent(evt)
     const target = keymap[lookup]
+
     if (target) {
       // the user has entered the correct key combination
       // for this hotkey
       // call the function related to this object here
       // convert target name to camelcase string
       // call commanderObject[targetNameAsCamelCaseString]()
-      if (!Store.recording.active) {
-        emitter.emit(target.name)
+      if (!state.recording.active) {
+        // emitter.emit(target.name)
+        console.log('You pressed: ', target)
+
         /*
         This is what we were doing before inverting the command object
         // convert keymap name to camelCase

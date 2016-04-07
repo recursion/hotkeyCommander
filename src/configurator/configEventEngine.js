@@ -1,5 +1,4 @@
 const utils = require('../common/utils')
-const events = require('../common/events')
 //const keyCodes = require('../../keycodes.local')
 
 // an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
@@ -8,25 +7,23 @@ const metaKeyCodes = [17, 16, 18, 91]
 
 module.exports = (Store) => {
   return {
-    // incase we ever want to use this....
-    onKeypress: (evt) => {
-
-    },
-    onKeyup: (evt) => {
-
-    },
     onKeydown: onKeyboardEvent
   }
 
   // emit an event when a user is trying to set a key
-  function emitSetKey (keyToSet, keyboardEvent, targetEl) {
-    const event = {element: targetEl, key: keyToSet, keyboardEvent}
-    Store.emit(events.setKey, event)
+  function emitSetKey (action, keyboardEvent, element) {
+    const event = {type: 'SET_KEY',
+      hotkeyAction: action,
+      element,
+      keyboardEvent
+    }
+    Store.dispatch(event)
   }
 
   // this is a generic keyboard event handler
   // and could be used equally for up/down or press events
   function onKeyboardEvent (keyboardEvent) {
+    const state = Store.getState()
     /*
     console.log(`
      keycode: ${keyboardEvent.keyCode}
@@ -39,14 +36,13 @@ module.exports = (Store) => {
     */
 
     // we only do things here if key recording has been activated
-    const recordingState = Store.recording
-    if (recordingState.active) {
+    if (state.recording.active) {
       const code = keyboardEvent.keyCode
-      const targetEl = recordingState.element
-      const targetKey = recordingState.key
+      const targetEl = state.recording.target
+      const targetAction = state.recording.hotkeyAction
 
       // look for a key already using the desired keycode
-      const keyAlreadyUsed = Store.getKeymap()[utils.hashKeyboardEvent(keyboardEvent)]
+      const keyAlreadyUsed = state.keymap[utils.hashKeyboardEvent(keyboardEvent)]
 
       // dont respond to direct meta key presses
       if (metaKeyCodes.indexOf(code) !== -1) {
@@ -55,13 +51,14 @@ module.exports = (Store) => {
 
       if (keyAlreadyUsed) {
         // since a key is already in use
-        if (targetKey.name !== keyAlreadyUsed.name) {
+        if (targetAction !== keyAlreadyUsed.action) {
           // key already mapped to this keycode - no change
-          Store.emit(events.alert)
+          // Store.emit(events.alert)
+          Store.dispatch({type: 'ALERT'})
           return
         }
       }
-      emitSetKey(targetKey, keyboardEvent, targetEl)
+      emitSetKey(targetAction, keyboardEvent, targetEl)
     }
   }
 }

@@ -1,4 +1,6 @@
 const defaultHotkeys = require('../hotkey.defaults')
+const {createStore} = require('redux')
+const configReducer = require('./configurator/reducers')
 
 // these only get initialized during a call to init
 let configurator
@@ -22,7 +24,7 @@ let commander
 // returns an event emitter than can be used to respond to keyboard events
 module.exports = (configRootElement = window, engineListenerEl = window, hotkeyDefinitions) => {
   // instantiate a store and pass it to our configurator and commander objects
-  const store = require('./common/store')(hotkeyDefinitions || defaultHotkeys)
+  const store = createStore(configReducer)
   configurator = require('./configurator')(store)
   commander = require('./commander')(store)
 

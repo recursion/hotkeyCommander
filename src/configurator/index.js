@@ -10,7 +10,7 @@ const utils = require('../common/utils')
 module.exports = (Store) => {
   const engine = require('./configEventEngine.js')(Store)
   const {mount} = require('./configurator.view')(Store)
-  const hotkeys = Store.getHotkeys()
+  const hotkeys = Store.getState().hotkeyList
 
   return {
     init: init
