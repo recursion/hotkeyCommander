@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!- This is purely for example usage and is not needed by the package ->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotkey Config</title>
+  <link rel="stylesheet" href="example/normalize.css">
+  <link rel="stylesheet" href="example/hotkeyCommander.css">
+</head>
+<body>
+  <div id="hotkeyCommander"></div>
+  <script src="hotkeyCommander.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(evt) {
+      // invoke hotkey commander by passing it the element you want it to render to
+      const commander = hotkeyCommander(document.getElementById('hotkeyCommander'))
+
+      // set up all the event handlers you need here
+      commander.on('CANCEL_ALL', function(){
+        console.log('CANCEL_ALL Event!')
+      })
+      commander.on('CANCEL_BIDS', function(){
+        console.log('CANCEL_BIDS Event!')
+      })
+      commander.on('CANCEL_OFFERS', function(){
+        console.log('CANCEL_OFFERS Event!')
+      })
+      commander.on('CANCEL_LAST', function(){
+        console.log('CANCEL_LAST Event!')
+      })
+      commander.on('BID_BETTER', function(){
+        console.log('BID_BETTER Event!')
+      })
+      commander.on('HIT_THE_OFFER', function(){
+        console.log('HIT_THE_OFFER Event!')
+      })
+    })
+  </script>
+</body>
+</html>
