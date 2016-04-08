@@ -1,4 +1,3 @@
-const defaultHotkeys = require('../hotkey.defaults')
 const configReducer = require('./reducers')
 
 // these only get initialized during a call to init
@@ -9,14 +8,23 @@ let commander
 // we can assume that its ok to
 // do everything in one context?
 // returns an event emitter than can be used to respond to keyboard events
-module.exports = (configRootElement = window, engineListenerEl = window, hotkeyDefinitions) => {
+/**
+ * @params {Object} options - {
+ *   @params {Element} target - element to mount configurator
+ *   @params {HotkeyDefinitionsObject} hotkeys - hotkey definitions
+ *   @param {Element} - engineListenerEl - defaults to window
+ *   @returns {EventEmitter2}
+ * }
+ */
+module.exports = (options) => {
+  // configRootElement = window, engineListenerEl = window) => {
   // instantiate a store and pass it to our configurator and commander objects
-  const store = configReducer()
+  const store = configReducer(options.hotkeys)
   configurator = require('./configurator')(store)
   commander = require('./commander')(store)
 
-  configurator.init(configRootElement, hotkeyDefinitions)
-  return commander(engineListenerEl)
+  configurator.init(options.target)
+  return commander(options.engineListenerEl || window)
 }
 
 /* TODO:
@@ -26,14 +34,14 @@ module.exports = (configRootElement = window, engineListenerEl = window, hotkeyD
     and its event emitter to transmit changes of the keymap.
 */
 
-exports.Commander = (listenerEl, hotkeys = defaultHotkeys) => {
-  const store = configReducer()
+exports.Commander = (options) => {
+  const store = configReducer(options.hotkeys)
   commander = require('./commander')(store)
-  return commander(listenerEl)
+  return commander(options.hotkeys, options.listenerEl)
 }
 
-exports.Configurator = (targetEl, hotkeys = defaultHotkeys) => {
-  const store = configReducer()
+exports.Configurator = (options) => {
+  const store = configReducer(options.hotkeys)
   configurator = require('./configurator')(store)
-  configurator.init(targetEl)
+  configurator.init(options.hotkeys, options.targetEl)
 }

@@ -122,7 +122,7 @@ module.exports = (Store) => {
   function createCategoryDiv (category) {
     const categoryDiv = createDiv()
     // remove innards of template
-    categoryDiv.className = 'hotkey-category'
+    categoryDiv.className = 'hotkey-config'
     categoryDiv.innerHTML = `
       <h5 class=${categorySelector}>
         ${utils.stripUnderscores(category)}

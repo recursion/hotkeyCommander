@@ -4,7 +4,7 @@
  *  keyCode is the ASCII keyCodes
 */
 // Define hotkeyCodes here
-module.exports = [
+var COMMANDER_HOTKEY_DEFAULTS = [
   {
     category: 'CANCEL_KEYS',
     actions: [

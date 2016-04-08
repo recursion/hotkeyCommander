@@ -1,15 +1,15 @@
-const defaultHotkeys = require('../../hotkey.defaults')
 const utils = require('../utils')
 
-// load default hotkeys into a normalized data structure
-const [categories, hotkeys] = normalize(defaultHotkeys)
-
 // setup the intialState
-const initialState = exports.initialState = {
-  categories, // this is an array of category names
-  hotkeys, // an object of hotkeyObjects with a category prop. = to its category id in categories
-  keymap: generateKeymap(hotkeys), // an object of hotkeys with their hashed key combo as key
-  recording: false // whether or not we are recording a new key
+const initialState = exports.initialState = (defaultHotkeys) => {
+  // load default hotkeys into a normalized data structure
+  const [categories, hotkeys] = normalize(defaultHotkeys)
+  return {
+    categories, // this is an array of category names
+    hotkeys, // an object of hotkeyObjects with a category prop. = to its category id in categories
+    keymap: generateKeymap(hotkeys), // an object of hotkeys with their hashed key combo as key
+    recording: false // whether or not we are recording a new key
+  }
 }
 
 // export our root reducer

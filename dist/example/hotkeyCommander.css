@@ -1,3 +1,6 @@
+#hotkeyCommander:focus{
+  outline: none;
+}
 /* block level selectors */
 .hotkey-config {
   display: block;

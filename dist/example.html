@@ -8,11 +8,15 @@
 </head>
 <body>
   <div id="hotkeyCommander"></div>
+  <script src="hotkey.defaults.js"></script>
   <script src="hotkeyCommander.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function(evt) {
       // invoke hotkey commander by passing it the element you want it to render to
-      const commander = hotkeyCommander(document.getElementById('hotkeyCommander'))
+      var commander = hotkeyCommander({
+        hotkeys: COMMANDER_HOTKEY_DEFAULTS,
+        target: document.getElementById('hotkeyCommander')
+      })
 
       // set up all the event handlers you need here
       commander.on('CANCEL_ALL', function(){

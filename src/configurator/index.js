@@ -18,15 +18,15 @@ module.exports = (Store) => {
 
   // takes an element to load the view into
   // and an element to listen to keystrokes on
-  const init = (configRenderElement) => {
-    if (!utils.isHTMLElement(configRenderElement)) {
+  const init = (rootElement) => {
+    if (!utils.isHTMLElement(rootElement)) {
       throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element')
     }
 
-    configRenderElement.tabIndex = 0
-    utils.addListener(configRenderElement, 'keydown', engine.onKeydown)
+    rootElement.tabIndex = 0
+    utils.addListener(rootElement, 'keydown', engine.onKeydown)
 
-    mount(configRenderElement)
+    mount(rootElement)
   }
   return {
     init: init
