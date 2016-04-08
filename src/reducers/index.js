@@ -1,14 +1,13 @@
 const defaultHotkeys = require('../../hotkey.defaults')
-const utils = require('../common/utils')
+const utils = require('../utils')
 const {createStore} = require('redux')
 
-const [cats, keys] = normalize(defaultHotkeys)
+const [categories, hotkeys] = normalize(defaultHotkeys)
 const initialState = {
-  categories: cats,
-  hotkeys: keys,
-  keymap: generateKeymap(keys),
-  recording: null,
-  alert: false
+  categories,
+  hotkeys,
+  keymap: generateKeymap(hotkeys),
+  recording: false
 }
 
 module.exports = () => {
@@ -18,57 +17,25 @@ module.exports = () => {
   return store
 }
 
-let hotkeys
 const reducer = (state = initialState, action) => {
   const target = state.hotkeys[action.action]
   switch (action.type) {
     case 'START_RECORDING':
       // create a new hotkeylist
-      hotkeys = Object.assign({}, state.hotkeys, {
-        [target.name]: {
-          name: target.name,
-          recording: true,
-          keyCode: target.keyCode,
-          altKey: target.altKey,
-          shiftKey: target.shiftKey,
-          ctrlKey: target.ctrlKey
-        }
-      })
       return Object.assign({}, state, {
-        hotkeys: hotkeys,
+        hotkeys: updateHotkey(state, target, target, true),
         recording: action.action
       })
     case 'STOP_RECORDING':
       // create a new hotkeylist
-      hotkeys = Object.assign({}, state.hotkeys, {
-        [target.name]: {
-          name: target.name,
-          recording: false,
-          keyCode: target.keyCode,
-          altKey: target.altKey,
-          shiftKey: target.shiftKey,
-          ctrlKey: target.ctrlKey
-        }
-      })
       return Object.assign({}, state, {
-        hotkeys: hotkeys,
+        hotkeys: updateHotkey(state, target, target, false),
         recording: false
       })
     case 'SET_KEY':
       // create a new hotkeylist
-      hotkeys = Object.assign({}, state.hotkeys, {
-        [target.name]: {
-          name: target.name,
-          recording: false,
-          keyCode: action.keyCode,
-          altKey: action.altKey,
-          shiftKey: action.shiftKey,
-          ctrlKey: action.ctrlKey
-        }
-      })
-
       return Object.assign({}, state, {
-        hotkeys: hotkeys,
+        hotkeys: updateHotkey(state, target, action, false),
         recording: false,
         keymap: generateKeymap(hotkeys)
       })
@@ -83,6 +50,19 @@ const reducer = (state = initialState, action) => {
     default:
       return state
   }
+}
+
+function updateHotkey (state, target, key, recording) {
+  return Object.assign({}, state.hotkeys, {
+    [target.name]: {
+      name: target.name,
+      recording: recording,
+      keyCode: key.keyCode,
+      altKey: key.altKey,
+      shiftKey: key.shiftKey,
+      ctrlKey: key.ctrlKey
+    }
+  })
 }
 
 // turns a hotkeyList definition into

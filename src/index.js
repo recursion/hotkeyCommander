@@ -1,6 +1,6 @@
 const defaultHotkeys = require('../hotkey.defaults')
 const {createStore} = require('redux')
-const configReducer = require('./configurator/reducers')
+const configReducer = require('./reducers')
 
 // these only get initialized during a call to init
 let configurator

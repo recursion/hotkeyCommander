@@ -3,13 +3,10 @@
  * this module is responsible for creating/mounting
  * and rendering the hotkey configuration view
  */
-const utils = require('../common/utils')
-const {stopRecording, startRecording, alertOff} = require('./actions.js')
+const utils = require('../utils')
+const {stopRecording, startRecording, alertOff} = require('../actions')
 
 //                CSS SELECTORS
-const configBlockSelector = '.hotkey-config'
-const setKeyBtnSelector = '.config-label.key-recorder-btn'
-const descriptionLabelSelector = '.config-label.key-description'
 const categorySelector = 'hotkey-category'
 const idleStateSelector = 'key-recorder-btn--idle'
 const activeStateSelector = 'key-recorder-btn--active'

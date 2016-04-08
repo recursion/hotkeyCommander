@@ -4,7 +4,7 @@
  * Provide the element to listen on
  */
 
-const utils = require('../common/utils')
+const utils = require('../utils')
 
 const EventEmitter2 = require('eventemitter2')
 const emitter = new EventEmitter2()

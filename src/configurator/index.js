@@ -4,7 +4,7 @@
  * This module mounts the configuration view
  * and handles the logic of recording new key strokes
  */
-const utils = require('../common/utils')
+const utils = require('../utils')
 
 // public api
 module.exports = (Store) => {

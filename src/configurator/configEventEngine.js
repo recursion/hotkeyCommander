@@ -1,6 +1,5 @@
-const utils = require('../common/utils')
-const {setKey} = require('./actions')
-const {alertOn} = require('./actions')
+const utils = require('../utils')
+const {setKey, alertOn} = require('../actions')
 
 // const keyCodes = require('../../keycodes.local')
 
