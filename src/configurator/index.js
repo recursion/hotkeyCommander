@@ -10,7 +10,6 @@ const utils = require('../common/utils')
 module.exports = (Store) => {
   const engine = require('./configEventEngine.js')(Store)
   const {mount} = require('./configurator.view')(Store)
-  const hotkeys = Store.getState().hotkeyList
 
   return {
     init: init
@@ -18,14 +17,15 @@ module.exports = (Store) => {
 
   // takes an element to load the view into
   // and an element to listen to keystrokes on
-  function init (configRenderElement, listenerElement = window) {
-    if (!utils.isHTMLElement(configRenderElement) || !utils.isHTMLElement(listenerElement)) {
+  function init (configRenderElement) {
+    if (!utils.isHTMLElement(configRenderElement)) {
       throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element')
     }
 
-    utils.addListener(listenerElement, 'keydown', engine.onKeydown)
-    utils.addListener(listenerElement, 'keyup', engine.onKeyup)
+    configRenderElement.tabIndex = 0
+    utils.addListener(configRenderElement, 'keydown', engine.onKeydown)
+    utils.addListener(configRenderElement, 'keyup', engine.onKeyup)
 
-    mount(hotkeys, configRenderElement)
+    mount(configRenderElement)
   }
 }

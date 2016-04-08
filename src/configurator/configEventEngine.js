@@ -1,5 +1,8 @@
 const utils = require('../common/utils')
-//const keyCodes = require('../../keycodes.local')
+const {setKey} = require('./actions')
+const {alertOn} = require('./actions')
+
+// const keyCodes = require('../../keycodes.local')
 
 // an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
 // these can only be used to modify other keys - not as standalone hotkeys
@@ -8,16 +11,6 @@ const metaKeyCodes = [17, 16, 18, 91]
 module.exports = (Store) => {
   return {
     onKeydown: onKeyboardEvent
-  }
-
-  // emit an event when a user is trying to set a key
-  function emitSetKey (action, keyboardEvent, element) {
-    const event = {type: 'SET_KEY',
-      hotkeyAction: action,
-      element,
-      keyboardEvent
-    }
-    Store.dispatch(event)
   }
 
   // this is a generic keyboard event handler
@@ -36,10 +29,10 @@ module.exports = (Store) => {
     */
 
     // we only do things here if key recording has been activated
-    if (state.recording.active) {
+    if (state.recording) {
+      keyboardEvent.stopPropagation()
       const code = keyboardEvent.keyCode
-      const targetEl = state.recording.target
-      const targetAction = state.recording.hotkeyAction
+      const targetAction = state.recording
 
       // look for a key already using the desired keycode
       const keyAlreadyUsed = state.keymap[utils.hashKeyboardEvent(keyboardEvent)]
@@ -54,11 +47,11 @@ module.exports = (Store) => {
         if (targetAction !== keyAlreadyUsed.action) {
           // key already mapped to this keycode - no change
           // Store.emit(events.alert)
-          Store.dispatch({type: 'ALERT'})
+          Store.dispatch(alertOn())
           return
         }
       }
-      emitSetKey(targetAction, keyboardEvent, targetEl)
+      Store.dispatch(setKey(targetAction, keyboardEvent))
     }
   }
 }

@@ -1,36 +1,36 @@
 /**
  *  ALL hotkeyCodes must follow this pattern
- *  action is the event that will be emitted by the commander
+ *  name is the event that will be emitted by the commander
  *  keyCode is the ASCII keyCodes
 */
 // Define hotkeyCodes here
 module.exports = [
   {
     category: 'CANCEL_KEYS',
-    keys: [
+    actions: [
       {
-        action: 'CANCEL_ALL',
+        name: 'CANCEL_ALL',
         keyCode: 89,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'CANCEL_LAST',
+        name: 'CANCEL_LAST',
         keyCode: 84,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'CANCEL_BIDS',
+        name: 'CANCEL_BIDS',
         keyCode: 82,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'CANCEL_OFFERS',
+        name: 'CANCEL_OFFERS',
         keyCode: 85,
         ctrlKey: false,
         shiftKey: false,
@@ -40,30 +40,30 @@ module.exports = [
   },
   {
     category: 'TOGGLE_KEYS',
-    keys: [
+    actions: [
       {
-        action: 'TOGGLE_LOTSIZE_UP',
+        name: 'TOGGLE_LOTSIZE_UP',
         keyCode: 220,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'TOGGLE_LOTSIZE_DOWN',
+        name: 'TOGGLE_LOTSIZE_DOWN',
         keyCode: 222,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'TOGGLE_OFFSET_UP',
+        name: 'TOGGLE_OFFSET_UP',
         keyCode: 189,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'TOGGLE_OFFSET_DOWN',
+        name: 'TOGGLE_OFFSET_DOWN',
         keyCode: 187,
         ctrlKey: false,
         shiftKey: false,
@@ -73,44 +73,44 @@ module.exports = [
   },
   {
     category: 'BUY_ORDERS',
-    keys: [
+    actions: [
       {
-        action: 'BID_BETTER',
+        name: 'BID_BETTER',
         keyCode: 70,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'BID_WITH_BEST_BID',
+        name: 'BID_WITH_BEST_BID',
         keyCode: 68,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'BID_BELOW_BEST',
+        name: 'BID_BELOW_BEST',
         keyCode: 83,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'BID_DOUBLE_BELOW_BEST',
+        name: 'BID_DOUBLE_BELOW_BEST',
         keyCode: 65,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'HIT_THE_OFFER',
+        name: 'HIT_THE_OFFER',
         keyCode: 71,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'MARKET_BUY',
+        name: 'MARKET_BUY',
         keyCode: 71,
         ctrlKey: true,
         shiftKey: false,
@@ -120,44 +120,44 @@ module.exports = [
   },
   {
     category: 'SELL_ORDERS',
-    keys: [
+    actions: [
       {
-        action: 'OFFER_BETTER',
+        name: 'OFFER_BETTER',
         keyCode: 74,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'OFFER_WITH_BEST_ASK',
+        name: 'OFFER_WITH_BEST_ASK',
         keyCode: 75,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'OFFER_ABOVE_BEST',
+        name: 'OFFER_ABOVE_BEST',
         keyCode: 76,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'OFFER_DOUBLE_ABOVE_BEST',
+        name: 'OFFER_DOUBLE_ABOVE_BEST',
         keyCode: 186,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'HIT_THE_BID',
+        name: 'HIT_THE_BID',
         keyCode: 72,
         ctrlKey: false,
         shiftKey: false,
         altKey: false
       },
       {
-        action: 'MARKET_SELL',
+        name: 'MARKET_SELL',
         keyCode: 72,
         ctrlKey: true,
         shiftKey: false,

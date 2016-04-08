@@ -24,7 +24,7 @@ let commander
 // returns an event emitter than can be used to respond to keyboard events
 module.exports = (configRootElement = window, engineListenerEl = window, hotkeyDefinitions) => {
   // instantiate a store and pass it to our configurator and commander objects
-  const store = createStore(configReducer)
+  const store = configReducer()
   configurator = require('./configurator')(store)
   commander = require('./commander')(store)
 

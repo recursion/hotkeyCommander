@@ -1,78 +1,109 @@
 const defaultHotkeys = require('../../hotkey.defaults')
 const utils = require('../common/utils')
-/*
-{
-  hotkeyList: [{hotkeyCategory}...],
-  keymap: {
-    keyComboHash: hotkeyObject,
-    keyComboHash: hotkeyObject
-  },
-  recording: {
-    active: bool,
-    hotkeyAction: hotkey,
-    target: Element
-  }
-}
-*/
+const {createStore} = require('redux')
+
+const [cats, keys] = normalize(defaultHotkeys)
 const initialState = {
-  hotkeyList: defaultHotkeys,
-  keymap: generateKeymap(defaultHotkeys),
-  alertId: 0,
-  recording: {
-    active: false,
-    key: null,
-    target: null
-  }
+  categories: cats,
+  hotkeys: keys,
+  keymap: generateKeymap(keys),
+  recording: null,
+  alert: false
 }
 
-module.exports = (state = initialState, action) => {
+module.exports = () => {
+  const store = createStore(reducer, initialState,
+    window.devToolsExtension ? window.devToolsExtension() : undefined
+  )
+  return store
+}
+
+let hotkeys
+const reducer = (state = initialState, action) => {
+  const target = state.hotkeys[action.action]
   switch (action.type) {
     case 'START_RECORDING':
-      return Object.assign({}, state, {
-        recording: {
-          active: true,
-          hotkeyAction: action.hotkeyAction,
-          target: action.element
+      // create a new hotkeylist
+      hotkeys = Object.assign({}, state.hotkeys, {
+        [target.name]: {
+          name: target.name,
+          recording: true,
+          keyCode: target.keyCode,
+          altKey: target.altKey,
+          shiftKey: target.shiftKey,
+          ctrlKey: target.ctrlKey
         }
       })
-    case 'STOP_RECORDING':
       return Object.assign({}, state, {
-        recording: {
-          active: false,
-          hotkeyAction: null,
-          target: null
+        hotkeys: hotkeys,
+        recording: action.action
+      })
+    case 'STOP_RECORDING':
+      // create a new hotkeylist
+      hotkeys = Object.assign({}, state.hotkeys, {
+        [target.name]: {
+          name: target.name,
+          recording: false,
+          keyCode: target.keyCode,
+          altKey: target.altKey,
+          shiftKey: target.shiftKey,
+          ctrlKey: target.ctrlKey
         }
+      })
+      return Object.assign({}, state, {
+        hotkeys: hotkeys,
+        recording: false
       })
     case 'SET_KEY':
       // create a new hotkeylist
-      const hotkeyList = state.hotkeyList.map((category, index) => {
-        return Object.assign({}, category, {
-          keys: category.keys.map((hotkey, idx) => {
-            if (hotkey.action === action.hotkeyAction) {
-              return Object.assign({}, hotkey, {
-                keyCode: action.keyboardEvent.keyCode,
-                altKey: action.keyboardEvent.altKey,
-                shiftKey: action.keyboardEvent.shiftKey,
-                ctrlKey: action.keyboardEvent.ctrlKey
-              })
-            } else {
-              return hotkey
-            }
-          })
-        })
+      hotkeys = Object.assign({}, state.hotkeys, {
+        [target.name]: {
+          name: target.name,
+          recording: false,
+          keyCode: action.keyCode,
+          altKey: action.altKey,
+          shiftKey: action.shiftKey,
+          ctrlKey: action.ctrlKey
+        }
       })
 
       return Object.assign({}, state, {
-        hotkeyList: hotkeyList,
-        keymap: generateKeymap(hotkeyList)
+        hotkeys: hotkeys,
+        recording: false,
+        keymap: generateKeymap(hotkeys)
       })
-    case 'ALERT':
+    case 'ALERT_ON':
       return Object.assign({}, state, {
-        alertId: ++state.alertId
+        alert: true
+      })
+    case 'ALERT_OFF':
+      return Object.assign({}, state, {
+        alert: false
       })
     default:
       return state
   }
+}
+
+// turns a hotkeyList definition into
+// two entities: categories and hotkeys
+// each hotkey will get a category property linking
+// to the id of their category
+function normalize (list) {
+  // build an object of hotkeys keyed by hotkey.name
+  const cats = []
+  const hotkeys = {}
+  list.forEach((cat, index) => {
+    // for each category
+    // iterate through each action
+    cats.push(cat.category)
+    for (let i = 0; i < cat.actions.length; i++) {
+      const targetKey = cat.actions[i]
+      // add the category index to this object
+      hotkeys[targetKey.name] = (Object.assign({}, targetKey, {category: index}))
+    }
+  })
+  return [cats, hotkeys]
 }
 
 // generate an object with code keys
@@ -82,23 +113,10 @@ module.exports = (state = initialState, action) => {
 // generate keymap must now strip out categories
 function generateKeymap (hotkeyList) {
   const result = {}
-
-  // create a hotkey object
-  // and add it to our result object
-  forEachHotkey(hotkeyList, (key) => {
-    let hashedName = utils.hashKeyboardEvent(key)
+  for (let key in hotkeyList) {
+    let hashedName = utils.hashKeyboardEvent(hotkeyList[key])
     result[hashedName] = key
-  })
-  // set keymap to our result
-  // and return it
+  }
   return result
 }
 
-// call back with each hotkey object
-function forEachHotkey (hotkeyList, work) {
-  hotkeyList.forEach((category) => {
-    category.keys.forEach((hotkey) => {
-      work(hotkey)
-    })
-  })
-}

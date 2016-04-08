@@ -39,24 +39,8 @@ module.exports = (Store) => {
       // call the function related to this object here
       // convert target name to camelcase string
       // call commanderObject[targetNameAsCamelCaseString]()
-      if (!state.recording.active) {
-        // emitter.emit(target.name)
-        console.log('You pressed: ', target)
-
-        /*
-        This is what we were doing before inverting the command object
-        // convert keymap name to camelCase
-        const commandName = utils.snakeCaseToCamelCase(target.name)
-
-        // invoke that command on the commander object
-        const command = commanderObject[commandName]
-        if (command) {
-          // what should we pass it here, if anything?
-          // only thing we could really pass is the keyboard event itself..
-          // but we shouldnt need it...
-          command()
-        }
-        */
+      if (!state.recording) {
+        emitter.emit(target)
       }
     }
   }
