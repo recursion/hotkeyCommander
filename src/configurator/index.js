@@ -5,27 +5,67 @@
  * and handles the logic of recording new key strokes
  */
 const utils = require('../utils')
+const {setKey, alertOn} = require('../actions')
+
+// an array of keycodes for ctrl, shift, alt, and the meta key (windows/mac key)
+// these will only be able to be used to modify other keys - not as standalone hotkeys
+const metaKeyCodes = [17, 16, 18, 91]
 
 // public api
 module.exports = (Store) => {
-  const engine = require('./configEventEngine.js')(Store)
+  const engine = createKeyboardEventHandler(Store)
   const {mount} = require('./configurator.view')(Store)
-
-  return {
-    init: init
-  }
 
   // takes an element to load the view into
   // and an element to listen to keystrokes on
-  function init (configRenderElement) {
+  const init = (configRenderElement) => {
     if (!utils.isHTMLElement(configRenderElement)) {
       throw new Error('Invalid initializer for configurator container element. Must be valid DOM Element')
     }
 
     configRenderElement.tabIndex = 0
     utils.addListener(configRenderElement, 'keydown', engine.onKeydown)
-    utils.addListener(configRenderElement, 'keyup', engine.onKeyup)
 
     mount(configRenderElement)
+  }
+  return {
+    init: init
+  }
+}
+
+// returns an object with an onKeydown method on it
+function createKeyboardEventHandler (Store) {
+  // this is a generic keyboard event handler
+  // and could be used equally for up/down or press events
+  const onKeyboardEvent = (keyboardEvent) => {
+    const state = Store.getState()
+    // we only do things here if key recording has been activated
+    if (state.recording) {
+      keyboardEvent.stopPropagation()
+      const code = keyboardEvent.keyCode
+      const targetAction = state.recording
+
+      // look for a key already using the desired keycode
+      const keyAlreadyUsed = state.keymap[utils.hashKeyboardEvent(keyboardEvent)]
+
+      // dont respond to direct meta key presses
+      if (metaKeyCodes.indexOf(code) !== -1) {
+        return
+      }
+
+      if (keyAlreadyUsed) {
+        // since a key is already in use
+        if (targetAction !== keyAlreadyUsed.action) {
+          // key already mapped to this keycode - no change
+          // Store.emit(events.alert)
+          Store.dispatch(alertOn())
+          return
+        }
+      }
+      Store.dispatch(setKey(targetAction, keyboardEvent))
+    }
+  }
+  return {
+    onKeydown: onKeyboardEvent
   }
 }
