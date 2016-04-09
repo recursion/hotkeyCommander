@@ -1,13 +1,5 @@
 const configReducer = require('./reducers')
 
-// these only get initialized during a call to init
-let configurator
-let commander
-
-// if only 1 element is passed in,
-// we can assume that its ok to
-// do everything in one context?
-// returns an event emitter than can be used to respond to keyboard events
 /**
  * @params {Object} options - {
  *   @params {Element} target - element to mount configurator
@@ -17,32 +9,50 @@ let commander
  * }
  */
 module.exports = (options) => {
-  // configRootElement = window, engineListenerEl = window) => {
-  // instantiate a store and pass it to our configurator and commander objects
+  // instantiate a redux store and pass it to our configurator and commander objects
   const store = configReducer(options.hotkeys)
-  configurator = require('./configurator')(store)
-  commander = require('./commander')(store)
 
+  // import configurator and commander
+  const configurator = require('./configurator')(store)
+  const commander = require('./commander')(store)
+
+  // init configurator
   configurator.init(options.target)
+
+  // init commander and return the commander event emitter
   return commander(options.engineListenerEl || window)
 }
 
-/* TODO:
-    When commander and configurator are running in seperate contexts
-    we will assume its a chrome plugin, and allow each component to
-    use its own store object, which will in turn be using chrome.storage.sync
-    and its event emitter to transmit changes of the keymap.
-*/
-
+/**
+ *      DUAL CONTEXT API
+ *
+ *  use this api to create commander in
+ *  one context and configurator in another
+ *
+ *  When using this method, each component will have
+ *  its own store and so - commanders store
+ *  will generate a new keymap when getting
+ *  messages from chrome.storage.onChanged
+ */
 exports.Commander = (options) => {
+  // create the redux store
   const store = configReducer(options.hotkeys)
-  commander = require('./commander')(store)
+
+  // import the commander object
+  const commander = require('./commander')(store)
+
+  // init commander and return his event emitter
   return commander(options.hotkeys, options.listenerEl)
 }
 
 exports.Configurator = (options) => {
+  // create the redux store
   const store = configReducer(options.hotkeys)
-  configurator = require('./configurator')(store)
+
+  // import configurator
+  const configurator = require('./configurator')(store)
+
+  // init confiturator
   configurator.init(options.hotkeys, options.targetEl)
 }
 
