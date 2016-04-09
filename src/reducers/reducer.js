@@ -1,3 +1,4 @@
+const actions = require('../actions')
 const utils = require('../utils')
 const storage = require('../storage')()
 
@@ -18,19 +19,18 @@ const initialState = exports.initialState = (defaultHotkeys) => {
 exports.reducer = (state = initialState, action) => {
   const target = state.hotkeys[action.action]
   switch (action.type) {
-    case 'START_RECORDING':
+    case actions.START_RECORDING:
       return Object.assign({}, state, {
         hotkeys: updateHotkey(state, target, target, true),
         recording: action.action
       })
-    case 'STOP_RECORDING':
+    case actions.STOP_RECORDING:
       return Object.assign({}, state, {
         hotkeys: updateHotkey(state, target, target, false),
         recording: false
       })
-    case 'SET_KEY':
+    case actions.SET_KEY:
       const newHotkeys = updateHotkey(state, target, action, false)
-      console.log(newHotkeys)
 
       // update persistent storage anytime a key changes
       storage.set(newHotkeys)
@@ -40,11 +40,11 @@ exports.reducer = (state = initialState, action) => {
         keymap: generateKeymap(newHotkeys),
         recording: false
       })
-    case 'ALERT_ON':
+    case actions.ALERT_ON:
       return Object.assign({}, state, {
         alert: true
       })
-    case 'ALERT_OFF':
+    case actions.ALERT_OFF:
       return Object.assign({}, state, {
         alert: false
       })

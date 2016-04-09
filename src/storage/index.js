@@ -3,18 +3,20 @@
 // this keeps track of our persistent storage strategy
 let strategy
 
+// determine which persistent storage we should use
+// and return an api for that storage mechanism
 module.exports = () => {
   // determine what storage options we have
   strategy = determineStrategy()
   return strategy
 }
 
+// set the storage strategy to chrome.storage if available (we are extension)
+// otherwise use localStorage
 const determineStrategy = () => {
   if (chrome && chrome.storage) {
-    console.log('using chrome.storage')
     return chromeStorageStrategy()
   } else {
-    console.log('using localStorage')
     return localStorageStrategy()
   }
 }
@@ -40,10 +42,12 @@ function normalize (list) {
   return [hotkeys, cats]
 }
 
+// handle persistent storage when using chrome
 const chromeStorageStrategy = () => {
   const init = (defaultHotkeys) => {}
   const get = () => {}
   const set = () => {}
+  // expose listeners?
   return {
     init,
     set,
@@ -51,13 +55,12 @@ const chromeStorageStrategy = () => {
   }
 }
 
-// use localStorage
+// handle persistent storage when using localStorage
 const localStorageStrategy = () => {
   const init = (defaultHotkeys) => {
     const hotkeys = localStorage.hotkeys
     const categories = localStorage.categories
     if (hotkeys && categories) {
-      console.log('found existing settings.')
       return [JSON.parse(hotkeys), JSON.parse(categories)]
     } else {
       // did not find in storage
