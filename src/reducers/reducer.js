@@ -1,6 +1,8 @@
 const actions = require('../actions')
 const utils = require('../utils')
-const persistentStorage = require('../storage')(window.chrome, window.localStorage)
+
+// we use this for initial state as well as persisting any changes
+const persistentStorage = exports.persistentStorage = require('../storage')(window.chrome, window.localStorage)
 
 const initialState = exports.initialState = (defaultHotkeys) => {
   // provide our persistentStorageStrategy with defaultHotkeys incase it doesnt ahve any.
@@ -36,6 +38,10 @@ exports.reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         alert: false
       })
+    case 'CHROME_STORAGE_UPDATE':
+      console.log('GOT UPDATE FROM CHROME STORAGE ONCHANGE', action.hotkeys)
+      // we need to request a new keymap here
+      return state
     default:
       return state
   }

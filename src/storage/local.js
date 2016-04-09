@@ -1,6 +1,6 @@
 // Local storage strategy
 /* globals localStorage */
-const {normalize} = require('./index')
+const normalize = require('./normalize')
 
 // provide getters and setters
 // for persistent storage when using localStorage
@@ -52,8 +52,7 @@ const set = (hotkeys, categories) => {
       localStorage.categories = JSON.stringify(categories)
     }
   } catch (e) {
-    console.error(e.message)
-    throw new Error('Failed to write to local storage!')
+    console.error('Failed to write to local storage!', e.message)
   }
 }
 
