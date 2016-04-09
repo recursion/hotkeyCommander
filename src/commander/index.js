@@ -32,6 +32,10 @@ module.exports = (Store) => {
       // if we are not recording
       if (!state.recording) {
         // emit the event
+        // TODO: we could allow a configuration option
+        //    which gives the developer the choice of
+        //    getting the event emitter, or just getting a redux store?
+        //    this means the reducer would have to be exposed as well?
         emitter.emit(target)
       }
     }

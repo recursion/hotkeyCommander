@@ -4,7 +4,7 @@
 
 > HotkeyCommander consumes keyboard events and provides simple user hotkey display/configuration, so you dont have to! Designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
 
-HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and hotkeyCommander will hand you back an event emitter that will emit your events, regardless of which hotkeys your user wants to use to invoke those actions.
+HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit your defined actions, regardless of which hotkeys your user wants to use to invoke those actions.
 
 Your users will be able to easily view and configure their hotkey preferences. Their new hotkeys remain mapped to your events.
 
@@ -60,7 +60,7 @@ Your users will be able to easily view and configure their hotkey preferences. T
         - render configuration on
         - consume user key events from
     3. `const commander = hotkeyCommander(configContainerElement, commanderListenerElement, hotkeyDefinition)`
-4. Create event handlers on the emitter than hotkeyCommander hands you back.
+4. Create event handlers on the emitter then hotkeyCommander hands you back.
     - `commander.on('MOVE_FORWARD', onMoveForward)`
 
 #### Load as a script from html or as a node module.
@@ -74,20 +74,19 @@ Your users will be able to easily view and configure their hotkey preferences. T
 
 ```html
   <div id="hotkeyCommander"></div>
+  <script src="/path/to/your/hotkeyDefaultsFile.js"></script>
   <script src="dist/hotkeyCommander.js"></script>
-
   <script>
-
-    const hotkeys = require('./myHotkeyDefaults')
     const targetEl = document.getElementById('hotkeyCommander');
-    const commander = hotkeyCommander(targetEl, window, hotkeys);
-
+      var commander = hotkeyCommander({
+        hotkeys: COMMANDER_HOTKEY_DEFAULTS,
+        target: document.getElementById('hotkeyCommander')
+      })
     // setup your event handlers
     commander.on('YOUR_EVENT_NAME', () => {
       // respond to the keypress here
       console.log('YOUR_EVENT_NAME happened!')
     })
-
   </script>
 ```
 
@@ -96,7 +95,7 @@ Your users will be able to easily view and configure their hotkey preferences. T
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
 const listenerElement = windo
-hotkeyCommander(targetElement, listenerElement, hotkeys)
+hotkeyCommander({target: targetElement, hotkeys: hotkeys})
 ```
 
 ##### As a chrome plugin
@@ -108,44 +107,47 @@ hotkeyCommander(targetElement, listenerElement, hotkeys)
 // in the context/file where you will be providing user configuration
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-hotkeyCommander.startConfigurator(targetElement, listenerElement, hotkeys)
+const targetEl = document.querySelector('.hotkeyCommander')
+hotkeyCommander.startConfigurator({target: targetEl, hotkeys: hotkeys})
 
 // then in the context where you want the keykeys to be responded to:
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-const commander = hotkeyCommander(listenerElement, responderObject, hotkeys)
-commander.on('YOUR_EVENT', () => {
+const targetEl = window
+const commander = hotkeyCommander.startCommander({target: targetEl, hotkeys: hotkeys})
+
+// set up event listeners with your pre-defined action names (from hotkey.defaults.js)
+commander.on('YOUR_ACTION', () => {
   // do stuff
 })
 ```
 ----
 
-### Creating hotkey definitions:
+### Creating action definitions:
 
-Creating hotkey definitions is a mostly simple concept. Ultimately its an array of objects which describe hotkeys, grouped by category. Whatever name you give the hotkey, is the event that will
-be emitted for that action
+Creating action definitions is a mostly simple concept. Ultimately its an array of objects which describe actions (triggered by hotkeys), grouped by category. Whatever name you give the action, is the event that will be emitted for that action
 
 ---
 
-###### HOTKEY OBJECT
-> Represents a hotkey
+###### ACTION OBJECT
+> Represents an Action and the hotkey that triggers it
 
 ```js
 {
-  name: 'YOUR_EVENT',
+  name: 'YOUR_ACTION',
   keyCode: ASCII_KEYCODE,
   altKey: BOOL,
   ctrlKey: BOOL,
   shiftKey: BOOL
 }
 ```
-###### HOTKEY CATEGORY OBJECT
+###### ACTIONS CATEGORY OBJECT
 > A category of hotkeys
 
 ```js
 {
   name: YOUR_CATEGORY_NAME,
-  keys: [
+  actions: [
     {hotkeyObject},
     {hotkeyObject},
     {hotkeyObject},
@@ -153,7 +155,7 @@ be emitted for that action
   ]
 }
 ```
-###### HOTKEY LIST
+###### ACTIONS LIST
 > An array of hotkey category objects:
 
 ```js
@@ -171,7 +173,7 @@ be emitted for that action
 [
   {
     name: 'MOVEMENT_KEYS',
-    keys: [
+    actions: [
       {
         name: 'FORWARD',
         keyCode: 87, // w
@@ -190,7 +192,7 @@ be emitted for that action
   },
   {
     name: 'UI_KEYS',
-    keys: [
+    actions: [
       {
         name: 'SHOW_MAP',
         keyCode: 77, // m
