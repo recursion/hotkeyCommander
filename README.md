@@ -2,13 +2,13 @@
 
 # Hotkey Commander
 
-> HotkeyCommander consumes keyboard events and provides simple user hotkey display/configuration, so you dont have to! Designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
+> HotkeyCommander provides a simple interface for hotkey display and configuration, so you dont have to! The module maps keyboard events to events of your designation, regardless of what the user sets his hotkeys to. Originally designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
 
-HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit your defined actions, regardless of which hotkeys your user wants to use to invoke those actions.
+HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit your defined actions.
 
 Your users will be able to easily view and configure their hotkey preferences. Their new hotkeys remain mapped to your events.
 
->To record a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
+>To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
 
 
      Default State      | Hotkey Recording State  |  Key Recorded state
