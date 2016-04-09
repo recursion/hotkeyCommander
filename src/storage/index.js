@@ -14,6 +14,7 @@ module.exports = () => {
 // set the storage strategy to chrome.storage if available (we are extension)
 // otherwise use localStorage
 const determineStrategy = () => {
+  const chrome = chrome || null
   if (chrome && chrome.storage) {
     return chromeStorageStrategy()
   } else {
