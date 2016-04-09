@@ -40,7 +40,7 @@ function createKeyboardEventHandler (Store) {
   const onKeyboardEvent = (keyboardEvent) => {
     const state = Store.getState()
     // we only do things here if key recording has been activated
-    if (state.recording) {
+    if (state.recording && !state.alert) {
       keyboardEvent.stopPropagation()
       const code = keyboardEvent.keyCode
       const targetAction = state.recording

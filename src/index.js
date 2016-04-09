@@ -45,3 +45,4 @@ exports.Configurator = (options) => {
   configurator = require('./configurator')(store)
   configurator.init(options.hotkeys, options.targetEl)
 }
+

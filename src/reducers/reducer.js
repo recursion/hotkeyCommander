@@ -1,9 +1,11 @@
 const utils = require('../utils')
+const storage = require('../storage')()
 
 // setup the intialState
 const initialState = exports.initialState = (defaultHotkeys) => {
+  const normalizedDefaults = storage.init(defaultHotkeys)
   // load default hotkeys into a normalized data structure
-  const [categories, hotkeys] = normalize(defaultHotkeys)
+  const [hotkeys, categories] = normalizedDefaults
   return {
     categories, // this is an array of category names
     hotkeys, // an object of hotkeyObjects with a category prop. = to its category id in categories
@@ -28,6 +30,11 @@ exports.reducer = (state = initialState, action) => {
       })
     case 'SET_KEY':
       const newHotkeys = updateHotkey(state, target, action, false)
+      console.log(newHotkeys)
+
+      // update persistent storage anytime a key changes
+      storage.set(newHotkeys)
+
       return Object.assign({}, state, {
         hotkeys: newHotkeys,
         keymap: generateKeymap(newHotkeys),
@@ -51,6 +58,7 @@ function updateHotkey (state, target, key, recording) {
   return Object.assign({}, state.hotkeys, {
     [target.name]: {
       name: target.name,
+      category: target.category,
       recording: recording,
       keyCode: key.keyCode,
       altKey: key.altKey,
@@ -58,27 +66,6 @@ function updateHotkey (state, target, key, recording) {
       ctrlKey: key.ctrlKey
     }
   })
-}
-
-// turns a hotkeyList definition into
-// two entities: categories and hotkeys
-// each hotkey will get a category property linking
-// to the id of their category
-function normalize (list) {
-  // build an object of hotkeys keyed by hotkey.name
-  const cats = []
-  const hotkeys = {}
-  list.forEach((cat, index) => {
-    // for each category
-    // iterate through each action
-    cats.push(cat.category)
-    for (let i = 0; i < cat.actions.length; i++) {
-      const targetKey = cat.actions[i]
-      // add the category index to this object
-      hotkeys[targetKey.name] = (Object.assign({}, targetKey, {category: index}))
-    }
-  })
-  return [cats, hotkeys]
 }
 
 // generate an object with code keys
