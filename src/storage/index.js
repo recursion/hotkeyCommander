@@ -1,24 +1,15 @@
-/* globals chrome localStorage */
-
-// this keeps track of our persistent storage strategy
-let strategy
+const chromeStorageStrategy = require('./chrome')
+const localStorageStrategy = require('./local')
 
 // determine which persistent storage we should use
 // and return an api for that storage mechanism
-module.exports = () => {
-  // determine what storage options we have
-  strategy = determineStrategy()
-  return strategy
-}
-
-// set the storage strategy to chrome.storage if available (we are extension)
-// otherwise use localStorage
-const determineStrategy = () => {
-  const chrome = chrome || null
+module.exports = (chrome = null, localStorage = null) => {
   if (chrome && chrome.storage) {
     return chromeStorageStrategy()
-  } else {
+  } else if (localStorage) {
     return localStorageStrategy()
+  } else {
+    throw new Error('No storage strategy available!')
   }
 }
 
@@ -26,7 +17,7 @@ const determineStrategy = () => {
 // two entities: categories and hotkeys
 // each hotkey will get a category property linking
 // to the id of their category
-function normalize (list) {
+exports.normalize = (list) => {
   // build an object of hotkeys keyed by hotkey.name
   const cats = []
   const hotkeys = {}
@@ -41,85 +32,4 @@ function normalize (list) {
     }
   })
   return [hotkeys, cats]
-}
-
-// handle persistent storage when using chrome
-// when using this strategy we will listen
-// from the commander engine for changes to the database
-const chromeStorageStrategy = () => {
-  const init = (defaultHotkeys) => {
-    // check for existing settings
-
-    // if they exist, return them
-
-    // otherwise add defaults to storage
-    // and return those
-
-  }
-  const get = () => {}
-  const set = () => {}
-
-  // expose listeners for chrome.storage.sync.onChange event?
-  const addListener = chrome.storage.onChanged.addListener
-  return {
-    init,
-    set,
-    get,
-    addListener
-  }
-}
-
-// handle persistent storage when using localStorage
-const localStorageStrategy = () => {
-  const init = (defaultHotkeys) => {
-    const hotkeys = localStorage.hotkeys
-    const categories = localStorage.categories
-    if (hotkeys && categories) {
-      return [JSON.parse(hotkeys), JSON.parse(categories)]
-    } else {
-      // did not find in storage
-
-      // normalize the defaults
-      const [hotkeys, categories] = normalize(defaultHotkeys)
-
-      // store them in local storage
-      set(hotkeys, categories)
-
-      // return em
-      return [hotkeys, categories]
-    }
-  }
-  const get = () => {
-    let hotkeys, categories
-    try {
-      hotkeys = JSON.parse(localStorage.hotkeys)
-      categories = JSON.parse(localStorage.categories)
-    } catch (e) {
-      console.error(e.message)
-      throw new Error('Failed to write to local storage!')
-    }
-    return [hotkeys, categories]
-  }
-  /**
-   * takes in normalized hotkeys and categories
-   * and saves them to local storage
-   */
-  const set = (hotkeys, categories) => {
-    // set them to local storage
-    try {
-      localStorage.hotkeys = JSON.stringify(hotkeys)
-      if (categories) {
-        localStorage.categories = JSON.stringify(categories)
-      }
-    } catch (e) {
-      console.error(e.message)
-      throw new Error('Failed to write to local storage!')
-    }
-  }
-
-  return {
-    init,
-    set,
-    get
-  }
 }
