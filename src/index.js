@@ -1,10 +1,14 @@
 const configReducer = require('./reducers')
 
 /**
+ *
+ *     HotkeyCommander - takes an options object and returns an event emitter
+ *
  * @params {Object} options - {
  *   @params {Element} target - element to mount configurator
  *   @params {HotkeyDefinitionsObject} hotkeys - hotkey definitions
- *   @param {Element} - engineListenerEl - defaults to window
+ *   @param {Element} - engineListenerEl - the element the main keylistener attaches to
+                                         - defaults to window
  *   @returns {EventEmitter2}
  * }
  */
