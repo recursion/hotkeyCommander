@@ -12,33 +12,37 @@ module.exports = () => {
   }
 }
 const init = (defaultHotkeys) => {
-  const hotkeys = localStorage.hotkeys
-  const categories = localStorage.categories
-  if (hotkeys && categories) {
-    return [JSON.parse(hotkeys), JSON.parse(categories)]
-  } else {
-    // did not find in storage
+  return new Promise((resolve, reject) => {
+    const hotkeys = localStorage.hotkeys
+    const categories = localStorage.categories
+    if (hotkeys && categories) {
+      return resolve([JSON.parse(hotkeys), JSON.parse(categories)])
+    } else {
+      // did not find in storage
 
-    // normalize the defaults
-    const [hotkeys, categories] = normalize(defaultHotkeys)
+      // normalize the defaults
+      const [hotkeys, categories] = normalize(defaultHotkeys)
 
-    // store them in local storage
-    set(hotkeys, categories)
+      // store them in local storage
+      set(hotkeys, categories)
 
-    // return em
-    return [hotkeys, categories]
-  }
+      // return em
+      return resolve([hotkeys, categories])
+    }
+  })
 }
 const get = () => {
-  let hotkeys, categories
-  try {
-    hotkeys = JSON.parse(localStorage.hotkeys)
-    categories = JSON.parse(localStorage.categories)
-  } catch (e) {
-    console.error(e.message)
-    throw new Error('Failed to write to local storage!')
-  }
-  return [hotkeys, categories]
+  return new Promise((resolve, reject) => {
+    let hotkeys, categories
+    try {
+      hotkeys = JSON.parse(localStorage.hotkeys)
+      categories = JSON.parse(localStorage.categories)
+    } catch (e) {
+      console.error(e.message)
+      throw new Error('Failed to write to local storage!')
+    }
+    return [hotkeys, categories]
+  })
 }
 /**
  * takes in normalized hotkeys and categories

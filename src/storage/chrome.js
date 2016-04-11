@@ -1,21 +1,45 @@
 // Chrome.storage strategy
 /* globals chrome */
+const normalize = require('./normalize')
 
 // handle persistent storage when using chrome
 // when using this strategy we will listen
 // from the commander engine for changes to the database
 module.exports = () => {
   const init = (defaultHotkeys) => {
-    // check for existing settings
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.get(null, (settings) => {
+        // settings should have hotkeys and categories?
+        console.log(settings)
 
-    // if they exist, return them
-
-    // otherwise add defaults to storage
-    // and return those
-
+        // if they exist, return them
+        if (settings.hotkeys && settings.categories) {
+          return resolve([settings.hotkeys, settings.categories])
+        } else {
+          // otherwise add defaults to storage
+          // and return those
+          const [hotkeys, categories] = normalize(defaultHotkeys)
+          chrome.storage.set({hotkeys: hotkeys, categories: categories})
+          return resolve([hotkeys, categories])
+        }
+      })
+    })
   }
-  const get = () => {}
-  const set = () => {}
+
+  const get = () => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.get(null, (settings) => {
+        // should have settings.hotkeys and settings.categories
+        return resolve([settings.hotkeys, settings.categories])
+      })
+    })
+  }
+
+  const set = (hotkeys) => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.set({hotkeys})
+    })
+  }
 
   // expose listeners for chrome.storage.sync.onChange event?
   const addListener = chrome.storage.onChanged.addListener

@@ -4,22 +4,27 @@ const utils = require('../utils')
 // we use this for initial state as well as persisting any changes
 const persistentStorage = exports.persistentStorage = require('../storage')(window.chrome, window.localStorage)
 
-const initialState = exports.initialState = (defaultHotkeys) => {
-  // provide our persistentStorageStrategy with defaultHotkeys incase it doesnt ahve any.
-  // it returns normalized hotkeys and categories - either from existing or defaults
-  const [hotkeys, categories] = persistentStorage.init(defaultHotkeys)
-
-  // return the apps initial state
-  return {
-    categories, // this is an array of category names
-    hotkeys, // an object of hotkeyObjects with a category prop. = to its category id in categories
-    keymap: generateKeymap(hotkeys), // an object of hotkeys with their hashed key combo as key
-    recording: false // whether or not we are recording a new key
-  }
+exports.setupInitialState = (defaultHotkeys) => {
+  return new Promise((resolve, reject) => {
+    // provide our persistentStorageStrategy with defaultHotkeys incase it doesnt ahve any.
+    // it returns normalized hotkeys and categories - either from existing or defaults
+    let hotkeys, categories
+    persistentStorage.init(defaultHotkeys)
+      .then((result) => {
+        [hotkeys, categories] = result
+        // return the apps initial state
+        resolve({
+          categories, // this is an array of category names
+          hotkeys, // an object of hotkeyObjects with a category prop. = to its category id in categories
+          keymap: generateKeymap(hotkeys), // an object of hotkeys with their hashed key combo as key
+          recording: false // whether or not we are recording a new key
+        })
+      })
+  })
 }
 
 // export our root reducer
-exports.reducer = (state = initialState, action) => {
+exports.reducer = (state = {}, action) => {
   switch (action.type) {
     case actions.START_RECORDING:
       return startRecording(state, action)

@@ -13,18 +13,24 @@ const configReducer = require('./reducers')
  * }
  */
 module.exports = (options) => {
-  // instantiate a redux store and pass it to our configurator and commander objects
-  const store = configReducer(options.hotkeys)
+  return new Promise((resolve, reject) => {
+    // instantiate a redux store and pass it to our configurator and commander objects
+    let store
+    configReducer(options.hotkeys)
+      .then((result) => {
+        store = result
 
-  // import configurator and commander
-  const configurator = require('./configurator')(store)
-  const commander = require('./commander')(store)
+        // import configurator and commander
+        const configurator = require('./configurator')(store)
+        const commander = require('./commander')(store)
 
-  // init configurator
-  configurator.init(options.target)
+        // init configurator
+        configurator.init(options.target)
 
-  // init commander and return the commander event emitter
-  return commander(options.engineListenerEl || window)
+        // init commander and return the commander event emitter
+        return resolve(commander(options.engineListenerEl || window))
+      })
+  })
 }
 
 /**

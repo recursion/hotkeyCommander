@@ -13,30 +13,33 @@
   <script>
     document.addEventListener('DOMContentLoaded', function(evt) {
       // invoke hotkey commander by passing it the element you want it to render to
-      var commander = hotkeyCommander({
+      hotkeyCommander({
         hotkeys: COMMANDER_HOTKEY_DEFAULTS,
         target: document.getElementById('hotkeyCommander')
       })
+      .then((result) => {
+        const commander = result
+        // set up all the event handlers you need here
+        commander.on('CANCEL_ALL', function(){
+          console.log('CANCEL_ALL Event!')
+        })
+        commander.on('CANCEL_BIDS', function(){
+          console.log('CANCEL_BIDS Event!')
+        })
+        commander.on('CANCEL_OFFERS', function(){
+          console.log('CANCEL_OFFERS Event!')
+        })
+        commander.on('CANCEL_LAST', function(){
+          console.log('CANCEL_LAST Event!')
+        })
+        commander.on('BID_BETTER', function(){
+          console.log('BID_BETTER Event!')
+        })
+        commander.on('HIT_THE_OFFER', function(){
+          console.log('HIT_THE_OFFER Event!')
+        })
+      })
 
-      // set up all the event handlers you need here
-      commander.on('CANCEL_ALL', function(){
-        console.log('CANCEL_ALL Event!')
-      })
-      commander.on('CANCEL_BIDS', function(){
-        console.log('CANCEL_BIDS Event!')
-      })
-      commander.on('CANCEL_OFFERS', function(){
-        console.log('CANCEL_OFFERS Event!')
-      })
-      commander.on('CANCEL_LAST', function(){
-        console.log('CANCEL_LAST Event!')
-      })
-      commander.on('BID_BETTER', function(){
-        console.log('BID_BETTER Event!')
-      })
-      commander.on('HIT_THE_OFFER', function(){
-        console.log('HIT_THE_OFFER Event!')
-      })
     })
   </script>
 </body>
