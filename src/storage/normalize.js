@@ -1,4 +1,5 @@
 module.exports = (list) => {
+  console.log('in normalize: ', list)
   // build an object of hotkeys keyed by hotkey.name
   const cats = []
   const hotkeys = {}

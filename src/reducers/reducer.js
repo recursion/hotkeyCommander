@@ -8,10 +8,10 @@ exports.setupInitialState = (defaultHotkeys) => {
   return new Promise((resolve, reject) => {
     // provide our persistentStorageStrategy with defaultHotkeys incase it doesnt ahve any.
     // it returns normalized hotkeys and categories - either from existing or defaults
-    let hotkeys, categories
+    console.log('Setting up intial state: ', defaultHotkeys)
     persistentStorage.init(defaultHotkeys)
       .then((result) => {
-        [hotkeys, categories] = result
+        const [hotkeys, categories] = result
         // return the apps initial state
         resolve({
           categories, // this is an array of category names
@@ -44,9 +44,11 @@ exports.reducer = (state = {}, action) => {
         alert: false
       })
     case 'CHROME_STORAGE_UPDATE':
-      console.log('GOT UPDATE FROM CHROME STORAGE ONCHANGE', action.hotkeys)
+      console.log('GOT UPDATE FROM CHROME STORAGE ONCHANGE', action)
       // we need to request a new keymap here
-      return state
+      return Object.assign({}, state, {
+        keymap: generateKeymap(action.hotkeys)
+      })
     default:
       return state
   }

@@ -13,7 +13,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function(evt) {
       // invoke hotkey commander by passing it the element you want it to render to
-      hotkeyCommander({
+      hotkeyCommander.init({
         hotkeys: COMMANDER_HOTKEY_DEFAULTS,
         target: document.getElementById('hotkeyCommander')
       })

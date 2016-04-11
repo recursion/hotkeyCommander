@@ -12,13 +12,12 @@ const configReducer = require('./reducers')
  *   @returns {EventEmitter2}
  * }
  */
-module.exports = (options) => {
+exports.init = (options) => {
   return new Promise((resolve, reject) => {
     // instantiate a redux store and pass it to our configurator and commander objects
-    let store
     configReducer(options.hotkeys)
       .then((result) => {
-        store = result
+        const store = result
 
         // import configurator and commander
         const configurator = require('./configurator')(store)
@@ -45,24 +44,35 @@ module.exports = (options) => {
  *  messages from chrome.storage.onChanged
  */
 exports.Commander = (options) => {
-  // create the redux store
-  const store = configReducer(options.hotkeys)
+  return new Promise((resolve, reject) => {
+    // instantiate a redux store and pass it to our configurator and commander objects
+    console.log('YEAH!: ', options)
+    configReducer(options.hotkeys)
+      .then((result) => {
+        const store = result
 
-  // import the commander object
-  const commander = require('./commander')(store)
+        // import the commander object
+        const commander = require('./commander')(store)
 
-  // init commander and return his event emitter
-  return commander(options.hotkeys, options.listenerEl)
+        // init commander and return his event emitter
+        resolve(commander(options.listenerEl))
+      })
+  })
 }
 
 exports.Configurator = (options) => {
-  // create the redux store
-  const store = configReducer(options.hotkeys)
+  return new Promise((resolve, reject) => {
+    // instantiate a redux store and pass it to our configurator and commander objects
+    configReducer(options.hotkeys)
+      .then((result) => {
+        const store = result
 
-  // import configurator
-  const configurator = require('./configurator')(store)
+        // import configurator
+        const configurator = require('./configurator')(store)
 
-  // init confiturator
-  configurator.init(options.hotkeys, options.targetEl)
+        // init confiturator
+        resolve(configurator.init(options.targetEl))
+      })
+  })
 }
 

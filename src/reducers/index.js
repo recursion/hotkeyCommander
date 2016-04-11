@@ -9,10 +9,14 @@ module.exports = (defaultHotkeys) => {
         const store = createStore(reducer, initialState,
           window.devToolsExtension ? window.devToolsExtension() : undefined
         )
-        if (persistentStorage.addListener) {
-          persistentStorage.addListener((changes, areaName) => {
-            console.log('Eh oh!', changes, areaName)
-            store.dispatch({type: 'CHROME_STORAGE_UPDATE', hotkeys: {}})
+        if (chrome && chrome.storage) {
+          chrome.storage.onChanged.addListener((changes, areaName) => {
+            console.log(Object.keys(changes).indexOf('hotkeys'))
+            if (Object.keys(changes).indexOf('hotkeys') !== -1) {
+              console.log('Eh oh!', changes, areaName)
+              console.log('changes ', changes.hotkeys.newValue)
+              store.dispatch({type: 'CHROME_STORAGE_UPDATE', hotkeys: changes.hotkeys.newValue})
+            }
           })
         }
         resolve(store)
