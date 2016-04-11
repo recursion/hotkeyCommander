@@ -1,3 +1,4 @@
+/* globals chrome */
 const {createStore} = require('redux')
 const {reducer, setupInitialState, persistentStorage} = require('./reducer')
 
@@ -9,12 +10,11 @@ module.exports = (defaultHotkeys) => {
         const store = createStore(reducer, initialState,
           window.devToolsExtension ? window.devToolsExtension() : undefined
         )
+        // TODO: this should be using persistentStorage instead of
+        // directly calling chrome.storage - but was causing errors as it was.
         if (chrome && chrome.storage) {
           chrome.storage.onChanged.addListener((changes, areaName) => {
-            console.log(Object.keys(changes).indexOf('hotkeys'))
             if (Object.keys(changes).indexOf('hotkeys') !== -1) {
-              console.log('Eh oh!', changes, areaName)
-              console.log('changes ', changes.hotkeys.newValue)
               store.dispatch({type: 'CHROME_STORAGE_UPDATE', hotkeys: changes.hotkeys.newValue})
             }
           })

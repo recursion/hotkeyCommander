@@ -55,9 +55,7 @@ function createKeyboardEventHandler (Store) {
 
       if (keyAlreadyUsed) {
         // since a key is already in use
-        if (targetAction !== keyAlreadyUsed.action) {
-          // key already mapped to this keycode - no change
-          // Store.emit(events.alert)
+        if (targetAction !== keyAlreadyUsed) {
           Store.dispatch(alertOn())
           return
         }

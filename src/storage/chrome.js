@@ -7,7 +7,6 @@ const normalize = require('./normalize')
 // from the commander engine for changes to the database
 module.exports = () => {
   const init = (defaultHotkeys) => {
-    console.log('In init: ', defaultHotkeys)
     return new Promise((resolve, reject) => {
       chrome.storage.sync.get(null, (settings) => {
         // if they exist, return them
@@ -39,7 +38,6 @@ module.exports = () => {
 
   // expose listeners for chrome.storage.sync.onChange event?
   const addListener = chrome.storage.onChanged.addListener
-  console.log('AL IS: ', addListener)
   return {
     init,
     set,

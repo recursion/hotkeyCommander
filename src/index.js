@@ -46,7 +46,6 @@ exports.init = (options) => {
 exports.Commander = (options) => {
   return new Promise((resolve, reject) => {
     // instantiate a redux store and pass it to our configurator and commander objects
-    console.log('YEAH!: ', options)
     configReducer(options.hotkeys)
       .then((result) => {
         const store = result
@@ -75,4 +74,3 @@ exports.Configurator = (options) => {
       })
   })
 }
-
