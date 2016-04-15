@@ -11,29 +11,29 @@ module.exports = () => {
       chrome.storage.sync.get(null, (settings) => {
         // if they exist, return them
         if (settings.hotkeys && settings.categories) {
-          return resolve([settings.hotkeys, settings.categories])
+          return resolve([settings.hotkeys, settings.categories, settings.engineActive || false])
         } else {
           // otherwise add defaults to storage
           // and return those
           const [hotkeys, categories] = normalize(defaultHotkeys)
-          chrome.storage.sync.set({hotkeys: hotkeys, categories: categories})
-          return resolve([hotkeys, categories])
+          chrome.storage.sync.set({hotkeys: hotkeys, categories: categories, engineActive: false})
+          return resolve([hotkeys, categories, false])
         }
       })
     })
   }
 
-  const get = () => {
+  const get = (keyname) => {
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.get(null, (settings) => {
+      chrome.storage.sync.get(keyName, (value) => {
         // should have settings.hotkeys and settings.categories
-        return resolve([settings.hotkeys, settings.categories])
+        return resolve(value)
       })
     })
   }
 
-  const set = (hotkeys) => {
-    chrome.storage.sync.set({hotkeys})
+  const set = (keyName, value) => {
+    chrome.storage.sync.set({keyName: value})
   }
 
   // expose listeners for chrome.storage.sync.onChange event?

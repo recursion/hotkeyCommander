@@ -1,6 +1,7 @@
 /* globals chrome */
 const {createStore} = require('redux')
-const {reducer, setupInitialState, persistentStorage} = require('./reducer')
+const {reducer, setupInitialState} = require('./reducer')
+const actions = require('../actions')
 
 // creates and exports the store, all nicely bundled up with devTools
 module.exports = (defaultHotkeys) => {
@@ -15,7 +16,10 @@ module.exports = (defaultHotkeys) => {
         if (chrome && chrome.storage) {
           chrome.storage.onChanged.addListener((changes, areaName) => {
             if (Object.keys(changes).indexOf('hotkeys') !== -1) {
-              store.dispatch({type: 'CHROME_STORAGE_UPDATE', hotkeys: changes.hotkeys.newValue})
+              store.dispatch({type: actions.CHROME_STORAGE_UPDATE_HOTKEYS, hotkeys: changes.hotkeys.newValue})
+            }
+            if (Object.keys(changes).indexOf('engineActive') !== -1) {
+              store.dispatch({type: actions.CHROME_STORAGE_UPDATE_ENGINEACTIVE, engineActive: changes.engineActive.newValue})
             }
           })
         }

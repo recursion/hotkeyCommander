@@ -15,8 +15,9 @@ const init = (defaultHotkeys) => {
   return new Promise((resolve, reject) => {
     const hotkeys = localStorage.hotkeys
     const categories = localStorage.categories
+    const engineActive = localStorage.engineActive || false
     if (hotkeys && categories) {
-      return resolve([JSON.parse(hotkeys), JSON.parse(categories)])
+      return resolve([JSON.parse(hotkeys), JSON.parse(categories), JSON.parse(engineActive)])
     } else {
       // did not find in storage
 
@@ -24,37 +25,36 @@ const init = (defaultHotkeys) => {
       const [hotkeys, categories] = normalize(defaultHotkeys)
 
       // store them in local storage
-      set(hotkeys, categories)
+      set('hotkeys', hotkeys)
+      set('categories', categories)
+      set('engineActive', false)
 
       // return em
-      return resolve([hotkeys, categories])
+      return resolve([hotkeys, categories, engineActive])
     }
   })
 }
-const get = () => {
+const get = (keyName) => {
   return new Promise((resolve, reject) => {
-    let hotkeys, categories
+    let target
     try {
-      hotkeys = JSON.parse(localStorage.hotkeys)
-      categories = JSON.parse(localStorage.categories)
+      target = JSON.parse(localStorage[keyName])
     } catch (e) {
       console.error(e.message)
       throw new Error('Failed to write to local storage!')
     }
-    return [hotkeys, categories]
+    return target
   })
 }
 /**
  * takes in normalized hotkeys and categories
  * and saves them to local storage
  */
-const set = (hotkeys, categories) => {
+const set = (keyName, value) => {
+  console.log('setting: ', keyName, ' to ', value)
   // set them to local storage
   try {
-    localStorage.hotkeys = JSON.stringify(hotkeys)
-    if (categories) {
-      localStorage.categories = JSON.stringify(categories)
-    }
+    localStorage[keyName] = JSON.stringify(value)
   } catch (e) {
     console.error('Failed to write to local storage!', e.message)
   }

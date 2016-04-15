@@ -25,21 +25,28 @@ module.exports = (Store) => {
   const keyboardEventHandler = (evt) => {
     const state = Store.getState()
     const key = utils.hashKeyboardEvent(evt)
+
+    // attempt to find this key combination in out keymap
     const target = state.keymap[key]
 
-    // if the keymap has this keycombo stored in it
-    if (target) {
+    // modules on/off state
+    const active = state.engineActive
+
+    // as long as the module is on and this keyboard event
+    // is actively mapped to an action
+    if (active && target) {
       // if we are not recording
       if (!state.recording) {
-        // emit the event
         // TODO: we could allow a configuration option
         //    which gives the developer the choice of
         //    getting the event emitter, or just getting a redux store?
         //    this means the reducer would have to be exposed as well?
+
         emitter.emit(target)
       }
     }
   }
 
+  // return an eventemitter2
   return commander
 }

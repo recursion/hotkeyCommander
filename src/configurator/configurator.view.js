@@ -4,7 +4,7 @@
  * and rendering the hotkey configuration view
  */
 const utils = require('../utils')
-const {stopRecording, startRecording, alertOff} = require('../actions')
+const {turnOn, turnOff, stopRecording, startRecording, alertOff} = require('../actions')
 
 //                CSS SELECTORS
 const categorySelector = 'hotkey-category'
@@ -38,40 +38,95 @@ module.exports = (Store) => {
         */
 
   function mount (containerEl) {
-    Store.getState().categories.forEach((category, catIndex) => {
+    const state = Store.getState()
+    const hotkeys = state.hotkeys
+    const categories = state.categories
+
+    // add the on/off switch
+    containerEl.appendChild(createToggleDiv())
+    categories.forEach((category, catIndex) => {
+      // mount this category element
       containerEl.appendChild(createCategoryDiv(category))
 
-      // load hotkeys into the template
-      // and render it
-      const hotkeys = Store.getState().hotkeys
+      // iterate through our hotkeys
       for (let hotkey in hotkeys) {
         const target = hotkeys[hotkey]
+
+        // if this hotkey is part of the current category
         if (target.category === catIndex) {
-          // create this hotkeys block element
-          const hotkeyConfigElement = createDiv()
-          hotkeyConfigElement.className = 'hotkey-config'
-
-          // create the description element
-          const description = createDiv()
-          description.className = 'config-label key-description'
-          description.innerText = utils.stripUnderscores(target.name)
-
-          // create the button
-          const button = createSetKeyButton(target)
-          // update it with the info it needs
-          renderButton(button, target, Store.getState())
-
-          // add the child elements to the hotkeys block element
-          hotkeyConfigElement.appendChild(description)
-          hotkeyConfigElement.appendChild(button)
-
-          // mount the hotkeys block element to the root element
-          containerEl.appendChild(hotkeyConfigElement)
+          // create an element and mount it here
+          mountHotkey(target, containerEl)
         }
       }
     })
   }
 
+  function createToggleDiv (containerEl) {
+    const toggleOuterDiv = createDiv()
+    toggleOuterDiv.className = 'hotkey-config'
+
+    const toggleInnerDiv = createDiv()
+    const onLabel = document.createElement('label')
+    onLabel.innerText = 'On'
+    onLabel.className = 'toggleLabel'
+    const offLabel = document.createElement('label')
+    offLabel.innerText = 'Off'
+    offLabel.className = 'toggleLabel'
+
+    // remove innards of template
+    toggleInnerDiv.className = 'hotkey-config-toggle'
+
+    toggleInnerDiv.appendChild(offLabel)
+    toggleInnerDiv.appendChild(createToggleSwitch())
+    toggleInnerDiv.appendChild(onLabel)
+    toggleOuterDiv.appendChild(toggleInnerDiv)
+
+    return toggleOuterDiv
+  }
+
+  function createToggleSwitch () {
+    const toggleSwitch = document.createElement('input')
+    toggleSwitch.type = 'range'
+    toggleSwitch.name = 'hotkeys-toggle'
+    toggleSwitch.className = 'hotkeys-toggle'
+    toggleSwitch.value = +Store.getState().engineActive
+    toggleSwitch.min = '0'
+    toggleSwitch.max = '1'
+    toggleSwitch.addEventListener('change', (e) => {
+      if (e.target.value === '0') {
+        Store.dispatch(turnOff())
+      } else if (e.target.value === '1') {
+        Store.dispatch(turnOn())
+      }
+    })
+    return toggleSwitch
+  }
+
+  // given a hotkey object and an Element -
+  // create html elements, mount then to container,
+  // and populate them with the key data
+  function mountHotkey (hotkeyObject, containerEl) {
+    // create this hotkeys block element
+    const hotkeyConfigElement = createDiv()
+    hotkeyConfigElement.className = 'hotkey-config'
+
+    // create the description element
+    let description = createDiv()
+    description.innerText = utils.stripUnderscores(hotkeyObject.name)
+    description.className = 'config-label key-description'
+
+    // create the button
+    const button = createSetKeyButton(hotkeyObject)
+    // update it with the info it needs
+    renderButton(button, hotkeyObject, Store.getState())
+
+    // add the child elements to the hotkeys block element
+    hotkeyConfigElement.appendChild(description)
+    hotkeyConfigElement.appendChild(button)
+
+    // mount the hotkeys block element to the root element
+    containerEl.appendChild(hotkeyConfigElement)
+  }
   //              HANDLE STORE CHANGES
 
   // called every time the store changes

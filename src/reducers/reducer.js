@@ -10,9 +10,10 @@ exports.setupInitialState = (defaultHotkeys) => {
     // it returns normalized hotkeys and categories - either from existing or defaults
     persistentStorage.init(defaultHotkeys)
       .then((result) => {
-        const [hotkeys, categories] = result
+        const [hotkeys, categories, engineActive] = result
         // return the apps initial state
         resolve({
+          engineActive: engineActive, // whether or not the module is on
           categories, // this is an array of category names
           hotkeys, // an object of hotkeyObjects with a category prop. = to its category id in categories
           keymap: generateKeymap(hotkeys), // an object of hotkeys with their hashed key combo as key
@@ -25,6 +26,12 @@ exports.setupInitialState = (defaultHotkeys) => {
 // export our root reducer
 exports.reducer = (state = {}, action) => {
   switch (action.type) {
+    case actions.TOGGLE_HKC_ON:
+      return toggleOn(state, action)
+
+    case actions.TOGGLE_HKC_OFF:
+      return toggleOff(state, action)
+
     case actions.START_RECORDING:
       return startRecording(state, action)
 
@@ -42,14 +49,33 @@ exports.reducer = (state = {}, action) => {
       return Object.assign({}, state, {
         alert: false
       })
-    case 'CHROME_STORAGE_UPDATE':
+    case 'CHROME_STORAGE_UPDATE_HOTKEYS':
       // we need to request a new keymap here
       return Object.assign({}, state, {
         keymap: generateKeymap(action.hotkeys)
       })
+    case 'CHROME_STORAGE_UPDATE_ENGINE_ACTIVE':
+      // we need to request a new keymap here
+      return Object.assign({}, state, {
+        engineActive: action.engineActive
+      })
     default:
       return state
   }
+}
+
+function toggleOn (state, action) {
+  persistentStorage.set('engineActive', true)
+  return Object.assign({}, state, {
+    engineActive: true
+  })
+}
+
+function toggleOff (state, action) {
+  persistentStorage.set('engineActive', false)
+  return Object.assign({}, state, {
+    engineActive: false
+  })
 }
 
 function startRecording (state, action) {
@@ -73,7 +99,7 @@ function setKey (state, action) {
   const newHotkeys = updateHotkey(state, target, action, false)
 
   // update persistent storage anytime a key changes
-  persistentStorage.set(newHotkeys)
+  persistentStorage.set('hotkeys', newHotkeys)
 
   return Object.assign({}, state, {
     hotkeys: newHotkeys,

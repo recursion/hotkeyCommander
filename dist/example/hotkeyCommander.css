@@ -36,6 +36,19 @@
   right: 0;
 }
 
+.hotkeys-toggle {
+  width: 50px;
+  height: 20px;
+}
+
+.hotkey-config-toggle {
+  text-align: center;
+}
+
+.toggleLabel {
+  margin: 0 10px;
+}
+
 .alert {
   transform: translateY(-50%);
   margin: auto;
@@ -102,3 +115,5 @@
   clear: both;
   float: right;
 }
+
+/* on/off switch */
