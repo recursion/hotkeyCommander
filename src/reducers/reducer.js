@@ -26,6 +26,7 @@ exports.setupInitialState = (defaultHotkeys) => {
 // export our root reducer
 exports.reducer = (state = {}, action) => {
   switch (action.type) {
+    // TODO: agree on an action for turning the engine on and off
     case actions.TOGGLE_HKC_ON:
       return toggleOn(state, action)
 
@@ -49,12 +50,13 @@ exports.reducer = (state = {}, action) => {
       return Object.assign({}, state, {
         alert: false
       })
+    // TODO: use proper actions here and/or agree on one name for turning on/off
     case 'CHROME_STORAGE_UPDATE_HOTKEYS':
       // we need to request a new keymap here
       return Object.assign({}, state, {
         keymap: generateKeymap(action.hotkeys)
       })
-    case 'CHROME_STORAGE_UPDATE_ENGINE_ACTIVE':
+    case 'CHROME_STORAGE_UPDATE_ENGINEACTIVE':
       // we need to request a new keymap here
       return Object.assign({}, state, {
         engineActive: action.engineActive
