@@ -51,12 +51,12 @@ exports.reducer = (state = {}, action) => {
         alert: false
       })
     // TODO: use proper actions here and/or agree on one name for turning on/off
-    case 'CHROME_STORAGE_UPDATE_HOTKEYS':
+    case actions.CHROME_STORAGE_UPDATE_HOTKEYS:
       // we need to request a new keymap here
       return Object.assign({}, state, {
         keymap: generateKeymap(action.hotkeys)
       })
-    case 'CHROME_STORAGE_UPDATE_ENGINEACTIVE':
+    case actions.CHROME_STORAGE_UPDATE_ENGINEACTIVE:
       // we need to request a new keymap here
       return Object.assign({}, state, {
         engineActive: action.engineActive
