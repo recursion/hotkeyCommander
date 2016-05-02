@@ -1,7 +1,7 @@
 {
   "name": "hotkey-commander",
-  "version": "0.0.6",
-  "description": "A module that provides common functionality for setting and using hotkeys.",
+  "version": "0.5.0",
+  "description": "An NPM module that provides user hotkey configuration.",
   "main": "dist/hotkeyCommander.js",
   "dependencies": {
     "eventemitter2": "^1.0.0",
