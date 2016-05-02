@@ -44,12 +44,11 @@ Your users will be able to easily view and configure their hotkey preferences. T
 #### Overview
 
 1. Get the package
-    - ~~`npm install --save hotkey-commander`~~  *-not yet implemented*
+    - `npm install hotkey-commander`
     - or
     - clone the repo and build hotkeyCommander.js
         1. git clone ........
-        1. run `npm run build` or `webpack` from the cloned repo to build
-        2. copy dist/hotkeyCommander.js to your project as needed
+    - run `npm run build` or `webpack` from the repo to build
 2. Create your list of custom hotkey definitions. *see below for details*
 3. Include hotkeyCommander in your project somewhere....
     - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
@@ -134,7 +133,7 @@ Creating action definitions is a mostly simple concept. Ultimately its an array 
 
 ```js
 {
-  name: 'YOUR_ACTION',
+  name: 'YOUR_ACTION_NAME_STRING',
   keyCode: ASCII_KEYCODE,
   altKey: BOOL,
   ctrlKey: BOOL,

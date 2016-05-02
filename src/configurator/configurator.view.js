@@ -6,6 +6,9 @@
 const utils = require('../utils')
 const {turnOn, turnOff, stopRecording, startRecording, alertOff} = require('../actions')
 
+// load the css
+require('./hotkeyCommander.css')
+
 //                CSS SELECTORS
 const categorySelector = 'hotkey-category'
 const idleStateSelector = 'key-recorder-btn--idle'
