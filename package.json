@@ -1,7 +1,7 @@
 {
   "name": "hotkey-commander",
-  "version": "0.5.1",
-  "description": "An NPM module that provides user hotkey configuration.",
+  "version": "0.5.2",
+  "description": "Simple user hotkey configuration and events. Hotkey commander provides an event emitter that will always emit your events, regardless of which hotkeys your user wants to use to trigger them.",
   "main": "dist/hotkeyCommander.js",
   "dependencies": {
     "eventemitter2": "^1.0.0",
