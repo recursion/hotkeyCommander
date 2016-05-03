@@ -80,9 +80,9 @@ Your users will be able to easily view and configure their hotkey preferences. T
         emitter.on('YOUR_EVENT', () => {
           // handle the event
         })
-        //or
+        // or
         // pass commanders emitter and the controller objects to your keyboardHandlers file
-        // require('./keyboardHandlers')(emitter, controller)
+        // require('./keyboardHandlers')(emitter)
       })
   </script>
 ```
@@ -97,9 +97,9 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
     emitter.on('YOUR_EVENT', () => {
       // handle the event
     })
-    //or
+    // or
     // pass commanders emitter and the controller objects to your keyboardHandlers file
-    // require('./keyboardHandlers')(emitter, controller)
+    // require('./keyboardHandlers')(emitter)
   })
 ```
 
@@ -125,9 +125,9 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
     emitter.on('YOUR_EVENT', () => {
       // handle the event
     })
-    //or
+    // or
     // pass commanders emitter and the controller objects to your keyboardHandlers file
-    // require('./keyboardHandlers')(emitter, controller)
+    // require('./keyboardHandlers')(emitter)
   })
 ```
 ----
