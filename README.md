@@ -77,15 +77,11 @@ Your users will be able to easily view and configure their hotkey preferences. T
   <script src="dist/hotkeyCommander.js"></script>
   <script>
     const targetEl = document.getElementById('hotkeyCommander');
-      var commander = hotkeyCommander({
-        hotkeys: COMMANDER_HOTKEY_DEFAULTS,
-        target: document.getElementById('hotkeyCommander')
+    hotkeyCommander({hotkeys: COMMANDER_HOTKEY_DEFAULTS, target: document.getElementById('hotkeyCommander')})
+      .then((emitter) => {
+        // pass commanders emitter and the controller objects to our keyboardHandlers
+        require('./utils/keyboardHandlers')(emitter, controller)
       })
-    // setup your event handlers
-    commander.on('YOUR_EVENT_NAME', () => {
-      // respond to the keypress here
-      console.log('YOUR_EVENT_NAME happened!')
-    })
   </script>
 ```
 
@@ -93,8 +89,12 @@ Your users will be able to easily view and configure their hotkey preferences. T
 ```js
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-const listenerElement = windo
-hotkeyCommander({target: targetElement, hotkeys: hotkeys})
+const listenerElement = window
+hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
+  .then((emitter) => {
+    // pass commanders emitter and the controller objects to our keyboardHandlers
+    require('./utils/keyboardHandlers')(emitter, controller)
+  })
 ```
 
 ##### As a chrome plugin
@@ -107,18 +107,18 @@ hotkeyCommander({target: targetElement, hotkeys: hotkeys})
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
 const targetEl = document.querySelector('.hotkeyCommander')
-hotkeyCommander.startConfigurator({target: targetEl, hotkeys: hotkeys})
+hotkeyCommander.Configurator({hotkeys: hotkeys, targetEl: document.getElementById('hotkeyCommander')})
+
 
 // then in the context where you want the keykeys to be responded to:
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
 const targetEl = window
-const commander = hotkeyCommander.startCommander({target: targetEl, hotkeys: hotkeys})
-
-// set up event listeners with your pre-defined action names (from hotkey.defaults.js)
-commander.on('YOUR_ACTION', () => {
-  // do stuff
-})
+hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
+  .then((emitter) => {
+    // pass commanders emitter and the controller objects to our keyboardHandlers
+    require('./utils/keyboardHandlers')(emitter, controller)
+  })
 ```
 ----
 
