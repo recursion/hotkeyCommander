@@ -54,13 +54,15 @@ Your users will be able to easily view and configure their hotkey preferences. T
 3. Include hotkeyCommander in your project somewhere....
     - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
     - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
-3. Pass hotkeyCommander some arguments: `const commander = hotkeyCommander({listenerEl: window, hotkeys: hotkeys})`
+3. Invoke hotkeyCommander while passing some arguments: `const commander = hotkeyCommander({listenerEl: window, hotkeys: hotkeys})`
     1. Your hotkey definitions object
     2. the HTML Elements to:
         - render configuration on
         - consume user key events from
-4. Create event handlers on the emitter then hotkeyCommander hands you back in its resolved promise.
-    - `commander.on('MOVE_FORWARD', onMoveForward)`
+4. Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
+    - `commander.then((emitter)) => {
+         emitter.on('MOVE_FORWARD', onMoveForward)
+       })`
 
 #### Load as a script from html or as a node module.
 
