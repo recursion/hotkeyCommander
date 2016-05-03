@@ -53,13 +53,12 @@ Your users will be able to easily view and configure their hotkey preferences. T
 3. Include hotkeyCommander in your project somewhere....
     - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
     - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
-3. Pass hotkeyCommander some arguments:
+3. Pass hotkeyCommander some arguments: `const commander = hotkeyCommander({listenerEl: window, hotkeys: hotkeys})`
     1. Your hotkey definitions object
     2. the HTML Elements to:
         - render configuration on
         - consume user key events from
-    3. `const commander = hotkeyCommander(configContainerElement, commanderListenerElement, hotkeyDefinition)`
-4. Create event handlers on the emitter then hotkeyCommander hands you back.
+4. Create event handlers on the emitter then hotkeyCommander hands you back in its resolved promise.
     - `commander.on('MOVE_FORWARD', onMoveForward)`
 
 #### Load as a script from html or as a node module.
@@ -67,9 +66,9 @@ Your users will be able to easily view and configure their hotkey preferences. T
 ##### As browser script
 > - `npm run build` to get the bundle file to the project dist directory
 > - move dist/hotkeyCommander.js to where you serve files from, or serve from dist..
-> - Setup initial hotkeys map in the hotkeys.js file.
+> - Setup and include default hotkeys.
 > - Include the hotkeyCommander.js script in your main html file.
-> - Call init on it with the desired container element (this is where you want your config panel to render)
+> - Invoke it with the desired container element (this is where you want your config panel to render) and hotkeys.
 
 ```html
   <div id="hotkeyCommander"></div>
@@ -79,8 +78,12 @@ Your users will be able to easily view and configure their hotkey preferences. T
     const targetEl = document.getElementById('hotkeyCommander');
     hotkeyCommander({hotkeys: COMMANDER_HOTKEY_DEFAULTS, target: document.getElementById('hotkeyCommander')})
       .then((emitter) => {
-        // pass commanders emitter and the controller objects to our keyboardHandlers
-        require('./utils/keyboardHandlers')(emitter, controller)
+        emitter.on('YOUR_EVENT', () => {
+          // handle the event
+        })
+        //or
+        // pass commanders emitter and the controller objects to your keyboardHandlers file
+        // require('./keyboardHandlers')(emitter, controller)
       })
   </script>
 ```
@@ -92,8 +95,12 @@ const hotkeyCommander = require('hotkeyCommander')
 const listenerElement = window
 hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
   .then((emitter) => {
-    // pass commanders emitter and the controller objects to our keyboardHandlers
-    require('./utils/keyboardHandlers')(emitter, controller)
+    emitter.on('YOUR_EVENT', () => {
+      // handle the event
+    })
+    //or
+    // pass commanders emitter and the controller objects to your keyboardHandlers file
+    // require('./keyboardHandlers')(emitter, controller)
   })
 ```
 
@@ -116,17 +123,25 @@ const hotkeyCommander = require('hotkeyCommander')
 const targetEl = window
 hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
   .then((emitter) => {
-    // pass commanders emitter and the controller objects to our keyboardHandlers
-    require('./utils/keyboardHandlers')(emitter, controller)
+    emitter.on('YOUR_EVENT', () => {
+      // handle the event
+    })
+    //or
+    // pass commanders emitter and the controller objects to your keyboardHandlers file
+    // require('./keyboardHandlers')(emitter, controller)
   })
 ```
 ----
 
-### Creating action definitions:
+### Creating default hotkey definitions:
 
-Creating action definitions is a mostly simple concept. Ultimately its an array of objects which describe actions (triggered by hotkeys), grouped by category. Whatever name you give the action, is the event that will be emitted for that action
+Creating hotkey action definitions is a mostly simple concept. Ultimately its an array of objects which describe actions (triggered by hotkeys), grouped by category.
+
+Whatever name you give the action, is the event that will be emitted for that action
 
 ---
+
+### The components of a hotkey definition file:
 
 ###### ACTION OBJECT
 > Represents an Action and the hotkey that triggers it
