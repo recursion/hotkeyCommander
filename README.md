@@ -10,11 +10,6 @@ Your users will be able to easily view and configure their hotkey preferences. T
 
 >To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
 
-
-     Default State      | Hotkey Recording State  |  Key Recorded state
-:----------------------:|:-----------------------:|:-----------------------:
-![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
-
 - **Easy to use:**
     1. include the package in your project
     2. define your hotkey definitions
@@ -22,6 +17,11 @@ Your users will be able to easily view and configure their hotkey preferences. T
     4. Assign your event handlers to the event emitter that hotkeyCommander hands you back.
 - **User configuration built in:** Your app instantly starts responding to user hotkey preference changes.
     - Users easily view and change current settings
+
+     Default State      | Hotkey Recording State  |  Key Recorded state
+:----------------------:|:-----------------------:|:-----------------------:
+![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
+
 - **Modular construction**
     - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine or use your own.
 - **Powerful**
@@ -32,7 +32,6 @@ Your users will be able to easily view and configure their hotkey preferences. T
     - Style conventions enforced by ['standard'](http://standardjs.com/index.html).
     - Package management via npm.
 
-> This module is still under development: While it is not feature complete or ready for production use, it is rather usable. It is coming along quite rapidly and should be seeing a 1.0 release before summer 2016 arrives.
 
 ###### Contributing
 - Pull requests are welcomed.
