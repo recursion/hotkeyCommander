@@ -20,9 +20,7 @@ Your users will be able to easily view and configure their hotkey preferences. T
 
 
 |    Default State      | Hotkey Recording State  |  Key Recorded state    |
-
 :----------------------:|:-----------------------:|:-----------------------:
-
 ![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
 
 
