@@ -81,7 +81,7 @@ Your users will be able to easily view and configure their hotkey preferences. T
           // handle the event
         })
         // or
-        // pass commanders emitter and the controller objects to your keyboardHandlers file
+        // pass commanders emitter to your keyboardHandlers file
         // require('./keyboardHandlers')(emitter)
       })
   </script>
@@ -98,7 +98,7 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
       // handle the event
     })
     // or
-    // pass commanders emitter and the controller objects to your keyboardHandlers file
+    // pass commanders emitter to your keyboardHandlers file
     // require('./keyboardHandlers')(emitter)
   })
 ```
@@ -126,7 +126,7 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
       // handle the event
     })
     // or
-    // pass commanders emitter and the controller objects to your keyboardHandlers file
+    // pass commanders emitter to your keyboardHandlers file
     // require('./keyboardHandlers')(emitter)
   })
 ```
