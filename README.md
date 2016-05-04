@@ -59,6 +59,11 @@ Your users will be able to easily view and configure their hotkey preferences. T
     2. the HTML Elements to:
         - render configuration on
         - consume user key events from
+    3. Display toggle boolean value
+        - whether or not to display an on/off switch for hotkeys.
+        - if you want the on / off toggle switch to display, you will need to pass a true value here
+        - assumed to be false if no value is passed in.
+        - hotkeyCommander will start in the off state if displayToggle is on, otherwise it starts in the on state.
 4. Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
     - `commander.then((emitter)) => {
          emitter.on('MOVE_FORWARD', onMoveForward)
@@ -79,7 +84,7 @@ Your users will be able to easily view and configure their hotkey preferences. T
   <script src="dist/hotkeyCommander.js"></script>
   <script>
     const targetEl = document.getElementById('hotkeyCommander');
-    hotkeyCommander({hotkeys: COMMANDER_HOTKEY_DEFAULTS, target: document.getElementById('hotkeyCommander')})
+    hotkeyCommander({hotkeys: COMMANDER_HOTKEY_DEFAULTS, target: document.getElementById('hotkeyCommander'), displayToggle: true})
       .then((emitter) => {
         emitter.on('YOUR_EVENT', () => {
           // handle the event
@@ -117,7 +122,7 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
 const targetEl = document.querySelector('.hotkeyCommander')
-hotkeyCommander.Configurator({hotkeys: hotkeys, targetEl: document.getElementById('hotkeyCommander')})
+hotkeyCommander.Configurator({hotkeys: hotkeys, targetEl: document.getElementById('hotkeyCommander'), displayToggle: true})
 
 
 // then in the context where you want the keykeys to be responded to:

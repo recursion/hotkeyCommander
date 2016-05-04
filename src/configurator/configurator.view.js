@@ -16,7 +16,7 @@ const activeStateSelector = 'key-recorder-btn--active'
 
 let currentHotkeys
 
-module.exports = (Store) => {
+module.exports = (Store, displayToggle) => {
   const appState = Store.getState()
 
   // set up our store listener
@@ -45,8 +45,11 @@ module.exports = (Store) => {
     const hotkeys = state.hotkeys
     const categories = state.categories
 
-    // add the on/off switch
-    containerEl.appendChild(createToggleDiv())
+    if (displayToggle) {
+      // add the on/off switch
+      containerEl.appendChild(createToggleDiv())
+    }
+
     categories.forEach((category, catIndex) => {
       // mount this category element
       containerEl.appendChild(createCategoryDiv(category))

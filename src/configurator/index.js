@@ -12,9 +12,9 @@ const {setKey, alertOn} = require('../actions')
 const metaKeyCodes = [17, 16, 18, 91]
 
 // public api
-module.exports = (Store) => {
+module.exports = (Store, displayToggle) => {
   const engine = createKeyboardEventHandler(Store)
-  const {mount} = require('./configurator.view')(Store)
+  const {mount} = require('./configurator.view')(Store, displayToggle)
 
   // takes an element to load the view into
   // and an element to listen to keystrokes on
@@ -26,7 +26,7 @@ module.exports = (Store) => {
     rootElement.tabIndex = 0
     utils.addListener(rootElement, 'keydown', engine.onKeydown)
 
-    mount(rootElement)
+    mount(rootElement, displayToggle)
   }
   return {
     init: init

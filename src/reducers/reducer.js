@@ -4,11 +4,11 @@ const utils = require('../utils')
 // we use this for initial state as well as persisting any changes
 const persistentStorage = exports.persistentStorage = require('../storage')(window.chrome, window.localStorage)
 
-exports.setupInitialState = (defaultHotkeys) => {
+exports.setupInitialState = (defaultHotkeys, displayToggle) => {
   return new Promise((resolve, reject) => {
     // provide our persistentStorageStrategy with defaultHotkeys incase it doesnt ahve any.
     // it returns normalized hotkeys and categories - either from existing or defaults
-    persistentStorage.init(defaultHotkeys)
+    persistentStorage.init(defaultHotkeys, displayToggle)
       .then((result) => {
         const [hotkeys, categories, engineActive] = result
         // return the apps initial state

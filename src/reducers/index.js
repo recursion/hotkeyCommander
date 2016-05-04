@@ -1,12 +1,12 @@
-/* globals chrome */
 const {createStore} = require('redux')
 const {reducer, setupInitialState} = require('./reducer')
 const actions = require('../actions')
+const chrome = chrome || null
 
 // creates and exports the store, all nicely bundled up with devTools
-module.exports = (defaultHotkeys) => {
+module.exports = (defaultHotkeys, displayToggle) => {
   return new Promise((resolve, reject) => {
-    setupInitialState(defaultHotkeys)
+    setupInitialState(defaultHotkeys, displayToggle)
       .then((initialState) => {
         const store = createStore(reducer, initialState,
           window.devToolsExtension ? window.devToolsExtension() : undefined

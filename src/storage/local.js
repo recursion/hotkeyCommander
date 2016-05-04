@@ -11,11 +11,11 @@ module.exports = () => {
     get
   }
 }
-const init = (defaultHotkeys) => {
+const init = (defaultHotkeys, displayToggle) => {
   return new Promise((resolve, reject) => {
     const hotkeys = localStorage.hotkeys
     const categories = localStorage.categories
-    const engineActive = localStorage.engineActive || false
+    const engineActive = localStorage.engineActive || !displayToggle
     if (hotkeys && categories) {
       return resolve([JSON.parse(hotkeys), JSON.parse(categories), JSON.parse(engineActive)])
     } else {
@@ -27,7 +27,7 @@ const init = (defaultHotkeys) => {
       // store them in local storage
       set('hotkeys', hotkeys)
       set('categories', categories)
-      set('engineActive', false)
+      set('engineActive', !displayToggle)
 
       // return em
       return resolve([hotkeys, categories, engineActive])
@@ -51,7 +51,6 @@ const get = (keyName) => {
  * and saves them to local storage
  */
 const set = (keyName, value) => {
-  console.log('setting: ', keyName, ' to ', value)
   // set them to local storage
   try {
     localStorage[keyName] = JSON.stringify(value)
