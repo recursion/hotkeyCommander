@@ -55,15 +55,6 @@ Your users will be able to easily view and configure their hotkey preferences. T
   - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
   - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
 3. Invoke hotkeyCommander while passing some arguments:
-
-```
-const commander = hotkeyCommander({hotkeys: hotkeys,
-                                      listenerEl: window,
-                                      target: document.querySelector('#configElement'),
-                                      displayToggle: true
-                                 })
-```
-
     1. Your hotkey definitions object
     2. the HTML Elements to:
       - render configuration on
@@ -73,6 +64,15 @@ const commander = hotkeyCommander({hotkeys: hotkeys,
       - if you want the on / off toggle switch to display, you will need to pass a true value here
       - assumed to be false if no value is passed in.
       - hotkeyCommander will start in the off state if displayToggle is on, otherwise it starts in the on state.
+
+```
+const commander = hotkeyCommander({hotkeys: hotkeys,
+                                   listenerEl: window,
+                                   target: document.querySelector('#configElement'),
+                                   displayToggle: true
+                                 })
+```
+
 4. Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
   - `commander.then((emitter)) => {
          emitter.on('MOVE_FORWARD', onMoveForward)
