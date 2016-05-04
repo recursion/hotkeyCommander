@@ -55,13 +55,15 @@ Your users will be able to easily view and configure their hotkey preferences. T
   - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
   - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
 3. Invoke hotkeyCommander while passing some arguments:
+
 ```
 const commander = hotkeyCommander({hotkeys: hotkeys,
                                       listenerEl: window,
                                       target: document.querySelector('#configElement'),
                                       displayToggle: true
-                                     })
+                                 })
 ```
+
     1. Your hotkey definitions object
     2. the HTML Elements to:
       - render configuration on
