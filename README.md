@@ -52,16 +52,7 @@ Your users will be able to easily view and configure their hotkey preferences. T
   - run `npm run build` or `webpack` from the repo to build
 2. Create your list of custom hotkey definitions. *see below for details*
 3. Include hotkeyCommander in your project somewhere....
-  - `const hotkeyCommander = require('path/to/hotkeyCommander.js')`
-  - or in your html file: `<script src="path/to/hotkeyCommander.js"></script>`
 3. Invoke hotkeyCommander with a few arguments:
-`
-const commander = hotkeyCommander({hotkeys: hotkeys,
-                                   listenerEl: window,
-                                   target: document.querySelector('#configElement'),
-                                   displayToggle: true
-                                 })
-`
   1. Your hotkey definitions object
   2. the HTML Elements to:
     - render configuration on
@@ -72,11 +63,9 @@ const commander = hotkeyCommander({hotkeys: hotkeys,
     - assumed to be false if no value is passed in.
     - hotkeyCommander will start in the off state if displayToggle is on, otherwise it starts in the on state.
 4. Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
-  - `commander.then((emitter)) => {
-         emitter.on('MOVE_FORWARD', onMoveForward)
-       })`
 
 #### Load as a script from html or as a node module.
+>
 
 ##### As browser script
 > - `npm run build` to get the bundle file to the project dist directory
