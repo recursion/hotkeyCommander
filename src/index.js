@@ -68,10 +68,10 @@ exports.Configurator = (options) => {
         const store = result
 
         // import configurator
-        const configurator = require('./configurator')(store)
+        const configurator = require('./configurator')(store, options.displayToggle || false)
 
         // init confiturator
-        resolve(configurator.init(options.targetEl, options.displayToggle || false))
+        resolve(configurator.init(options.targetEl))
       })
   })
 }
