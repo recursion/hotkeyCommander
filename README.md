@@ -2,11 +2,11 @@
 
 # Hotkey Commander
 
-> HotkeyCommander provides a simple interface for hotkey display and configuration, so you dont have to! The module maps keyboard events to events of your designation, regardless of what the user sets his hotkeys to. Originally designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
+> HotkeyCommander maps keyboard events to your action events, and allows the user to easily set his hotkey's to the key-combinations of his or her preference. Originally designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
 
-HotkeyCommander handles all of your hotkey configuration and keyboard event capture and response needs. Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit your defined actions.
+Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit your defined actions.
 
-Your users will be able to easily view and configure their hotkey preferences. Their new hotkeys remain mapped to your events.
+Your users will be able to easily view and configure their hotkey preferences. Their hotkey preferences remain mapped to your events.
 
 >To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
 
@@ -24,11 +24,10 @@ Your users will be able to easily view and configure their hotkey preferences. T
 ![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
 
 
-- **Modular construction**
-    - **Flexible rendering options:** Display the configuration pane with hotkeyCommanders built in rendering engine or use your own.
 - **Powerful**
     - **Responds to multiple key combinations:** Ctrl+Shift+k, Alt+Ctrl+u - etc
     - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension situation: where hotkey configuration runs in a completely seperate browser context than the the keyboard events are being consumed in - _hotkeyCommander will work just as easily in a single browser context._
+- **Modular construction**
 - **Modern**
     - Builtin es2015 support via babel and webpack.
     - Style conventions enforced by ['standard'](http://standardjs.com/index.html).
@@ -51,18 +50,20 @@ Your users will be able to easily view and configure their hotkey preferences. T
     1. git clone ........
   - run `npm run build` or `webpack` from the repo to build
 2. Create your list of custom hotkey definitions. *see below for details*
-3. Include hotkeyCommander in your project somewhere....
+3. Include hotkeyCommander in your project somewhere.... (as a script in a html document, or as a node module)
 3. Invoke hotkeyCommander with a few arguments:
   1. Your hotkey definitions object
   2. the HTML Elements to:
     - render configuration on
     - consume user key events from
+    - (these elements could all simply be the window object)
   3. Display toggle boolean value
     - whether or not to display an on/off switch for hotkeys.
     - if you want the on / off toggle switch to display, you will need to pass a true value here
     - assumed to be false if no value is passed in.
     - hotkeyCommander will start in the off state if displayToggle is on, otherwise it starts in the on state.
-4. Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
+4. HotkeyCommander returns you a promise:
+    - Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
 
 #### Load as a script from html or as a node module.
 >
@@ -145,7 +146,8 @@ Whatever name you give the action, is the event that will be emitted for that ac
 
 ---
 
-### The components of a hotkey definition file:
+### Abstract:
+#### The components of a hotkey definition file:
 
 ###### ACTION OBJECT
 > Represents an Action and the hotkey that triggers it
@@ -185,7 +187,7 @@ Whatever name you give the action, is the event that will be emitted for that ac
   {categoryObject}
 ]
 ```
-###### HOTKEY.DEFAULTS.JS EXAMPLE
+### HOTKEY.DEFAULTS.JS EXAMPLE
 ```js
 // hotkey.defaults.js
 [
