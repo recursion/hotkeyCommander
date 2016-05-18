@@ -2,42 +2,32 @@
 
 # Hotkey Commander
 
-> HotkeyCommander maps keyboard events to your action events, and allows the user to easily set his hotkey's to the key-combinations of his or her preference. Originally designed to work in a multi-context google chrome extension environment - hotkeyCommander works *great* in a single context too!
+> Sophisticated keyboard event engine and user hotkey configuration made simple.
 
-Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit your defined actions.
+Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit the actions you define in the hotkey definitions.
 
-Your users will be able to easily view and configure their hotkey preferences. Their hotkey preferences remain mapped to your events.
-
->To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, presses the new hotkey combination, and hotkey Commander maps the new hotkey to the correct action.
-
-- **Easy to use:**
-    1. include the package in your project
-    2. define your hotkey definitions
-    3. pass the hotkey definitions, and the target elements to hotkeyCommander.
-    4. Assign your event handlers to the event emitter that hotkeyCommander hands you back.
-- **User configuration built in:** Your app instantly starts responding to user hotkey preference changes.
-    - Users easily view and change current settings
-
+>To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, and then presses their desired key-combination.
 
 |    Default State      | Hotkey Recording State  |  Key Recorded state    |
 :----------------------:|:-----------------------:|:-----------------------:
 ![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
 
-
+### Features
+- **Easy to use:**
+    1. include the package in your project
+    2. define your hotkey definitions
+    3. pass the hotkey definitions, and the target elements to hotkeyCommander.
+    4. Assign your event handlers to the event emitter that hotkeyCommander hands you back.
+- **User configuration built in:** Your app instantly responds to user hotkey preference changes.
+    - Users easily view and change current settings
 - **Powerful**
-    - **Responds to multiple key combinations:** Ctrl+Shift+k, Alt+Ctrl+u - etc
-    - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension situation: where hotkey configuration runs in a completely seperate browser context than the the keyboard events are being consumed in - _hotkeyCommander will work just as easily in a single browser context._
+    - **Capable of consuming complex key combinations:** Alt+Ctrl+Shift+k
+    - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension environment: where the engine listens in the active browser window, but configuration occurs in the chrome plugin window - hotkeyCommander works just as easily in a single browser context._
 - **Modular construction**
 - **Modern**
     - Builtin es2015 support via babel and webpack.
     - Style conventions enforced by ['standard'](http://standardjs.com/index.html).
     - Package management via npm.
-
-
-###### Contributing
-- Pull requests are welcomed.
-- Project uses [standard](http://standardjs.com/index.html) linting for all styling requirements. No fuss. No muss.
-- Please use git issues from communications/feature requests/bug reports. Or jump on the [waffle](https://waffle.io/recursion/hotkeyCommander) to see our issues the way we do.
 
 # Usage
 
@@ -231,3 +221,7 @@ Whatever name you give the action, is the event that will be emitted for that ac
   }
 ]
 ```
+###### Contributing
+- Pull requests are welcomed.
+- Project uses [standard](http://standardjs.com/index.html) linting for all styling requirements. No fuss. No muss.
+- Please use git issues from communications/feature requests/bug reports. Or jump on the [waffle](https://waffle.io/recursion/hotkeyCommander) to see our issues the way we do.
