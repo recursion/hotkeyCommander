@@ -51,7 +51,7 @@ exports.init = (options) => {
  *  Commander
  *  @param {Object} options - {
  *    @param {Bool} displayToggle - whether or not to display the on/off toggle
- *    @param {HTML Element} target - element to mount configurator
+ *    @param {HTML Element} target - element to mount commander
  *   @returns {Promise} - resolves with an EventEmitter2 instance
  *         i.e: Commander(options)
  *                .then((emitter))
