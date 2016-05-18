@@ -15,7 +15,8 @@
       hotkeyCommander.init({
         hotkeys: COMMANDER_HOTKEY_DEFAULTS,
         // displayToggle: true,
-        target: document.getElementById('hotkeyCommander')
+        configTarget: document.getElementById('hotkeyCommander'),
+        engineTarget: window
       })
       .then((result) => {
         const commander = result

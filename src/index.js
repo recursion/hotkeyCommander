@@ -7,8 +7,8 @@ const configReducer = require('./reducers')
  *  @param {Object} options - {
  *    @param {HotkeyDefinitions} hotkeys - hotkey definitions
  *    @param {Bool} displayToggle - whether or not to display the on/off toggle
- *    @param {Element} target - element to mount configurator
- *    @param {Element} - engineListenerEl - the element the main keylistener attaches to
+ *    @param {Element} configTarget - element to mount configurator
+ *    @param {Element} - engineTarget - the element the main keylistener attaches to
  *                                         - defaults to window
  *   @returns {EventEmitter2}
  * }
@@ -25,10 +25,10 @@ exports.init = (options) => {
         const commander = require('./commander')(store)
 
         // init configurator
-        configurator.init(options.target, options.displayToggle || false)
+        configurator.init(options.configTarget, options.displayToggle || false)
 
         // init commander inside the resolved promise which returns the commander event emitter
-        resolve(commander(options.engineListenerEl || window))
+        resolve(commander(options.engineTarget || window))
       })
   })
 }
@@ -55,7 +55,7 @@ exports.Commander = (options) => {
         const commander = require('./commander')(store)
 
         // init commander and return his event emitter
-        resolve(commander(options.listenerEl))
+        resolve(commander(options.target))
       })
   })
 }
@@ -71,7 +71,7 @@ exports.Configurator = (options) => {
         const configurator = require('./configurator')(store, options.displayToggle || false)
 
         // init confiturator
-        resolve(configurator.init(options.targetEl))
+        resolve(configurator.init(options.target))
       })
   })
 }

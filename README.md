@@ -44,9 +44,9 @@ Simply import the module to your project, hand it your hotkey definitions and ta
 3. Invoke hotkeyCommander with a few arguments:
   1. Your hotkey definitions object
   2. the HTML Elements to:
-    - render configuration on
-    - consume user key events from
-    - (these elements could all simply be the window object)
+    - render configuration on `configTarget`
+    - consume user key events from `engineTarget`
+    - (these elements could all simply be the window object - which the engineTarget is set to by default)
   3. Display toggle boolean value
     - whether or not to display an on/off switch for hotkeys.
     - if you want the on / off toggle switch to display, you will need to pass a true value here
@@ -71,7 +71,11 @@ Simply import the module to your project, hand it your hotkey definitions and ta
   <script src="dist/hotkeyCommander.js"></script>
   <script>
     const targetEl = document.getElementById('hotkeyCommander');
-    hotkeyCommander({hotkeys: COMMANDER_HOTKEY_DEFAULTS, target: document.getElementById('hotkeyCommander'), displayToggle: true})
+    hotkeyCommander({hotkeys: COMMANDER_HOTKEY_DEFAULTS,
+                     configTarget: document.getElementById('hotkeyCommander'),
+                     engineTarget: window,
+                     displayToggle: true
+                   })
       .then((emitter) => {
         emitter.on('YOUR_EVENT', () => {
           // handle the event
@@ -87,8 +91,10 @@ Simply import the module to your project, hand it your hotkey definitions and ta
 ```js
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-const listenerElement = window
-hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
+hotkeyCommander.Commander({hotkeys: defaultHotkeys,
+                           engineTarget: window,
+                           configTarget: window
+                          })
   .then((emitter) => {
     emitter.on('YOUR_EVENT', () => {
       // handle the event
@@ -108,15 +114,17 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
 // in the context/file where you will be providing user configuration
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-const targetEl = document.querySelector('.hotkeyCommander')
-hotkeyCommander.Configurator({hotkeys: hotkeys, targetEl: document.getElementById('hotkeyCommander'), displayToggle: true})
+hotkeyCommander.Configurator({hotkeys: hotkeys,
+                              target: document.getElementById('hotkeyCommander'),
+                              displayToggle: true
+                            })
 
 
 // then in the context where you want the keykeys to be responded to:
 const hotkeys = require('./myDefaultHotkeys')
 const hotkeyCommander = require('hotkeyCommander')
-const targetEl = window
-hotkeyCommander.Commander({hotkeys: defaultHotkeys, listenerEl: window})
+const target = window
+hotkeyCommander.Commander({hotkeys: defaultHotkeys, target: target})
   .then((emitter) => {
     emitter.on('YOUR_EVENT', () => {
       // handle the event
