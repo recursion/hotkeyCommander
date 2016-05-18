@@ -1,6 +1,6 @@
 {
   "name": "hotkey-commander",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Simple user hotkey configuration and events. Hotkey commander provides an event emitter that will always emit your events, regardless of which hotkeys your user wants to use to trigger them.",
   "main": "dist/hotkeyCommander.js",
   "dependencies": {
