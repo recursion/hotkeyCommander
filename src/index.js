@@ -10,7 +10,9 @@ const configReducer = require('./reducers')
  *    @param {Element} configTarget - element to mount configurator
  *    @param {Element} - engineTarget - the element the main keylistener attaches to
  *                                         - defaults to window
- *   @returns {EventEmitter2}
+ *   @returns {Promise} - resolves with an EventEmitter2 instance
+ *         i.e: hotkeyCommander.init(options)
+ *                .then((emitter))
  * }
  */
 exports.init = (options) => {
@@ -43,6 +45,16 @@ exports.init = (options) => {
  *  its own store and so - commanders store
  *  will generate a new keymap when getting
  *  messages from chrome.storage.onChanged
+ **/
+
+ /**
+ *  Commander
+ *  @param {Object} options - {
+ *    @param {Bool} displayToggle - whether or not to display the on/off toggle
+ *    @param {HTML Element} target - element to mount configurator
+ *   @returns {Promise} - resolves with an EventEmitter2 instance
+ *         i.e: Commander(options)
+ *                .then((emitter))
  */
 exports.Commander = (options) => {
   return new Promise((resolve, reject) => {
@@ -60,6 +72,13 @@ exports.Commander = (options) => {
   })
 }
 
+/**
+ * Configurator
+ *  @param {Object} options - {
+ *    @param {Bool} displayToggle - whether or not to display the on/off toggle
+ *    @param {HTML Element} target - element to mount configurator
+ *  @returns {Promise}
+ **/
 exports.Configurator = (options) => {
   return new Promise((resolve, reject) => {
     // instantiate a redux store and pass it to our configurator and commander objects
