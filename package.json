@@ -17,7 +17,9 @@
     "webpack": "^1.12.14"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "webpack",
+    "prepublish": "webpack"
   },
   "repository": {
     "type": "git",
