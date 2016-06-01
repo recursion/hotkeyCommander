@@ -4,14 +4,6 @@
 
 > Sophisticated keyboard event engine and user hotkey configuration made simple.
 
-Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit the actions you define in the hotkey definitions.
-
->To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, and then presses their desired key-combination.
-
-|    Default State      | Hotkey Recording State  |  Key Recorded state    |
-:----------------------:|:-----------------------:|:-----------------------:
-![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
-
 ### Features
 - **Easy to use:**
     1. include the package in your project
@@ -31,7 +23,14 @@ Simply import the module to your project, hand it your hotkey definitions and ta
 
 # Usage
 
-#### Overview
+Simply import the module to your project, hand it your hotkey definitions and target HTMLElements: hotkeyCommander will hand you back an event emitter that will emit the actions you define in the hotkey definitions file.
+
+>To *record* a new hotkey setting, the user simply opens the config window, clicks on the key they want to change, and then presses their desired key-combination.
+
+|    Default State      | Hotkey Recording State  |  Key Recorded state    |
+:----------------------:|:-----------------------:|:-----------------------:
+![Configurators default state](http://i.imgur.com/ft0YTEA.png) | ![Recording a key](http://i.imgur.com/zSUVrmZ.png) | ![Key after recording](http://i.imgur.com/ZsDDzit.png)
+
 
 1. Get the package
   - `npm install hotkey-commander`
@@ -138,53 +137,12 @@ hotkeyCommander.Commander({hotkeys: defaultHotkeys, target: target})
 
 ### Creating default hotkey definitions:
 
-Creating hotkey action definitions is a mostly simple concept. Ultimately its an array of objects which describe actions (triggered by hotkeys), grouped by category.
+Creating hotkey action definitions is a mostly simple concept. Ultimately its an array of objects which describe event actions, grouped by category.
 
-Whatever name you give the action, is the event that will be emitted for that action
+The name you give the action is the event that will be emitted for that action
 
 ---
 
-### Abstract:
-#### The components of a hotkey definition file:
-
-###### ACTION OBJECT
-> Represents an Action and the hotkey that triggers it
-
-```js
-{
-  name: 'YOUR_ACTION_NAME_STRING',
-  keyCode: ASCII_KEYCODE,
-  altKey: BOOL,
-  ctrlKey: BOOL,
-  shiftKey: BOOL
-}
-```
-###### ACTIONS CATEGORY OBJECT
-> A category of hotkeys
-
-```js
-{
-  name: YOUR_CATEGORY_NAME,
-  actions: [
-    {hotkeyObject},
-    {hotkeyObject},
-    {hotkeyObject},
-    {hotkeyObject}
-  ]
-}
-```
-###### ACTIONS LIST
-> An array of hotkey category objects:
-
-```js
-[
-  {categoryObject},
-  {categoryObject},
-  {categoryObject},
-  {categoryObject},
-  {categoryObject}
-]
-```
 ### HOTKEY.DEFAULTS.JS EXAMPLE
 ```js
 // hotkey.defaults.js
@@ -227,6 +185,47 @@ Whatever name you give the action, is the event that will be emitted for that ac
       }
     ]
   }
+]
+```
+
+#### The components of a hotkey definition file:
+
+###### ACTION OBJECT
+> Represents an Action and the hotkey that triggers it
+
+```js
+{
+  name: 'YOUR_ACTION_NAME_STRING',
+  keyCode: ASCII_KEYCODE,
+  altKey: BOOL,
+  ctrlKey: BOOL,
+  shiftKey: BOOL
+}
+```
+###### ACTIONS CATEGORY OBJECT
+> A category of hotkeys
+
+```js
+{
+  name: YOUR_CATEGORY_NAME,
+  actions: [
+    {hotkeyObject},
+    {hotkeyObject},
+    {hotkeyObject},
+    {hotkeyObject}
+  ]
+}
+```
+###### ACTIONS LIST
+> An array of hotkey category objects:
+
+```js
+[
+  {categoryObject},
+  {categoryObject},
+  {categoryObject},
+  {categoryObject},
+  {categoryObject}
 ]
 ```
 ###### Contributing
