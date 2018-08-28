@@ -3,6 +3,7 @@
 # Hotkey Commander
 
 > Sophisticated keyboard event engine and user hotkey configuration made simple.
+- No longer maintained: Changes to the keyboard event api may have rendered this package obsolete/broken.
 
 ### Features
 - **Easy to use:**
