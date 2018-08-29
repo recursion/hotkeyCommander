@@ -23,6 +23,7 @@ module.exports = (Store) => {
   }
 
   const keyboardEventHandler = (evt) => {
+    evt.preventDefault();
     const state = Store.getState()
     const key = utils.hashKeyboardEvent(evt)
 
