@@ -7,8 +7,24 @@
 </head>
 <body>
   <div id="hotkeyCommander"></div>
+  <div id="feedback"></div>
   <script src="hotkey.defaults.js"></script>
   <script src="hotkeyCommander.js"></script>
+  <style>
+    #feedback {
+      text-align: center;
+      margin: auto;
+      margin-top: 50px;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      border: 1px solid black;
+      color: red;
+      padding: 20px;
+      height: 100px;
+      width: 300px;
+    }
+  </style>
   <script>
     document.addEventListener('DOMContentLoaded', function(evt) {
       // invoke hotkey commander by passing it the element you want it to render to
@@ -18,26 +34,154 @@
         configTarget: document.getElementById('hotkeyCommander'),
         engineTarget: window
       })
-      .then((result) => {
-        const commander = result
+      .then((commander) => {
         // set up all the event handlers you need here
         commander.on('CANCEL_ALL', function(){
           console.log('CANCEL_ALL Event!')
+          document.querySelector('#feedback').innerHTML = 'CANCEL_ALL Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
         })
         commander.on('CANCEL_BIDS', function(){
           console.log('CANCEL_BIDS Event!')
+          document.querySelector('#feedback').innerHTML = 'CANCEL_BIDS Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
         })
         commander.on('CANCEL_OFFERS', function(){
           console.log('CANCEL_OFFERS Event!')
+          document.querySelector('#feedback').innerHTML = 'CANCEL_OFFERS Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
         })
         commander.on('CANCEL_LAST', function(){
           console.log('CANCEL_LAST Event!')
+          document.querySelector('#feedback').innerHTML = 'CANCEL_LAST Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('TOGGLE_LOTSIZE_UP', function(){
+          console.log('TOGGLE_LOTSIZE_UP Event!')
+          document.querySelector('#feedback').innerHTML = 'TOGGLE_LOTSIZE_UP Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('TOGGLE_LOTSIZE_DOWN', function(){
+          console.log('TOGGLE_LOTSIZE_DOWN Event!')
+          document.querySelector('#feedback').innerHTML = 'TOGGLE_LOTSIZE_DOWN Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('TOGGLE_OFFSET_UP', function(){
+          console.log('TOGGLE_OFFSET_UP Event!')
+          document.querySelector('#feedback').innerHTML = 'TOGGLE_OFFSET_UP Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('TOGGLE_OFFSET_DOWN', function(){
+          console.log('TOGGLE_OFFSET_DOWN Event!')
+          document.querySelector('#feedback').innerHTML = 'TOGGLE_OFFSET_DOWN Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('TOGGLE_OFFSET_DOWN', function(){
+          console.log('TOGGLE_OFFSET_DOWN Event!')
+          document.querySelector('#feedback').innerHTML = 'TOGGLE_OFFSET_DOWN Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
         })
         commander.on('BID_BETTER', function(){
           console.log('BID_BETTER Event!')
+          document.querySelector('#feedback').innerHTML = 'BID_BETTER Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('BID_WITH_BEST_BID', function(){
+          console.log('BID_WITH_BEST_BID Event!')
+          document.querySelector('#feedback').innerHTML = 'BID_WITH_BEST_BID Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('BID_BELOW_BEST', function(){
+          console.log('BID_BELOW_BEST Event!')
+          document.querySelector('#feedback').innerHTML = 'BID_BELOW_BEST Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('BID_DOUBLE_BELOW_BEST', function(){
+          console.log('BID_DOUBLE_BELOW_BEST Event!')
+          document.querySelector('#feedback').innerHTML = 'BID_DOUBLE_BELOW_BEST Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
         })
         commander.on('HIT_THE_OFFER', function(){
           console.log('HIT_THE_OFFER Event!')
+          document.querySelector('#feedback').innerHTML = 'HIT_THE_OFFER Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('MARKET_BUY', function(){
+          console.log('MARKET_BUY Event!')
+          document.querySelector('#feedback').innerHTML = 'MARKET_BUY Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('OFFER_BETTER', function(){
+          console.log('OFFER_BETTER Event!')
+          document.querySelector('#feedback').innerHTML = 'OFFER_BETTER Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('OFFER_WITH_BEST_ASK', function(){
+          console.log('OFFER_WITH_BEST_ASK Event!')
+          document.querySelector('#feedback').innerHTML = 'OFFER_WITH_BEST_ASK Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('OFFER_ABOVE_BEST', function(){
+          console.log('OFFER_ABOVE_BEST Event!')
+          document.querySelector('#feedback').innerHTML = 'OFFER_ABOVE_BEST Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('OFFER_DOUBLE_ABOVE_BEST', function(){
+          console.log('OFFER_DOUBLE_ABOVE_BEST Event!')
+          document.querySelector('#feedback').innerHTML = 'OFFER_DOUBLE_ABOVE_BEST Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('HIT_THE_BID', function(){
+          console.log('HIT_THE_BID Event!')
+          document.querySelector('#feedback').innerHTML = 'HIT_THE_BID Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
+        })
+        commander.on('MARKET_SELL', function(){
+          console.log('MARKET_SELL Event!')
+          document.querySelector('#feedback').innerHTML = 'MARKET_SELL Event Fired';
+          setTimeout(() => {
+            document.querySelector('#feedback').innerHTML = '';
+          }, 1000);
         })
       })
 
