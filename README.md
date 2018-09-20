@@ -16,7 +16,7 @@
     - **Capable of consuming complex key combinations:** Alt+Ctrl+Shift+k
     - **Can run from multiple contexts:** Engineered to work in a 'multi-context' chrome extension environment: where the engine listens in the active browser window, but configuration occurs in the chrome plugin window - hotkeyCommander works just as easily in a single browser context._
 - **Modular construction**
-- **Modern**
+- **Modern (at the time it was built anyway!)**
     - Builtin es2015 support via babel and webpack.
     - Style conventions enforced by ['standard'](http://standardjs.com/index.html).
     - Package management via npm.
