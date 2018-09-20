@@ -37,25 +37,25 @@ Simply import the module to your project, hand it your hotkey definitions and ta
   - or
   - clone the repo and build hotkeyCommander.js
     1. git clone ........
-  - run `npm run build` or `webpack` from the repo to build
+    2. run `npm run build` or `webpack` from the repo to build
 2. Create your list of custom hotkey definitions. *see below for details*
-3. Include hotkeyCommander in your project somewhere.... (as a script in a html document, or as a node module)
-3. Invoke hotkeyCommander with a few arguments:
-  1. Your hotkey definitions object
-  2. the HTML Elements to:
-    - render configuration on `configTarget`
-    - consume user key events from `engineTarget`
-    - (these elements could all simply be the window object - which the engineTarget is set to by default)
-  3. Display toggle boolean value
-    - whether or not to display an on/off switch for hotkeys.
-    - if you want the on / off toggle switch to display, you will need to pass a true value here
-    - assumed to be false if no value is passed in.
-    - hotkeyCommander will start in the off state if displayToggle is on, otherwise it starts in the on state.
-4. HotkeyCommander returns you a promise:
-    - Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
+4. Include hotkeyCommander in your project somewhere.... (as a script in a html document, or as a node module)
+5. Invoke hotkeyCommander with a few arguments:
+    1. Your hotkey definitions object
+    2. the HTML Elements to:
+        - render configuration on `configTarget`
+        - consume user key events from `engineTarget`
+        - (these elements could all simply be the window object - which the engineTarget is set to by default)
+    3. Display toggle boolean value
+        - whether or not to display an on/off switch for hotkeys.
+        - if you want the on / off toggle switch to display, you will need to pass a true value here
+        - assumed to be false if no value is passed in.
+        - hotkeyCommander will start in the off state if displayToggle is on, otherwise it starts in the on state.
+    4. HotkeyCommander returns you a promise:
+        - Create event handlers on the emitter that hotkeyCommander hands you back in its resolved promise.
 
 #### Load as a script from html or as a node module.
->
+
 
 ##### As browser script
 > - `npm run build` to get the bundle file to the project dist directory
